@@ -1,0 +1,138 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "每日英语学习助手"
+      }
+    },
+    {
+      "path": "pages/vocabulary/index",
+      "style": {
+        "navigationBarTitleText": "单词学习"
+      }
+    },
+    {
+      "path": "pages/vocabulary/wordcard",
+      "style": {
+        "navigationBarTitleText": "单词卡片"
+      }
+    },
+    {
+      "path": "pages/vocabulary/challenge",
+      "style": {
+        "navigationBarTitleText": "记忆挑战"
+      }
+    },
+    {
+      "path": "pages/vocabulary/leaderboard",
+      "style": {
+        "navigationBarTitleText": "排行榜"
+      }
+    },
+    {
+      "path": "pages/vocabulary/favorites",
+      "style": {
+        "navigationBarTitleText": "生词本"
+      }
+    },
+    {
+      "path": "pages/listening/index",
+      "style": {
+        "navigationBarTitleText": "听力练习"
+      }
+    },
+    {
+      "path": "pages/listening/sentence",
+      "style": {
+        "navigationBarTitleText": "句子听力"
+      }
+    },
+    {
+      "path": "pages/listening/challenge",
+      "style": {
+        "navigationBarTitleText": "听力挑战"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
+      "path": "pages/profile/statistics",
+      "style": {
+        "navigationBarTitleText": "学习统计"
+      }
+    },
+    {
+      "path": "pages/profile/achievements",
+      "style": {
+        "navigationBarTitleText": "我的成就"
+      }
+    },
+    {
+      "path": "pages/profile/settings",
+      "style": {
+        "navigationBarTitleText": "应用设置"
+      }
+    },
+    {
+      "path": "pages/profile/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/profile/register",
+      "style": {
+        "navigationBarTitleText": "注册"
+      }
+    },
+    {
+      "path": "pages/admin/word-manage",
+      "style": {
+        "navigationBarTitleText": "单词管理"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "每日英语学习助手",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/images/tabbar/home.png",
+        "selectedIconPath": "static/images/tabbar/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/vocabulary/index",
+        "iconPath": "static/images/tabbar/vocabulary.png",
+        "selectedIconPath": "static/images/tabbar/vocabulary-active.png",
+        "text": "单词学习"
+      },
+      {
+        "pagePath": "pages/listening/index",
+        "iconPath": "static/images/tabbar/listening.png",
+        "selectedIconPath": "static/images/tabbar/listening-active.png",
+        "text": "听力练习"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "iconPath": "static/images/tabbar/profile.png",
+        "selectedIconPath": "static/images/tabbar/profile-active.png",
+        "text": "个人中心"
+      }
+    ]
+  }
+} 
