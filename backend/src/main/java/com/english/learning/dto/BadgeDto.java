@@ -1,0 +1,21 @@
+package com.english.learning.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class BadgeDto {
+    private Long id;
+    private String badgeId;
+    private String name;
+    private String description;
+    private String icon;
+    private String level;
+    private String category;
+    private String dateEarned;
+} 
