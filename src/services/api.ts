@@ -404,6 +404,16 @@ export const api = {
         throw error;
       }
     },
+
+    // 获取学习汇总统计
+    getStats: async () => {
+      try {
+        return await axiosInstance.get('/progress/stats');
+      } catch (error) {
+        console.error('获取学习统计失败:', error);
+        throw error;
+      }
+    },
     
     // 更新学习进度
     updateProgress: async (progress: IProgressUpdate) => {
@@ -597,4 +607,4 @@ export const api = {
   }
 };
 
-export default api; 
+export default api;

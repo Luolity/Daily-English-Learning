@@ -454,8 +454,14 @@ export default defineComponent({
             accuracy: score.value / questions.value.length,
             timeSpent: usedTime.value
           });
+          await store.dispatch('updateProgress', {
+            wordsLearned: questions.value.length,
+            timeSpent: usedTime.value,
+            correctCount: score.value,
+            totalCount: questions.value.length
+          });
         } catch (error) {
-          console.error('挑战记录提交失败', error);
+          console.error('挑战数据提交失败', error);
         }
       } else {
         // 进入下一题

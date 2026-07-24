@@ -2,6 +2,7 @@ package com.english.learning.controller;
 
 import com.english.learning.dto.ChallengeRecordDto;
 import com.english.learning.security.services.UserDetailsImpl;
+import com.english.learning.service.BadgeService;
 import com.english.learning.service.ChallengeRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class ChallengeRecordController {
     @Autowired
     private ChallengeRecordService challengeRecordService;
 
+    @Autowired
+    private BadgeService badgeService;
+
     @PostMapping("/submit")
     // @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> submitChallengeRecord(
@@ -26,6 +30,7 @@ public class ChallengeRecordController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getId();
         ChallengeRecordDto savedRecord = challengeRecordService.submitRecord(userId, recordDto);
+        badgeService.checkAndAwardBadges(userId);
         return ResponseEntity.ok(savedRecord);
     }
 
