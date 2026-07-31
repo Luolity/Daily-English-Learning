@@ -11,7 +11,7 @@
  Target Server Version : 80100
  File Encoding         : 65001
 
- Date: 22/05/2026 17:26:39
+ Date: 31/07/2026 15:38:50
 */
 
 SET NAMES utf8mb4;
@@ -34,7 +34,7 @@ CREATE TABLE `tbl_badges`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id` ASC) USING BTREE,
   CONSTRAINT `tbl_badges_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_badges
@@ -51,6 +51,17 @@ INSERT INTO `tbl_badges` VALUES (9, 'vocabulary_100', '词汇达人', '学习100
 INSERT INTO `tbl_badges` VALUES (10, 'vocabulary_200', '词汇大师', '学习200个单词', 'vocab-200', 'gold', 'vocabulary', '2023-06-06T18:20:10', 3);
 INSERT INTO `tbl_badges` VALUES (11, 'accuracy_80', '精准学习者', '正确率达到80%', 'accuracy-80', 'silver', 'challenge', '2023-06-04T10:30:50', 3);
 INSERT INTO `tbl_badges` VALUES (12, 'accuracy_90', '完美主义者', '正确率达到90%', 'accuracy-90', 'gold', 'challenge', '2023-06-06T11:45:25', 3);
+INSERT INTO `tbl_badges` VALUES (13, 'streak_3', '初学乍练', '连续学习3天', 'streak-3', 'bronze', 'streak', '2026-05-22T18:05:27.5615588', 1);
+INSERT INTO `tbl_badges` VALUES (14, 'streak_7', '坚持不懈', '连续学习7天', 'streak-7', 'silver', 'streak', '2026-05-22T18:05:27.5635648', 1);
+INSERT INTO `tbl_badges` VALUES (15, 'streak_30', '习惯养成', '连续学习30天', 'streak-30', 'gold', 'streak', '2026-05-22T18:05:27.564866', 1);
+INSERT INTO `tbl_badges` VALUES (16, 'accuracy_80', '精准学习者', '正确率达到80%', 'accuracy-80', 'silver', 'challenge', '2026-05-22T18:05:27.5658707', 1);
+INSERT INTO `tbl_badges` VALUES (17, 'accuracy_95', '学霸', '正确率达到95%', 'accuracy-95', 'gold', 'challenge', '2026-05-22T18:05:27.5658707', 1);
+INSERT INTO `tbl_badges` VALUES (18, 'special_first_day', '初来乍到', '完成第一天的学习', 'special-first', 'bronze', 'special', '2026-05-22T18:05:27.571341', 1);
+INSERT INTO `tbl_badges` VALUES (19, 'accuracy_80', '精准学习者', '正确率达到80%', 'accuracy-80', 'silver', 'challenge', '2026-05-22T18:16:38.6355941', 38);
+INSERT INTO `tbl_badges` VALUES (20, 'accuracy_95', '学霸', '正确率达到95%', 'accuracy-95', 'gold', 'challenge', '2026-05-22T18:16:38.6385993', 38);
+INSERT INTO `tbl_badges` VALUES (21, 'special_first_day', '初来乍到', '完成第一天的学习', 'special-first', 'bronze', 'special', '2026-05-22T18:16:38.6415992', 38);
+INSERT INTO `tbl_badges` VALUES (22, 'special_first_day', '初来乍到', '完成第一天的学习', 'special-first', 'bronze', 'special', '2026-05-29T10:40:35.6885472', 39);
+INSERT INTO `tbl_badges` VALUES (23, 'accuracy_80', '精准学习者', '正确率达到80%', 'accuracy-80', 'silver', 'challenge', '2026-05-29T10:42:41.6307876', 39);
 
 -- ----------------------------
 -- Table structure for tbl_categories
@@ -62,7 +73,7 @@ CREATE TABLE `tbl_categories`  (
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_categories
@@ -88,11 +99,15 @@ CREATE TABLE `tbl_challenge_records`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id` ASC) USING BTREE,
   CONSTRAINT `tbl_challenge_records_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_challenge_records
 -- ----------------------------
+INSERT INTO `tbl_challenge_records` VALUES (1, 1, 5, 5, 1, 14, '2026-05-22 18:05:28');
+INSERT INTO `tbl_challenge_records` VALUES (2, 38, 5, 5, 1, 15, '2026-05-22 18:16:39');
+INSERT INTO `tbl_challenge_records` VALUES (3, 39, 13, 14, 0.9285714285714286, 64, '2026-05-29 10:42:42');
+INSERT INTO `tbl_challenge_records` VALUES (4, 1, 2, 5, 0.4, 7, '2026-05-29 11:35:51');
 
 -- ----------------------------
 -- Table structure for tbl_learning_progress
@@ -109,7 +124,7 @@ CREATE TABLE `tbl_learning_progress`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id` ASC) USING BTREE,
   CONSTRAINT `tbl_learning_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_learning_progress
@@ -129,6 +144,11 @@ INSERT INTO `tbl_learning_progress` VALUES (12, 3, '2023-06-07', 20, 60, 18, 20)
 INSERT INTO `tbl_learning_progress` VALUES (13, 15, '2025-06-20', 1, 1, 0, 0);
 INSERT INTO `tbl_learning_progress` VALUES (14, 31, '2026-03-13', 5, 5, 0, 0);
 INSERT INTO `tbl_learning_progress` VALUES (15, 37, '2026-05-22', 11, 13, 4, 10);
+INSERT INTO `tbl_learning_progress` VALUES (16, 1, '2026-05-22', 5, 14, 5, 5);
+INSERT INTO `tbl_learning_progress` VALUES (17, 38, '2026-05-22', 5, 15, 5, 5);
+INSERT INTO `tbl_learning_progress` VALUES (18, 1, '2026-05-28', 2, 2, 0, 0);
+INSERT INTO `tbl_learning_progress` VALUES (19, 39, '2026-05-29', 21, 71, 13, 14);
+INSERT INTO `tbl_learning_progress` VALUES (20, 1, '2026-05-29', 9, 11, 2, 5);
 
 -- ----------------------------
 -- Table structure for tbl_roles
@@ -138,7 +158,7 @@ CREATE TABLE `tbl_roles`  (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 127 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 132 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_roles
@@ -146,135 +166,6 @@ CREATE TABLE `tbl_roles`  (
 INSERT INTO `tbl_roles` VALUES (1, 'ROLE_USER');
 INSERT INTO `tbl_roles` VALUES (2, 'ROLE_MODERATOR');
 INSERT INTO `tbl_roles` VALUES (3, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (4, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (5, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (6, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (7, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (8, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (9, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (10, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (11, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (12, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (13, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (14, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (15, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (16, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (17, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (18, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (19, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (20, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (21, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (22, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (23, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (24, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (25, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (26, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (27, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (28, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (29, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (30, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (31, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (32, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (33, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (34, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (35, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (36, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (37, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (38, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (39, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (40, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (41, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (42, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (43, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (44, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (45, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (46, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (47, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (48, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (49, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (50, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (51, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (52, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (53, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (54, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (55, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (56, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (57, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (58, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (59, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (60, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (61, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (62, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (63, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (64, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (65, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (66, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (67, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (68, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (69, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (70, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (71, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (72, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (73, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (74, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (75, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (76, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (77, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (78, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (79, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (80, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (81, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (82, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (83, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (84, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (85, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (86, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (87, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (88, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (89, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (90, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (91, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (92, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (93, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (94, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (95, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (96, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (97, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (98, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (99, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (100, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (101, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (102, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (103, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (104, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (105, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (106, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (107, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (108, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (109, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (110, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (111, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (112, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (113, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (114, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (115, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (116, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (117, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (118, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (119, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (120, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (121, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (122, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (123, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (124, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (125, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (126, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (127, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (128, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (129, 'ROLE_ADMIN');
-INSERT INTO `tbl_roles` VALUES (130, 'ROLE_USER');
-INSERT INTO `tbl_roles` VALUES (131, 'ROLE_MODERATOR');
-INSERT INTO `tbl_roles` VALUES (132, 'ROLE_ADMIN');
 
 -- ----------------------------
 -- Table structure for tbl_user_favorites
@@ -292,10 +183,10 @@ CREATE TABLE `tbl_user_favorites`  (
 -- ----------------------------
 -- Records of tbl_user_favorites
 -- ----------------------------
-INSERT INTO `tbl_user_favorites` VALUES (15, 1);
-INSERT INTO `tbl_user_favorites` VALUES (31, 1);
 INSERT INTO `tbl_user_favorites` VALUES (15, 2);
+INSERT INTO `tbl_user_favorites` VALUES (1, 7);
 INSERT INTO `tbl_user_favorites` VALUES (3, 9);
+INSERT INTO `tbl_user_favorites` VALUES (38, 9);
 
 -- ----------------------------
 -- Table structure for tbl_user_roles
@@ -321,51 +212,10 @@ INSERT INTO `tbl_user_roles` VALUES (11, 1);
 INSERT INTO `tbl_user_roles` VALUES (15, 1);
 INSERT INTO `tbl_user_roles` VALUES (31, 1);
 INSERT INTO `tbl_user_roles` VALUES (37, 1);
+INSERT INTO `tbl_user_roles` VALUES (38, 1);
+INSERT INTO `tbl_user_roles` VALUES (39, 1);
 INSERT INTO `tbl_user_roles` VALUES (3, 2);
 INSERT INTO `tbl_user_roles` VALUES (1, 3);
-INSERT INTO `tbl_user_roles` VALUES (1, 6);
-INSERT INTO `tbl_user_roles` VALUES (1, 9);
-INSERT INTO `tbl_user_roles` VALUES (1, 12);
-INSERT INTO `tbl_user_roles` VALUES (1, 15);
-INSERT INTO `tbl_user_roles` VALUES (1, 18);
-INSERT INTO `tbl_user_roles` VALUES (1, 21);
-INSERT INTO `tbl_user_roles` VALUES (1, 24);
-INSERT INTO `tbl_user_roles` VALUES (1, 27);
-INSERT INTO `tbl_user_roles` VALUES (1, 30);
-INSERT INTO `tbl_user_roles` VALUES (1, 33);
-INSERT INTO `tbl_user_roles` VALUES (1, 36);
-INSERT INTO `tbl_user_roles` VALUES (1, 39);
-INSERT INTO `tbl_user_roles` VALUES (1, 42);
-INSERT INTO `tbl_user_roles` VALUES (1, 45);
-INSERT INTO `tbl_user_roles` VALUES (1, 48);
-INSERT INTO `tbl_user_roles` VALUES (1, 51);
-INSERT INTO `tbl_user_roles` VALUES (1, 54);
-INSERT INTO `tbl_user_roles` VALUES (1, 57);
-INSERT INTO `tbl_user_roles` VALUES (1, 60);
-INSERT INTO `tbl_user_roles` VALUES (1, 63);
-INSERT INTO `tbl_user_roles` VALUES (1, 66);
-INSERT INTO `tbl_user_roles` VALUES (1, 69);
-INSERT INTO `tbl_user_roles` VALUES (1, 72);
-INSERT INTO `tbl_user_roles` VALUES (1, 75);
-INSERT INTO `tbl_user_roles` VALUES (1, 78);
-INSERT INTO `tbl_user_roles` VALUES (1, 81);
-INSERT INTO `tbl_user_roles` VALUES (1, 84);
-INSERT INTO `tbl_user_roles` VALUES (1, 87);
-INSERT INTO `tbl_user_roles` VALUES (1, 90);
-INSERT INTO `tbl_user_roles` VALUES (1, 93);
-INSERT INTO `tbl_user_roles` VALUES (1, 96);
-INSERT INTO `tbl_user_roles` VALUES (1, 99);
-INSERT INTO `tbl_user_roles` VALUES (1, 102);
-INSERT INTO `tbl_user_roles` VALUES (1, 105);
-INSERT INTO `tbl_user_roles` VALUES (1, 108);
-INSERT INTO `tbl_user_roles` VALUES (1, 111);
-INSERT INTO `tbl_user_roles` VALUES (1, 114);
-INSERT INTO `tbl_user_roles` VALUES (1, 117);
-INSERT INTO `tbl_user_roles` VALUES (1, 120);
-INSERT INTO `tbl_user_roles` VALUES (1, 123);
-INSERT INTO `tbl_user_roles` VALUES (1, 126);
-INSERT INTO `tbl_user_roles` VALUES (1, 129);
-INSERT INTO `tbl_user_roles` VALUES (1, 132);
 
 -- ----------------------------
 -- Table structure for tbl_users
@@ -386,12 +236,12 @@ CREATE TABLE `tbl_users`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username` ASC) USING BTREE,
   UNIQUE INDEX `email`(`email` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 39 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_users
 -- ----------------------------
-INSERT INTO `tbl_users` VALUES (1, 'admin', 'admin@example.com', '$2a$10$WnYGgzJIEE8UJqQMGAGzpeUO.jJbcpGAjZGvRsEyqwm8JYWj6g5qW', '管理员', 'avatar1.png', 32, '2023-06-07', 526, 12450, 0.92);
+INSERT INTO `tbl_users` VALUES (1, 'admin', 'admin@example.com', '$2a$10$kGNqxesVh//hGZ93PFJcc.saiegKkeWFSLzDYWWALs8bNW0Wp561G', '管理员', '/uploads/avatars/1_9ddf3a02b031430b9f1c648cc93585b8.png', 32, '2023-06-07', 542, 12477, 0.9159862479194522);
 INSERT INTO `tbl_users` VALUES (2, 'user1', 'user1@example.com', '$2a$10$WnYGgzJIEE8UJqQMGAGzpeUO.jJbcpGAjZGvRsEyqwm8JYWj6g5qW', '学习者一号', 'avatar2.png', 7, '2023-06-07', 120, 3600, 0.85);
 INSERT INTO `tbl_users` VALUES (3, 'user2', 'user2@example.com', '$2a$10$WnYGgzJIEE8UJqQMGAGzpeUO.jJbcpGAjZGvRsEyqwm8JYWj6g5qW', '英语达人', 'avatar3.png', 15, '2023-06-07', 220, 5400, 0.88);
 INSERT INTO `tbl_users` VALUES (4, 'testuser5', 'test5@example.com', '$2a$10$k55tnVDEGyyGeAODhTeYXuothiOKYPhnVlvm/CQzPb0vS9ptN5YEO', 'Test User 5', NULL, 0, NULL, 0, 0, 0);
@@ -400,6 +250,8 @@ INSERT INTO `tbl_users` VALUES (11, 'admin123', '123456@qq.com', '$2a$10$Azl6cMg
 INSERT INTO `tbl_users` VALUES (15, 'test', '123456789@qq.com', '$2a$10$4vOdewbDgcgvogSLsNSYrODBd3GvSvaG8ujx4QigxaXzh7XX40CfS', '王五', NULL, 0, '2025-06-20', 1, 1, 0);
 INSERT INTO `tbl_users` VALUES (31, 'admin123456', 'admin123@qq.com', '$2a$10$xOTK3IxYzCp7V/TXQQ0NhOJMXycHcxdjnFYNh/P7aD.h7.Qpdcvcu', 'ad123456', NULL, 0, '2026-03-13', 5, 5, 0);
 INSERT INTO `tbl_users` VALUES (37, 'user111', 'user1@qq.com', '$2a$10$j3jXAuvVTxmgy8qTqU2ekeyPNsW6EPp03jkWG/lj1SNyCDphQXu12', 'user111', NULL, 0, '2026-05-22', 11, 13, 0.19047619047619047);
+INSERT INTO `tbl_users` VALUES (38, 'test1', 'test@qq.com', '$2a$10$kGNqxesVh//hGZ93PFJcc.saiegKkeWFSLzDYWWALs8bNW0Wp561G', 'test', '/uploads/avatars/38_7ee1d064a9c040acacf700d7e012b1ac.png', 0, '2026-05-22', 5, 15, 0.5);
+INSERT INTO `tbl_users` VALUES (39, 'test2', 'test2@qq.com', '$2a$10$649Kg1kal0JBBDd0jYAe8OBvc5f1wrjo312fIjXBm/RMEgpADuLDW', 'test', '/uploads/avatars/39_366920c0437d42c5af69b8b9c1d9c4c2.png', 0, '2026-05-29', 21, 71, 0.37142857142857144);
 
 -- ----------------------------
 -- Table structure for tbl_word_cards
@@ -416,12 +268,11 @@ CREATE TABLE `tbl_word_cards`  (
   `difficulty` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `word`(`word` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 371 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_word_cards
 -- ----------------------------
-INSERT INTO `tbl_word_cards` VALUES (1, 'abandon', '放弃，抛弃', '[əˈbændən]', 'v.', 'To leave completely and finally; forsake utterly; desert.', 'He abandoned his family.', 'medium');
 INSERT INTO `tbl_word_cards` VALUES (2, 'ability', '能力，才能', '[əˈbɪləti]', 'n.', 'The quality or state of being able; power to perform.', 'He has the ability to solve complex problems.', 'easy');
 INSERT INTO `tbl_word_cards` VALUES (3, 'abroad', '国外', '[əˈbrɔːd]', 'adv.', 'In or to a foreign country.', 'He went abroad for his studies.', 'easy');
 INSERT INTO `tbl_word_cards` VALUES (4, 'absolute', '绝对的，完全的', '[ˈæbsəluːt]', 'adj.', 'Free from imperfection; complete; perfect.', 'He has absolute control over the situation.', 'medium');
@@ -759,7 +610,6 @@ CREATE TABLE `tbl_word_categories`  (
 -- ----------------------------
 -- Records of tbl_word_categories
 -- ----------------------------
-INSERT INTO `tbl_word_categories` VALUES (1, 1);
 INSERT INTO `tbl_word_categories` VALUES (2, 1);
 INSERT INTO `tbl_word_categories` VALUES (3, 1);
 INSERT INTO `tbl_word_categories` VALUES (5, 1);
