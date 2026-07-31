@@ -1,0 +1,124 @@
+@font-face {
+  font-family: "iconfont";
+  src: url('https://at.alicdn.com/t/c/font_4456621_l2c6dfpxlm.woff2?t=1710667981605') format('woff2'),
+       url('https://at.alicdn.com/t/c/font_4456621_l2c6dfpxlm.woff?t=1710667981605') format('woff'),
+       url('https://at.alicdn.com/t/c/font_4456621_l2c6dfpxlm.ttf?t=1710667981605') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 播放图标 - 原图标 */
+.icon-play:before {
+  content: "\e6b1";
+}
+
+/* 新播放图标 - 三角形 */
+.icon-play-triangle:before {
+  content: "\e652";
+}
+
+/* 新播放图标 - 圆形播放 */
+.icon-play-circle:before {
+  content: "\e601";
+}
+
+/* 新播放图标 - 视频播放 */
+.icon-video-play:before {
+  content: "\e605";
+}
+
+/* 暂停图标 */
+.icon-pause:before {
+  content: "\e6b2";
+}
+
+/* 暂停图标 - 圆形 */
+.icon-pause-circle:before {
+  content: "\e602";
+}
+
+/* 对勾图标 */
+.icon-check:before {
+  content: "\e606";
+}
+
+/* 错误图标 */
+.icon-close:before {
+  content: "\e607";
+}
+
+/* 声音图标 */
+.icon-sound:before {
+  content: "\e688";
+}
+
+/* 星星图标 */
+.icon-star:before {
+  content: "\e604";
+}
+
+/* 书本图标 */
+.icon-book:before {
+  content: "\e62d";
+}
+
+/* 耳机图标 */
+.icon-headphone:before {
+  content: "\e603";
+}
+
+/* 问答图标 */
+.icon-quiz:before {
+  content: "\e65a";
+}
+
+/* 刷新图标 */
+.icon-refresh:before {
+  content: "\e608";
+}
+
+/* 右箭头图标 */
+.icon-right:before {
+  content: "\e609";
+}
+
+/* 图表图标 */
+.icon-chart:before {
+  content: "\e645";
+}
+
+/* 徽章图标 */
+.icon-badge:before {
+  content: "\e60a";
+}
+
+/* 分享图标 */
+.icon-share:before {
+  content: "\e66c";
+}
+
+/* 反馈图标 */
+.icon-feedback:before {
+  content: "\e671";
+}
+
+/* 信息图标 */
+.icon-info:before {
+  content: "\e60b";
+}
+
+/* 微信图标 */
+.icon-wechat:before {
+  content: "\e69a";
+}
+
+/* QQ图标 */
+.icon-qq:before {
+  content: "\e698";
+}
