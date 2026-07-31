@@ -13,37 +13,37 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 鎾斁鍥炬爣 - 鍘熷浘鏍? */
+/* 播放图标 - 原图标 */
 .icon-play:before {
   content: "\e6b1";
 }
 
-/* 鏂版挱鏀惧浘鏍? - 涓夎褰? */
+/* 新播放图标 - 三角形 */
 .icon-play-triangle:before {
   content: "\e652";
 }
 
-/* 鏂版挱鏀惧浘鏍? - 鍦嗗舰鎾斁 */
+/* 新播放图标 - 圆形播放 */
 .icon-play-circle:before {
   content: "\e601";
 }
 
-/* 鏂版挱鏀惧浘鏍? - 瑙嗛鎾斁 */
+/* 新播放图标 - 视频播放 */
 .icon-video-play:before {
   content: "\e605";
 }
 
-/* 鏆傚仠鍥炬爣 */
+/* 暂停图标 */
 .icon-pause:before {
   content: "\e6b2";
 }
 
-/* 鏆傚仠鍥炬爣 - 鍦嗗舰 */
+/* 暂停图标 - 圆形 */
 .icon-pause-circle:before {
   content: "\e602";
 }
 
-/* 瀵瑰嬀鍥炬爣 */
+/* 对勾图标 */
 .icon-check:before {
   content: "\e606";
 }
@@ -53,22 +53,22 @@
   content: "\e607";
 }
 
-/* 澹伴煶鍥炬爣 */
+/* 声音图标 */
 .icon-sound:before {
   content: "\e688";
 }
 
-/* 鏄熸槦鍥炬爣 */
+/* 星星图标 */
 .icon-star:before {
   content: "\e604";
 }
 
-/* 涔︽湰鍥炬爣 */
+/* 书本图标 */
 .icon-book:before {
   content: "\e62d";
 }
 
-/* 鑰虫満鍥炬爣 */
+/* 耳机图标 */
 .icon-headphone:before {
   content: "\e603";
 }
@@ -78,27 +78,27 @@
   content: "\e65a";
 }
 
-/* 鍒锋柊鍥炬爣 */
+/* 刷新图标 */
 .icon-refresh:before {
   content: "\e608";
 }
 
-/* 鍙崇澶村浘鏍? */
+/* 右箭头图标 */
 .icon-right:before {
   content: "\e609";
 }
 
-/* 鍥捐〃鍥炬爣 */
+/* 图表图标 */
 .icon-chart:before {
   content: "\e645";
 }
 
-/* 寰界珷鍥炬爣 */
+/* 徽章图标 */
 .icon-badge:before {
   content: "\e60a";
 }
 
-/* 鍒嗕韩鍥炬爣 */
+/* 分享图标 */
 .icon-share:before {
   content: "\e66c";
 }
@@ -108,7 +108,7 @@
   content: "\e671";
 }
 
-/* 淇℃伅鍥炬爣 */
+/* 信息图标 */
 .icon-info:before {
   content: "\e60b";
 }
@@ -118,7 +118,7 @@
   content: "\e69a";
 }
 
-/* QQ鍥炬爣 */
+/* QQ图标 */
 .icon-qq:before {
   content: "\e698";
 }

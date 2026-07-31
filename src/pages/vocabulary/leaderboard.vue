@@ -52,8 +52,7 @@ export default defineComponent({
     const fetchLeaderboard = async () => {
       try {
         const res = await api.challenge.getLeaderboard(20)
-        const data = res as { data?: unknown[]; content?: unknown[] } | unknown[]
-        const list = Array.isArray(data) ? data : (data.data || data.content || [])
+        const list = Array.isArray(res) ? res : (res?.data || res?.content || [])
         leaderboard.value = (list || []).map(mapRecord)
       } catch (error) {
         console.error('获取排行榜失败', error)

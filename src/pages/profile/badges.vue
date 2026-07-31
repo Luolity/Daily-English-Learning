@@ -1,7 +1,7 @@
 <template>
   <view class="badges-container">
     <view class="header">
-      <text class="title">鎴戠殑鎴愬氨</text>
+      <text class="title">我的成就</text>
       <view class="badge-progress">
         <text class="progress-text">{{ badgeCompletion }}%</text>
         <view class="progress-bar">
@@ -31,17 +31,17 @@
           <text class="badge-date" v-if="badge.dateEarned">
             {{ formatDate(badge.dateEarned) }}
           </text>
-          <text class="badge-locked-text" v-else>鏈В閿?</text>
+          <text class="badge-locked-text" v-else>未解锁</text>
         </view>
       </view>
     </view>
     
-    <!-- 寰界珷璇︽儏寮圭獥 -->
+    <!-- 徽章详情弹窗 -->
     <view v-if="showModal" class="badge-modal" @click.stop="showModal = false">
       <view class="modal-content" @click.stop>
         <view class="modal-header">
           <text class="modal-title">{{ selectedBadge.name }}</text>
-          <text class="modal-close" @click="showModal = false">脳</text>
+          <text class="modal-close" @click="showModal = false">×</text>
         </view>
         
         <view class="modal-body">
@@ -55,12 +55,12 @@
           <text class="modal-badge-description">{{ selectedBadge.description }}</text>
           
           <view class="modal-badge-info" v-if="selectedBadge.dateEarned">
-            <text class="info-label">鑾峰緱鏃堕棿</text>
+            <text class="info-label">获得时间</text>
             <text class="info-value">{{ formatDate(selectedBadge.dateEarned, true) }}</text>
           </view>
           
           <view class="modal-badge-level">
-            <text class="level-label">绛夌骇</text>
+            <text class="level-label">等级</text>
             <text :class="'level-' + selectedBadge.level">{{ getBadgeLevel(selectedBadge.level) }}</text>
           </view>
         </view>
@@ -72,7 +72,7 @@
             :class="{ disabled: !selectedBadge.dateEarned }"
             @click="shareBadge(selectedBadge)"
           >
-            鍒嗕韩
+            分享
           </button>
         </view>
       </view>
@@ -90,7 +90,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     
-    // 寰界珷鏁版嵁
+    // 徽章数据
     const allBadges = computed(() => badgeService.badges.map(badge => {
       const userBadge = userBadges.value.find((item: any) => (item.badgeId || item.id) === badge.id)
       return userBadge ? { ...badge, dateEarned: userBadge.dateEarned } : badge
@@ -102,7 +102,7 @@ export default defineComponent({
       return Math.round((earnedBadges / totalBadges) * 100);
     })
     
-    // 妯℃€佹鐘舵€?
+    // 模态框状态
     const showModal = ref(false)
     const selectedBadge = ref<IBadge>({
       id: '',
@@ -113,7 +113,7 @@ export default defineComponent({
       category: 'special'
     })
     
-    // 寰界珷鍒嗙被
+    // 徽章分类
     const badgeSections = computed(() => {
       const streakBadges = allBadges.value.filter(badge => badge.category === 'streak')
       const vocabBadges = allBadges.value.filter(badge => badge.category === 'vocabulary')
@@ -122,22 +122,22 @@ export default defineComponent({
       
       return [
         {
-          title: '杩炵画瀛︿範',
+          title: '连续学习',
           badges: streakBadges,
           total: streakBadges.length
         },
         {
-          title: '璇嶆眹鎴愬氨',
+          title: '词汇成就',
           badges: vocabBadges,
           total: vocabBadges.length
         },
         {
-          title: '鎸戞垬鎴愬氨',
+          title: '挑战成就',
           badges: challengeBadges,
           total: challengeBadges.length
         },
         {
-          title: '鐗规畩鎴愬氨',
+          title: '特殊成就',
           badges: specialBadges,
           total: specialBadges.length
         }
@@ -149,40 +149,40 @@ export default defineComponent({
       return badgeService.getBadgeIconPath(iconName)
     }
     
-    // 鏄剧ず寰界珷璇︽儏
+    // 显示徽章详情
     const showBadgeDetails = (badge: IBadge) => {
       selectedBadge.value = badge
       showModal.value = true
     }
     
-    // 鏍煎紡鍖栨棩鏈?
+    // 格式化日期
     const formatDate = (dateString: string, detailed = false) => {
       const date = new Date(dateString)
       if (detailed) {
         return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`
       }
-      return `${date.getMonth() + 1}鏈?${date.getDate()}鏃
+      return `${date.getMonth() + 1}月${date.getDate()}日`
     }
     
-    // 鑾峰彇寰界珷绛夌骇鏂囨湰
+    // 获取徽章等级文本
     const getBadgeLevel = (level?: string) => {
       switch (level) {
-        case 'bronze': return '閾滅墝'
-        case 'silver': return '閾剁墝'
-        case 'gold': return '閲戠墝'
-        case 'platinum': return '鐧介噾'
-        default: return '鏅€?'
+        case 'bronze': return '铜牌'
+        case 'silver': return '银牌'
+        case 'gold': return '金牌'
+        case 'platinum': return '白金'
+        default: return '普通'
       }
     }
     
-    // 鍒嗕韩寰界珷
+    // 分享徽章
     const shareBadge = async (badge: IBadge) => {
       if (!badge.dateEarned) return
       
       try {
         await badgeService.shareBadgeToSocial(badge)
       } catch (error) {
-        console.error('鍒嗕韩澶辫触:', error)
+        console.error('分享失败:', error)
         uni.showToast({
           title: '分享失败，请重试',
           icon: 'none'
@@ -190,18 +190,18 @@ export default defineComponent({
       }
     }
     
-    // 鑾峰彇寰界珷绫诲埆琛ㄦ儏
+    // 获取徽章类别表情
     const getBadgeEmoji = (category: string) => {
       switch (category) {
-        case 'streak': return '猸?'
-        case 'vocabulary': return '馃摉'
-        case 'challenge': return '馃弳'
-        case 'special': return '馃帠锔?'
-        default: return '馃敯'
+        case 'streak': return '⭐'
+        case 'vocabulary': return '📖'
+        case 'challenge': return '🏆'
+        case 'special': return '🎖️'
+        default: return '🔰'
       }
     }
     
-    // 鑾峰彇寰界珷绫诲埆棰滆壊
+    // 获取徽章类别颜色
     const getBadgeClassByLevel = (level?: string) => {
       switch (level) {
         case 'bronze': return 'bronze-badge'
@@ -561,7 +561,7 @@ export default defineComponent({
   color: #ffffff;
 }
 
-/* 寰界珷绛夌骇鏍峰紡 */
+/* 徽章等级样式 */
 .bronze-badge {
   background: linear-gradient(135deg, #cd7f32, #e6b17e, #cd7f32);
   box-shadow: 0 4rpx 12rpx rgba(205, 127, 50, 0.5);

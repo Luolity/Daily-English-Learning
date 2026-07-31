@@ -1,27 +1,27 @@
 <template>
   <view class="statistics-container">
     <view class="header">
-      <text class="title">鐎涳缚绡勭紒鐔活吀</text>
+      <text class="title">学习统计</text>
     </view>
     
     <view class="summary-card">
       <view class="summary-item">
         <text class="summary-value">{{ totalDays }}</text>
-        <text class="summary-label">閹顒熸稊鐘层亯閺侊拷</text>
+        <text class="summary-label">总学习天数</text>
       </view>
       <view class="summary-item">
         <text class="summary-value">{{ wordsLearned }}</text>
-        <text class="summary-label">瀹告彃顒熼崡鏇＄槤</text>
+        <text class="summary-label">已学单词</text>
       </view>
       <view class="summary-item">
         <text class="summary-value">{{ challengesCompleted }}</text>
-        <text class="summary-label">閹告垶鍨€瑰本鍨?</text>
+        <text class="summary-label">挑战完成</text>
       </view>
     </view>
     
     <view class="chart-section">
       <view class="section-header">
-        <text class="section-title">鍗曡瘝瀛︿範瓒嬪娍</text>
+        <text class="section-title">单词学习趋势</text>
         <view class="time-range">
           <text 
             v-for="(range, index) in timeRanges" 
@@ -47,14 +47,14 @@
     
     <view class="stats-section">
       <view class="section-header">
-        <text class="section-title">鐎涳缚绡勯崚鍡樼€?</text>
+        <text class="section-title">学习分析</text>
       </view>
       
       <view class="stats-list">
         <view class="stats-item">
           <view class="stats-info">
-            <text class="stats-title">閸楁洝鐦濋幒灞惧綑閻滐拷</text>
-            <text class="stats-desc">閺嶈宓侀幐鎴炲灛濮濓絿鈥橀悳鍥吀缁狅拷</text>
+            <text class="stats-title">单词掌握率</text>
+            <text class="stats-desc">根据挑战正确率计算</text>
           </view>
           <view class="stats-value">
             <view class="progress-bar">
@@ -66,8 +66,8 @@
         
         <view class="stats-item">
           <view class="stats-info">
-            <text class="stats-title">鐎涳缚绡勬潻鐐电敾閹拷</text>
-            <text class="stats-desc">鏉╋拷30婢垛晛鍞撮惃鍕劅娑旂娀顣堕悳锟?</text>
+            <text class="stats-title">学习连续性</text>
+            <text class="stats-desc">近30天内的学习频率</text>
           </view>
           <view class="stats-value">
             <view class="progress-bar">
@@ -79,8 +79,8 @@
         
         <view class="stats-item">
           <view class="stats-info">
-            <text class="stats-title">閸氼剙濮忕拋顓犵矊妫版垹宸?</text>
-            <text class="stats-desc">閻╃ǹ顕禍搴″礋鐠囧秴顒熸稊鐘垫畱濮ｆ柧绶?</text>
+            <text class="stats-title">听力训练频率</text>
+            <text class="stats-desc">相对于单词学习的比例</text>
           </view>
           <view class="stats-value">
             <view class="progress-bar">
@@ -94,8 +94,8 @@
     
     <view class="ranking-section">
       <view class="section-header">
-        <text class="section-title">閹烘帟顢戝锟?</text>
-        <text class="view-all" @click="viewRanking">鏌ョ湅瀹屾暣姒滃崟</text>
+        <text class="section-title">排行榜</text>
+        <text class="view-all" @click="viewRanking">查看完整榜单</text>
       </view>
       
       <view class="ranking-list">
@@ -125,7 +125,7 @@
     </view>
     
     <view class="about-section">
-      <text class="statistics-note">缂佺喕顓搁弫鐗堝祦濮ｅ繑妫╅弴瀛樻煀</text>
+      <text class="statistics-note">统计数据每日更新</text>
     </view>
   </view>
 </template>
@@ -140,7 +140,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     
-    // 閻€劍鍩涙穱鈩冧紖
+    // 用户信息
     const userInfo = computed(() => store.getters.userInfo)
     
     const progressHistory = ref<any[]>([])
@@ -151,9 +151,9 @@ export default defineComponent({
     const continuityRate = ref(0)
     const listeningRate = ref(0)
     
-    // 閺冨爼妫块懠鍐ㄦ纯閫夋瀚?
-    const timeRanges = ['閸涳拷', '閺堬拷', '楠烇拷', '閸忋劑鍎?']
-    const currentRange = ref(1) // 姒涙ǹ顓婚柅澶嬪"閺堬拷"
+    // 时间范围选择
+    const timeRanges = ['周', '月', '年', '全部']
+    const currentRange = ref(1) // 默认选择"月"
     
     const chartData = ref<number[]>([])
     const chartLabels = ref<string[]>([])
@@ -174,9 +174,9 @@ export default defineComponent({
       uni.navigateTo({ url: '/pages/vocabulary/leaderboard' })
     }
     
-    // 閼惧嘲褰囬悽銊﹀煕閸氬秹顩荤€涙鐦?
+    // 获取用户名首字母
     const getUserInitial = (nickname: string) => {
-      if (!nickname || nickname.length === 0) return '閺堬拷'
+      if (!nickname || nickname.length === 0) return '未'
       return nickname.charAt(0)
     }
     
@@ -211,7 +211,7 @@ export default defineComponent({
         userScore.value = challengesCompleted.value
 
         topUsers.value = (Array.isArray(leaderboard) ? leaderboard : []).map((item: any) => ({
-          nickname: item.nickname || '鐎涳缚绡勯悽銊﹀煕',
+          nickname: item.nickname || '学习用户',
           score: item.score || 0,
           isCurrentUser: String(item.userId) === String(userInfo.value.id)
         }))
@@ -219,8 +219,8 @@ export default defineComponent({
         currentUserRank.value = rank >= 0 ? rank + 1 : 0
         updateChartData()
       } catch (error) {
-        console.error('閸旂姾娴囩€涳缚绡勭紒鐔活吀婢惰精瑙?:', error)
-        uni.showToast({ title: '閸旂姾娴囩€涳缚绡勭紒鐔活吀婢惰精瑙?', icon: 'none' })
+        console.error('加载学习统计失败:', error)
+        uni.showToast({ title: '加载学习统计失败', icon: 'none' })
       }
     }
     

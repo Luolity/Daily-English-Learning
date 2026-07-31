@@ -8,7 +8,7 @@
       <view class="content">
         <view class="section">
           <view class="section-header">
-            <text class="section-title">姣忔棩鎸戞垬</text>
+            <text class="section-title">每日挑战</text>
           </view>
           <view class="daily-challenge" @click="navigateTo('/pages/listening/challenge')">
             <view class="daily-image-placeholder">
@@ -16,33 +16,33 @@
             </view>
             <view class="daily-overlay">
               <text class="daily-title">今日听力挑战</text>
-              <text class="daily-subtitle">瀹屾垚娴嬮獙鑾峰緱鎴愬氨</text>
-              <button class="daily-btn">寮€濮嬫寫鎴?</button>
+              <text class="daily-subtitle">完成测验获得成就</text>
+              <button class="daily-btn">开始挑战</button>
             </view>
           </view>
         </view>
         
         <view class="section">
           <view class="section-header">
-            <text class="section-title">缁冧範妯″紡</text>
+            <text class="section-title">练习模式</text>
           </view>
           <view class="card-container">
             <view class="card" @click="navigateTo('/pages/listening/sentence')">
               <view class="card-image-placeholder sentence-bg">
-                <text class="mode-icon">鍚?</text>
+                <text class="mode-icon">听</text>
               </view>
               <view class="card-content">
-                <text class="card-title">鍗曞彞绮惧惉</text>
-                <text class="card-description">閫愬彞缁冧範锛岃皟鑺傝閫?</text>
+                <text class="card-title">单句精听</text>
+                <text class="card-description">逐句练习，调节语速</text>
               </view>
             </view>
             <view class="card" @click="showScenarioNotice">
               <view class="card-image-placeholder scenario-bg">
-                <text class="mode-icon">鍦?</text>
+                <text class="mode-icon">场</text>
               </view>
               <view class="card-content">
                 <text class="card-title">场景听力</text>
-                <text class="card-description">鐪熷疄鍦烘櫙瀵硅瘽缁冧範</text>
+                <text class="card-description">真实场景对话练习</text>
               </view>
             </view>
           </view>
@@ -59,8 +59,8 @@
               :key="index"
               @click="navigateToScenario(scenario)"
             >
-              <view class="scenario-image-placeholder" :class="'scenario-bg-' + index">
-                <text class="scenario-icon" :style="{ color: getScenarioColor(index) }">鍚?</text>
+              <view class="scenario-image-placeholder" :class="`scenario-bg-${index}`">
+                <text class="scenario-icon" :style="{ color: getScenarioColor(index) }">听</text>
               </view>
               <view class="scenario-info">
                 <text class="scenario-title">{{ scenario.title }}</text>
@@ -75,8 +75,8 @@
         
         <view class="section">
           <view class="section-header">
-            <text class="section-title">涓嬭浇绠＄悊</text>
-            <text class="view-all">鏌ョ湅鍏ㄩ儴</text>
+            <text class="section-title">下载管理</text>
+            <text class="view-all">查看全部</text>
           </view>
           <view class="download-list">
             <view v-if="downloadedAudios.length === 0" class="empty-downloads">
@@ -104,55 +104,55 @@ import { defineComponent, ref, reactive } from 'vue'
 export default defineComponent({
   name: 'ListeningIndex',
   setup() {
-    // 鍥剧墖鍔犺浇鐘舵€?
+    // 图片加载状态
     const imageLoaded = reactive({
       daily: false,
       sentence: false,
       scenario: false
     })
     
-    // 鍦烘櫙鍥剧墖鍔犺浇鐘舵€?
+    // 场景图片加载状态
     const scenarioImagesLoaded = ref(Array(4).fill(false))
     
     // 处理图片加载错误
     const handleImageError = (e: any) => {
-      console.error('鍥剧墖鍔犺浇澶辫触:', e)
-      // 鍥剧墖鍔犺浇澶辫触鏃跺彲浠ュ仛涓€浜涘鐞嗭紝濡傛樉绀洪粯璁ゅ浘鐗?
+      console.error('图片加载失败:', e)
+      // 图片加载失败时可以做一些处理，如显示默认图片
     }
     
-    // 妯℃嫙鍦烘櫙鏁版嵁
+    // 模拟场景数据
     const scenarios = reactive([
       {
         id: '1',
-        title: '鍜栧暋搴楃偣椁?',
-        level: '鍒濈骇',
-        duration: '3鍒嗛挓',
+        title: '咖啡店点餐',
+        level: '初级',
+        duration: '3分钟',
         image: '/static/images/listening/scenario_cafe.png'
       },
       {
         id: '2',
-        title: '鏈哄満瀵硅瘽',
+        title: '机场对话',
         level: '中级',
-        duration: '5鍒嗛挓',
+        duration: '5分钟',
         image: '/static/images/listening/scenario_airport.png'
       },
       {
         id: '3',
         title: '商务会议',
-        level: '楂樼骇',
-        duration: '8鍒嗛挓',
+        level: '高级',
+        duration: '8分钟',
         image: '/static/images/listening/scenario_business.png'
       },
       {
         id: '4',
-        title: '鍖婚櫌灏辫瘖',
+        title: '医院就诊',
         level: '中级',
-        duration: '4鍒嗛挓',
+        duration: '4分钟',
         image: '/static/images/listening/scenario_hospital.png'
       }
     ])
     
-    // 妯℃嫙涓嬭浇鏁版嵁
+    // 模拟下载数据
     const downloadedAudios = ref([
       {
         id: '1',
@@ -166,14 +166,14 @@ export default defineComponent({
       }
     ])
     
-    // 椤甸潰璺宠浆
+    // 页面跳转
     const navigateTo = (url: string) => {
       uni.navigateTo({
         url
       })
     }
     
-    // 璺宠浆鍒扮壒瀹氬満鏅?
+    // 跳转到特定场景
     const navigateToScenario = (scenario: any) => {
       uni.showToast({
         title: `${scenario.title}正在准备中`,
@@ -183,7 +183,7 @@ export default defineComponent({
 
     const showScenarioNotice = () => {
       uni.showToast({
-        title: '鍦烘櫙鍚姏姝ｅ湪鍑嗗涓?',
+        title: '场景听力正在准备中',
         icon: 'none'
       })
     }
@@ -496,7 +496,7 @@ export default defineComponent({
   color: #999;
 }
 
-/* 鍥剧墖鍔犺浇鍔ㄧ敾 */
+/* 图片加载动画 */
 .image-loading {
   animation: pulse 1.5s infinite ease-in-out;
 }
@@ -513,7 +513,7 @@ export default defineComponent({
   }
 }
 
-/* 鍥剧墖鍗犱綅绗︽牱寮? */
+/* 图片占位符样式 */
 .image-placeholder {
   position: absolute;
   top: 0;

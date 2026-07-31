@@ -5,7 +5,7 @@ import { getUserAvatarUrl } from '../utils/avatar'
 import { api } from '../services/api'
 import { calcTotalPages } from '../utils/pagination'
 
-// 瀵煎叆API鍝嶅簲绫诲瀷
+// 导入API响应类型
 interface WordCardResponse {
   content?: IWordCard[];
   records?: IWordCard[];
@@ -27,7 +27,7 @@ export default createStore({
     })
   ],
   state: {
-    // 鐢ㄦ埛淇℃伅
+    // 用户信息
     userInfo: {
       id: '',
       nickname: '',
@@ -35,26 +35,26 @@ export default createStore({
       roles: [],
       isLoggedIn: false
     } as IUserInfo,
-    // 鍗曡瘝瀛︿範
+    // 单词学习
     vocabulary: {
       wordList: [] as IWordCard[],
       favorites: [] as IWordCard[],
       categories: ['CET4', 'CET6', 'TOEFL', 'IELTS', 'GRE']
     } as IVocabulary,
-    // 瀛︿範杩涘害
+    // 学习进度
     learningProgress: {
-      streak: 0, // 杩炵画瀛︿範澶╂暟
+      streak: 0, // 连续学习天数
       lastStudyDate: '', // 上次学习日期
       totalWords: 0, // 已学单词总数
-      totalTime: 0, // 鎬诲涔犳椂闂达紙鍒嗛挓锛?
+      totalTime: 0, // 总学习时间（分钟）
       dailyStats: [] as ILearningProgress[], // 每日学习统计
-      correctRate: 0 // 姝ｇ‘鐜?
+      correctRate: 0 // 正确率
     },
-    // 鎴愬氨绯荤粺
+    // 成就系统
     achievements: {
-      badges: [] as IBadge[], // 宸茶幏寰楀窘绔?
-      unlockedAchievements: [] as IAchievement[], // 宸茶В閿佹垚灏?
-      badgeCompletion: 0 // 寰界珷瀹屾垚搴?
+      badges: [] as IBadge[], // 已获得徽章
+      unlockedAchievements: [] as IAchievement[], // 已解锁成就
+      badgeCompletion: 0 // 徽章完成度
     },
     // 听力练习
     listening: {
@@ -72,7 +72,7 @@ export default createStore({
     } as IAppSettings
   },
   mutations: {
-    // 鐢ㄦ埛鐩稿叧
+    // 用户相关
     SET_USER_INFO(state, userInfo: Partial<IUserInfo>) {
       state.userInfo = { ...state.userInfo, ...userInfo };
     },
@@ -120,7 +120,7 @@ export default createStore({
       };
     },
     
-    // 鍗曡瘝鐩稿叧
+    // 单词相关
     SET_WORD_LIST(state, wordList: IWordCard[]) {
       state.vocabulary.wordList = wordList;
     },
@@ -136,11 +136,11 @@ export default createStore({
       state.vocabulary.favorites = favorites;
     },
     
-    // 瀛︿範杩涘害鐩稿叧
+    // 学习进度相关
     UPDATE_LEARNING_PROGRESS(state, progress: IProgressUpdate) {
       const today = new Date().toISOString().split('T')[0];
       
-      // 鏇存柊杩炵画瀛︿範澶╂暟
+      // 更新连续学习天数
       if (state.learningProgress.lastStudyDate !== today) {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
@@ -176,7 +176,7 @@ export default createStore({
         });
       }
       
-      // 鏇存柊姝ｇ‘鐜?
+      // 更新正确率
       if (progress.totalCount && progress.totalCount > 0) {
         const totalCorrect = state.learningProgress.dailyStats.reduce((sum, item) => sum + item.correctCount, 0);
         const totalQuestions = state.learningProgress.dailyStats.reduce((sum, item) => sum + item.totalCount, 0);
@@ -184,7 +184,7 @@ export default createStore({
       }
     },
     
-    // 鎴愬氨鐩稿叧
+    // 成就相关
     ADD_BADGE(state, badge: IBadge & { badgeId?: string }) {
       const badgeKey = badge.badgeId || badge.id;
       if (!state.achievements.badges.some(item => (item as any).badgeId === badgeKey || item.id === badgeKey)) {
@@ -220,7 +220,7 @@ export default createStore({
     }
   },
   actions: {
-    // 鑾峰彇鍗曡瘝鍒楄〃
+    // 获取单词列表
     async fetchWordList({ commit }, { category, difficulty, keyword, page = 1, size = 10 }: { category?: string, difficulty?: string, keyword?: string, page?: number, size?: number }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
@@ -229,7 +229,7 @@ export default createStore({
         const response = await api.wordCards.getWordCards(page, size, category, difficulty, keyword);
         console.log('getWordCards response:', response);
         
-        // 鍋ュ．鎬у垽鏂?
+        // 健壮性判断
         if (response && response.content && Array.isArray(response.content)) {
           const totalItems = response.totalItems ?? 0;
           commit('SET_WORD_LIST', response.content);
@@ -263,7 +263,7 @@ export default createStore({
           };
         } else {
           commit('SET_WORD_LIST', []);
-          console.error('鑾峰彇鍗曡瘝鍒楄〃澶辫触锛岃繑鍥炲唴瀹瑰紓甯?:', response);
+          console.error('获取单词列表失败，返回内容异常:', response);
           return {
             content: [],
             currentPage: page,
@@ -273,15 +273,15 @@ export default createStore({
           };
         }
       } catch (error) {
-        console.error('鑾峰彇鍗曡瘝鍒楄〃澶辫触:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '鑾峰彇鍗曡瘝鍒楄〃澶辫触');
+        console.error('获取单词列表失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '获取单词列表失败');
         throw error;
       } finally {
         commit('SET_LOADING', false);
       }
     },
     
-    // 娣诲姞鍒扮敓璇嶆湰
+    // 添加到生词本
     async addToFavorites({ commit }, word: IWordCard) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
@@ -290,15 +290,15 @@ export default createStore({
         await api.wordCards.addToFavorites(word.id);
         commit('ADD_TO_FAVORITES', word);
         uni.showToast({
-          title: '宸叉坊鍔犲埌鐢熻瘝鏈?',
+          title: '已添加到生词本',
           icon: 'success'
         });
         return true;
       } catch (error) {
-        console.error('娣诲姞鍒扮敓璇嶆湰澶辫触:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '娣诲姞鍒扮敓璇嶆湰澶辫触');
+        console.error('添加到生词本失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '添加到生词本失败');
         uni.showToast({
-          title: '娣诲姞澶辫触',
+          title: '添加失败',
           icon: 'error'
         });
         return false;
@@ -307,7 +307,7 @@ export default createStore({
       }
     },
     
-    // 浠庣敓璇嶆湰绉婚櫎
+    // 从生词本移除
     async removeFromFavorites({ commit }, wordId: string) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
@@ -321,10 +321,10 @@ export default createStore({
         });
         return true;
       } catch (error) {
-        console.error('浠庣敓璇嶆湰绉婚櫎澶辫触:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '浠庣敓璇嶆湰绉婚櫎澶辫触');
+        console.error('从生词本移除失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '从生词本移除失败');
         uni.showToast({
-          title: '绉婚櫎澶辫触',
+          title: '移除失败',
           icon: 'error'
         });
         return false;
@@ -333,7 +333,7 @@ export default createStore({
       }
     },
     
-    // 鏇存柊瀛︿範杩涘害
+    // 更新学习进度
     async updateProgress({ commit, dispatch, state }, progress: IProgressUpdate) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
@@ -344,15 +344,15 @@ export default createStore({
         await dispatch('checkAndAwardBadges');
         return state.learningProgress;
       } catch (error) {
-        console.error('鏇存柊瀛︿範杩涘害澶辫触:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '鏇存柊瀛︿範杩涘害澶辫触');
+        console.error('更新学习进度失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '更新学习进度失败');
         throw error;
       } finally {
         commit('SET_LOADING', false);
       }
     },
 
-    // 妫€鏌ュ苟鍒锋柊寰界珷
+    // 检查并刷新徽章
     async checkAndAwardBadges({ dispatch }) {
       try {
         await api.badges.checkAndAwardBadges();
@@ -360,21 +360,21 @@ export default createStore({
         await dispatch('getBadgeCompletion');
         return true;
       } catch (error) {
-        console.error('妫€鏌ュ窘绔犺В閿佸け璐?:', error);
+        console.error('检查徽章解锁失败:', error);
         return false;
       }
     },
     
-    // 鑾峰彇鐢ㄦ埛寰界珷
+    // 获取用户徽章
     async fetchBadges({ commit }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       
       try {
-        console.log('寮€濮嬭幏鍙栫敤鎴峰窘绔?...');
-        // 鑾峰彇鐢ㄦ埛寰界珷鍒楄〃
+        console.log('开始获取用户徽章...');
+        // 获取用户徽章列表
         const badges = await api.badges.getUserBadges();
-        console.log('鑾峰彇鐢ㄦ埛寰界珷鍝嶅簲:', badges);
+        console.log('获取用户徽章响应:', badges);
         
         const normalized = (Array.isArray(badges) ? badges : []).map((b: any) => ({
           id: b.badgeId || b.id,
@@ -390,52 +390,52 @@ export default createStore({
         
         return badges;
       } catch (error) {
-        console.error('鑾峰彇鐢ㄦ埛寰界珷澶辫触:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '鑾峰彇鐢ㄦ埛寰界珷澶辫触');
+        console.error('获取用户徽章失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '获取用户徽章失败');
         return [];
       } finally {
         commit('SET_LOADING', false);
       }
     },
     
-    // 鑾峰彇寰界珷瀹屾垚搴?
+    // 获取徽章完成度
     async getBadgeCompletion({ commit }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       
       try {
-        // 鑾峰彇寰界珷瀹屾垚搴?
+        // 获取徽章完成度
         const completion = await api.badges.getBadgeCompletion();
         
-        // 鏇存柊鐘舵€?
+        // 更新状态
         commit('SET_BADGE_COMPLETION', completion);
         
         return completion;
       } catch (error) {
-        console.error('鑾峰彇寰界珷瀹屾垚搴﹀け璐?:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '鑾峰彇寰界珷瀹屾垚搴﹀け璐?');
+        console.error('获取徽章完成度失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '获取徽章完成度失败');
         return 0;
       } finally {
         commit('SET_LOADING', false);
       }
     },
     
-    // 鐧诲綍鍔熻兘
+    // 登录功能
     async login({ commit }, { username, password }: { username: string, password: string }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       
       try {
-        console.log('姝ｅ湪灏濊瘯鐧诲綍...');
+        console.log('正在尝试登录...');
         const userInfo = await api.auth.login(username, password);
-        console.log('鐧诲綍鎴愬姛:', userInfo);
+        console.log('登录成功:', userInfo);
         commit('LOGIN', userInfo);
         return userInfo;
       } catch (error) {
-        console.error('鐧诲綍澶辫触:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '鐧诲綍澶辫触');
+        console.error('登录失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '登录失败');
         uni.showToast({
-          title: '鐧诲綍澶辫触锛岃妫€鏌ョ敤鎴峰悕鍜屽瘑鐮?',
+          title: '登录失败，请检查用户名和密码',
           icon: 'none'
         });
         throw error;
@@ -444,21 +444,21 @@ export default createStore({
       }
     },
     
-    // 娉ㄥ唽鍔熻兘
+    // 注册功能
     async register({ commit }, { username, email, password, nickname }: { username: string, email: string, password: string, nickname?: string }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       
       try {
-        console.log('姝ｅ湪灏濊瘯娉ㄥ唽...');
+        console.log('正在尝试注册...');
         const userInfo = await api.auth.register(username, email, password, nickname);
-        console.log('娉ㄥ唽鎴愬姛:', userInfo);
+        console.log('注册成功:', userInfo);
         commit('LOGIN', userInfo);
         return userInfo;
       } catch (error: any) {
-        console.error('娉ㄥ唽澶辫触:', error);
+        console.error('注册失败:', error);
         // 使用服务器返回的错误消息
-        const errorMessage = error.message || '娉ㄥ唽澶辫触';
+        const errorMessage = error.message || '注册失败';
         commit('SET_ERROR', errorMessage);
         // 不在这里显示Toast，让UI组件决定如何显示错误
         throw error;
@@ -467,7 +467,7 @@ export default createStore({
       }
     },
     
-    // 閫€鍑虹櫥褰?
+    // 退出登录
     async logout({ commit }) {
       commit('SET_LOADING', true);
       
@@ -476,21 +476,21 @@ export default createStore({
         commit('LOGOUT');
         return true;
       } catch (error) {
-        console.error('閫€鍑虹櫥褰曞け璐?:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '閫€鍑虹櫥褰曞け璐?');
+        console.error('退出登录失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '退出登录失败');
         return false;
       } finally {
         commit('SET_LOADING', false);
       }
     },
     
-    // 妫€鏌ョ櫥褰曠姸鎬?
+    // 检查登录状态
     async checkLoginStatus({ commit }) {
       try {
         const token = uni.getStorageSync('token');
         
         if (token) {
-          // 鑾峰彇鐢ㄦ埛淇℃伅
+          // 获取用户信息
           const userInfo = await api.user.getUserInfo();
           commit('LOGIN', {
             ...userInfo,
@@ -502,14 +502,14 @@ export default createStore({
           return false;
         }
       } catch (error) {
-        console.error('妫€鏌ョ櫥褰曠姸鎬佸け璐?:', error);
+        console.error('检查登录状态失败:', error);
         uni.removeStorageSync('token');
         commit('LOGOUT');
         return false;
       }
     },
     
-    // 鑾峰彇鏀惰棌鐨勫崟璇?
+    // 获取收藏的单词
     async fetchFavorites({ commit }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
@@ -518,7 +518,7 @@ export default createStore({
         const response = await api.wordCards.getFavorites();
         console.log('getFavorites response:', response);
         
-        // 鍋ュ．鎬у鐞?
+        // 健壮性处理
         let favorites: IWordCard[] = [];
         
         if (response && response.content && Array.isArray(response.content)) {
@@ -526,22 +526,22 @@ export default createStore({
         } else if (response && Array.isArray(response)) {
           favorites = response;
         } else if (response) {
-          // 灏濊瘯浠庡叾浠栧彲鑳界殑瀛楁涓彁鍙栨暟鎹?
+          // 尝试从其他可能的字段中提取数据
           favorites = response.records || response.data || response.favorites || [];
         }
         
         commit('SET_FAVORITES', favorites);
         return favorites;
       } catch (error) {
-        console.error('鑾峰彇鏀惰棌鍗曡瘝澶辫触:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '鑾峰彇鏀惰棌鍗曡瘝澶辫触');
+        console.error('获取收藏单词失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '获取收藏单词失败');
         return [];
       } finally {
         commit('SET_LOADING', false);
       }
     },
     
-    // 鏇存柊鐢ㄦ埛淇℃伅锛堟湰鍦? + 鍙€夊悓姝ユ湇鍔＄锛?
+    // 更新用户信息（本地 + 可选同步服务端）
     updateUserInfo({ commit }, userInfo: Partial<IUserInfo>) {
       const patch = { ...userInfo };
       if (userInfo.avatar !== undefined) {
@@ -551,13 +551,13 @@ export default createStore({
       return patch;
     },
 
-    // 搴旂敤璁剧疆锛堟瘡鏃ョ洰鏍囥€侀粯璁ら毦搴︾瓑锛?
+    // 应用设置（每日目标、默认难度等）
     updateUserSetting({ commit }, { key, value }: { key: keyof IAppSettings; value: IAppSettings[keyof IAppSettings] }) {
       commit('SET_APP_SETTING', { key, value });
       return { key, value };
     },
 
-    // 浠庢湇鍔＄鍒锋柊鐢ㄦ埛淇℃伅锛堝惈澶村儚锛?
+    // 从服务端刷新用户信息（含头像）
     async fetchUserProfile({ commit, state }) {
       if (!state.userInfo.isLoggedIn) return null;
       try {
@@ -565,12 +565,12 @@ export default createStore({
         commit('SET_USER_INFO', info);
         return info;
       } catch (error) {
-        console.error('鍒锋柊鐢ㄦ埛淇℃伅澶辫触:', error);
+        console.error('刷新用户信息失败:', error);
         return null;
       }
     },
 
-    // 涓婁紶澶村儚
+    // 上传头像
     async uploadAvatar({ commit }, filePath: string) {
       try {
         const result = await api.user.uploadAvatar(filePath);
@@ -578,20 +578,20 @@ export default createStore({
         commit('SET_USER_INFO', { avatar: avatarUrl });
         return { avatar: avatarUrl };
       } catch (error) {
-        console.error('涓婁紶澶村儚澶辫触:', error);
+        console.error('上传头像失败:', error);
         throw error;
       }
     },
 
-    // 鑾峰彇瀛︿範杩涘害
+    // 获取学习进度
     async fetchLearningProgress({ commit }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       
       try {
-        console.log('鑾峰彇瀛︿範杩涘害...');
+        console.log('获取学习进度...');
         const progress = await api.progress.getProgress();
-        console.log('鑾峰彇瀛︿範杩涘害鎴愬姛:', progress);
+        console.log('获取学习进度成功:', progress);
         commit('SET_USER_INFO', {
           learningStreak: progress.streak,
           lastStudyDate: progress.lastStudyDate,
@@ -601,8 +601,8 @@ export default createStore({
         });
         return progress;
       } catch (error) {
-        console.error('鑾峰彇瀛︿範杩涘害澶辫触:', error);
-        commit('SET_ERROR', error instanceof Error ? error.message : '鑾峰彇瀛︿範杩涘害澶辫触');
+        console.error('获取学习进度失败:', error);
+        commit('SET_ERROR', error instanceof Error ? error.message : '获取学习进度失败');
         throw error;
       } finally {
         commit('SET_LOADING', false);
@@ -626,4 +626,4 @@ export default createStore({
     defaultDifficulty: state => state.appSettings.defaultDifficulty,
     userAvatarUrl: state => getUserAvatarUrl(state.userInfo.avatar)
   }
-});
+}); 

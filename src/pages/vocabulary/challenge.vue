@@ -1,28 +1,28 @@
 <template>
   <view class="challenge-container">
     <view class="header">
-      <text class="title">璁板繂鎸戞垬</text>
-      <text class="score">寰楀垎: {{ score }}/{{ questions.length }}</text>
+      <text class="title">记忆挑战</text>
+      <text class="score">得分: {{ score }}/{{ questions.length }}</text>
     </view>
     
     <view v-if="!isGameStarted" class="start-screen">
       <view class="start-card">
-        <text class="start-title">鍗曡瘝璁板繂鎸戞垬</text>
-        <text class="start-description">娴嬭瘯浣犵殑鍗曡瘝璁板繂鑳藉姏锛岄€夋嫨姝ｇ‘鐨勪腑鏂囬噴涔?</text>
+        <text class="start-title">单词记忆挑战</text>
+        <text class="start-description">测试你的单词记忆能力，选择正确的中文释义</text>
         
         <view class="leaderboard-btn-container">
-          <button class="leaderboard-btn" @click="goToLeaderboard">馃弳 鏌ョ湅鎺掕姒?</button>
+          <button class="leaderboard-btn" @click="goToLeaderboard">🏆 查看排行榜</button>
         </view>
 
         <view class="difficulty-selector">
-          <text class="selector-label">閫夋嫨闅惧害:</text>
+          <text class="selector-label">选择难度:</text>
           <view class="selector-options">
             <view 
               class="difficulty-option" 
               :class="{ active: selectedDifficulty === 'easy' }"
               @click="selectedDifficulty = 'easy'"
             >
-              <text>绠€鍗?</text>
+              <text>简单</text>
             </view>
             <view 
               class="difficulty-option" 
@@ -36,13 +36,13 @@
               :class="{ active: selectedDifficulty === 'hard' }"
               @click="selectedDifficulty = 'hard'"
             >
-              <text>鍥伴毦</text>
+              <text>困难</text>
             </view>
           </view>
         </view>
         
         <view class="count-selector">
-          <text class="selector-label">棰樼洰鏁伴噺: {{ questionCount }}</text>
+          <text class="selector-label">题目数量: {{ questionCount }}</text>
           <slider 
             :min="5" 
             :max="50" 
@@ -64,7 +64,7 @@
         <view class="challenge-options">
           <view class="option-row">
             <view class="option-item">
-              <text class="option-label">鏃堕棿闄愬埗</text>
+              <text class="option-label">时间限制</text>
               <switch :checked="enableTimeLimit" @change="onTimeLimitChange" color="#3cc51f" />
             </view>
             <view class="option-item">
@@ -74,25 +74,25 @@
           </view>
         </view>
         
-        <button class="start-btn" @click="startGame">寮€濮嬫寫鎴?</button>
+        <button class="start-btn" @click="startGame">开始挑战</button>
       </view>
     </view>
     
     <view v-else-if="isGameOver" class="result-screen">
       <view class="result-card">
-        <text class="result-title">鎸戞垬缁撴潫!</text>
+        <text class="result-title">挑战结束!</text>
         <view class="result-stats">
           <view class="stat-item">
             <text class="stat-value">{{ score }}</text>
-            <text class="stat-label">寰楀垎</text>
+            <text class="stat-label">得分</text>
           </view>
           <view class="stat-item">
             <text class="stat-value">{{ Math.round((score / questions.length) * 100) }}%</text>
-            <text class="stat-label">姝ｇ‘鐜?</text>
+            <text class="stat-label">正确率</text>
           </view>
           <view class="stat-item">
             <text class="stat-value">{{ usedTime }}s</text>
-            <text class="stat-label">鐢ㄦ椂</text>
+            <text class="stat-label">用时</text>
           </view>
         </view>
         
@@ -101,15 +101,15 @@
         </view>
         
         <view class="result-message">
-          <text v-if="score === questions.length">澶浜?! 瀹岀編绛旈!</text>
+          <text v-if="score === questions.length">太棒了! 完美答题!</text>
           <text v-else-if="score / questions.length >= 0.8">很好! 继续努力!</text>
-          <text v-else-if="score / questions.length >= 0.6">涓嶉敊! 鍐嶆帴鍐嶅帀!</text>
-          <text v-else>鍔犳补! 鍐嶈瘯涓€娆?!</text>
+          <text v-else-if="score / questions.length >= 0.6">不错! 再接再厉!</text>
+          <text v-else>加油! 再试一次!</text>
         </view>
         
         <view class="result-actions">
-          <button class="action-btn" @click="restartGame">鍐嶇帺涓€娆?</button>
-          <button class="action-btn" @click="backToHome">杩斿洖涓婚〉</button>
+          <button class="action-btn" @click="restartGame">再玩一次</button>
+          <button class="action-btn" @click="backToHome">返回主页</button>
         </view>
       </view>
     </view>
@@ -143,7 +143,7 @@
         <view v-if="showAnswer" class="answer-feedback">
           <view v-if="isCorrect" class="feedback correct">
             <svg-icon name="check" color="#4caf50" :size="22" />
-            <text>鍥炵瓟姝ｇ‘!</text>
+            <text>回答正确!</text>
           </view>
           <view v-else class="feedback wrong">
             <svg-icon name="close" color="#f44336" :size="22" />
@@ -168,21 +168,21 @@
           class="next-btn"
           @click="nextQuestion"
         >
-          {{ isLastQuestion ? '鏌ョ湅缁撴灉' : '涓嬩竴棰?' }}
+          {{ isLastQuestion ? '查看结果' : '下一题' }}
         </button>
       </view>
       
       <view class="game-info">
         <view class="info-item">
-          <text class="info-label">闅惧害</text>
+          <text class="info-label">难度</text>
           <text class="info-value">{{ difficultyText }}</text>
         </view>
         <view class="info-item">
-          <text class="info-label">棰樼洰</text>
+          <text class="info-label">题目</text>
           <text class="info-value">{{ currentQuestionIndex + 1 }}/{{ questions.length }}</text>
         </view>
         <view v-if="enableTimeLimit" class="info-item">
-          <text class="info-label">鏃堕棿</text>
+          <text class="info-label">时间</text>
           <text class="info-value" :class="{ 'time-warning': timeLeft <= 10 }">{{ timeLeft }}s</text>
         </view>
       </view>
@@ -203,7 +203,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     
-    // 娓告垙鐘舵€?
+    // 游戏状态
     const isGameStarted = ref(false)
     const isGameOver = ref(false)
     const selectedDifficulty = ref(store.getters.defaultDifficulty || 'medium')
@@ -211,7 +211,7 @@ export default defineComponent({
     const enableTimeLimit = ref(true)
     const enableAudio = ref(true)
     
-    // 问题鐩稿叧
+    // 问题相关
     const questions = ref<Array<{
       word: string;
       phonetic: string;
@@ -227,7 +227,7 @@ export default defineComponent({
     const timerInterval = ref<number | null>(null)
     const startTime = ref<number>(0)
     
-    // 褰撳墠问题
+    // 当前问题
     const currentQuestion = computed(() => {
       return questions.value[currentQuestionIndex.value] || {
         word: '',
@@ -237,7 +237,7 @@ export default defineComponent({
       }
     })
     
-    // 鏄惁涓烘渶鍚庝竴棰?
+    // 是否为最后一题
     const isLastQuestion = computed(() => {
       return currentQuestionIndex.value === questions.value.length - 1
     })
@@ -247,7 +247,7 @@ export default defineComponent({
       return selectedOptionIndex.value === currentQuestion.value.correctIndex
     })
     
-    // 棰樼洰鏁伴噺鍙樺寲
+    // 题目数量变化
     const onQuestionCountChange = (e: any) => {
       questionCount.value = e.detail.value
     }
@@ -260,7 +260,7 @@ export default defineComponent({
       return baseTime;
     }
     
-    // 鍚姩璁℃椂鍣?
+    // 启动计时器
     const startTimer = () => {
       startTime.value = Date.now();
       
@@ -282,7 +282,7 @@ export default defineComponent({
       }, 1000) as unknown as number;
     }
     
-    // 閲嶇疆璁℃椂鍣?
+    // 重置计时器
     const resetTimer = () => {
       if (!enableTimeLimit.value) return;
       
@@ -290,7 +290,7 @@ export default defineComponent({
       timeLeft.value = timePerQuestion;
     }
     
-    // 鍋滄璁℃椂鍣?
+    // 停止计时器
     const stopTimer = () => {
       if (timerInterval.value) {
         clearInterval(Number(timerInterval.value));
@@ -309,10 +309,10 @@ export default defineComponent({
       // audio.play();
     }
     
-    // 寮€濮嬫父鎴?
+    // 开始游戏
     const startGame = async () => {
       try {
-      // 闇€瑕佽冻澶熷崟璇嶇敓鎴愬共鎵伴」锛宻ize 蹇呴』涓烘暣鏁?
+      // 需要足够单词生成干扰项，size 必须为整数
       const pageSize = Math.min(50, Math.max(questionCount.value + 10, questionCount.value * 3));
       
       await store.dispatch('fetchWordList', { 
@@ -325,7 +325,7 @@ export default defineComponent({
 
       if (wordList.length < 4) {
         uni.showToast({
-          title: '璇ラ毦搴︿笅鍗曡瘝涓嶈冻锛岃鎹㈤毦搴︽垨鍏堟坊鍔犲崟璇?',
+          title: '该难度下单词不足，请换难度或先添加单词',
           icon: 'none'
         })
         return
@@ -337,7 +337,7 @@ export default defineComponent({
       const targetCount = Math.min(questionCount.value, availableWords.length);
       if (targetCount < questionCount.value) {
         uni.showToast({
-          title: `浠呮壘鍒? ${targetCount} 涓崟璇嶏紝灏嗘寜瀹為檯鏁伴噺鍑洪`,
+          title: `仅找到 ${targetCount} 个单词，将按实际数量出题`,
           icon: 'none'
         })
       }
@@ -349,13 +349,13 @@ export default defineComponent({
       }
 
       if (selectedWords.length === 0) {
-        uni.showToast({ title: '鏃犳硶鐢熸垚棰樼洰', icon: 'none' })
+        uni.showToast({ title: '无法生成题目', icon: 'none' })
         return
       }
       
-      // 鐢熸垚问题
+      // 生成问题
       questions.value = selectedWords.map(word => {
-        // 涓烘瘡涓棶棰樼敓鎴?3涓敊璇€夐」
+        // 为每个问题生成3个错误选项
         const otherWords = wordList.filter((w: IWordCard) => w.id !== word.id)
         const wrongOptions: string[] = []
         
@@ -366,7 +366,7 @@ export default defineComponent({
           otherWords.splice(randomIndex, 1)
         }
         
-        // 纭繚鍗充娇鍗曡瘝鏁伴噺涓嶈冻锛屼篃鑳界敓鎴?4涓€夐」锛堝彲鑳藉寘鍚噸澶嶉€夐」锛?
+        // 确保即使单词数量不足，也能生成4个选项（可能包含重复选项）
         const allOptions = [...wrongOptions]
         
         // 如果没有足够的错误选项，从wordList中随机选择（可能重复）
@@ -379,7 +379,7 @@ export default defineComponent({
             }
           } else {
             // 如果wordList为空，使用占位符
-            allOptions.push("閫夐」" + (allOptions.length + 1))
+            allOptions.push("选项" + (allOptions.length + 1))
           }
         }
         
@@ -395,7 +395,7 @@ export default defineComponent({
         }
       })
       
-      // 閲嶇疆娓告垙鐘舵€?
+      // 重置游戏状态
       currentQuestionIndex.value = 0
       selectedOptionIndex.value = -1
       showAnswer.value = false
@@ -406,7 +406,7 @@ export default defineComponent({
       isGameStarted.value = true
       isGameOver.value = false
       
-      // 鍚姩璁℃椂鍣?
+      // 启动计时器
       startTimer()
       
       // 播放当前单词音频
@@ -414,12 +414,12 @@ export default defineComponent({
         playWordAudio(questions.value[0].word)
       }
       } catch (error) {
-        console.error('寮€濮嬫寫鎴樺け璐?', error)
-        uni.showToast({ title: '寮€濮嬫寫鎴樺け璐ワ紝璇烽噸璇?', icon: 'none' })
+        console.error('开始挑战失败', error)
+        uni.showToast({ title: '开始挑战失败，请重试', icon: 'none' })
       }
     }
     
-    // 閫夋嫨閫夐」
+    // 选择选项
     const selectOption = (index: number) => {
       if (!showAnswer.value) {
         selectedOptionIndex.value = index
@@ -439,14 +439,14 @@ export default defineComponent({
       usedTime.value += currentQuestionTime;
     }
     
-    // 涓嬩竴棰?
+    // 下一题
     const nextQuestion = async () => {
       if (isLastQuestion.value) {
-        // 娓告垙缁撴潫
+        // 游戏结束
         isGameOver.value = true
         stopTimer();
         
-        // 鎻愪氦鎸戞垬璁板綍
+        // 提交挑战记录
         try {
           await api.challenge.submitRecord({
             score: score.value,
@@ -461,15 +461,15 @@ export default defineComponent({
             totalCount: questions.value.length
           });
         } catch (error) {
-          console.error('鎸戞垬鏁版嵁鎻愪氦澶辫触', error);
+          console.error('挑战数据提交失败', error);
         }
       } else {
-        // 杩涘叆涓嬩竴棰?
+        // 进入下一题
         currentQuestionIndex.value++
         selectedOptionIndex.value = -1
         showAnswer.value = false
         
-        // 閲嶇疆璁℃椂鍣?
+        // 重置计时器
         resetTimer();
         startTimer();
         
@@ -478,28 +478,28 @@ export default defineComponent({
       }
     }
     
-    // 閲嶆柊寮€濮嬫父鎴?
+    // 重新开始游戏
     const restartGame = () => {
       isGameStarted.value = false
       isGameOver.value = false
       stopTimer();
     }
     
-    // 杩斿洖涓婚〉
+    // 返回主页
     const backToHome = () => {
       uni.switchTab({
         url: '/pages/index/index'
       })
     }
     
-    // 鍓嶅線鎺掕姒?
+    // 前往排行榜
     const goToLeaderboard = () => {
       uni.navigateTo({
         url: '/pages/vocabulary/leaderboard'
       })
     }
     
-    // 鏃堕棿闄愬埗鍙樺寲
+    // 时间限制变化
     const onTimeLimitChange = (e: any) => {
       enableTimeLimit.value = e.detail.value
     }
@@ -509,21 +509,21 @@ export default defineComponent({
       enableAudio.value = e.detail.value
     }
     
-    // 璁＄畻闅惧害鏂囨湰
+    // 计算难度文本
     const difficultyText = computed(() => {
       switch (selectedDifficulty.value) {
         case 'easy':
-          return '绠€鍗?'
+          return '简单'
         case 'medium':
           return '中等'
         case 'hard':
-          return '鍥伴毦'
+          return '困难'
         default:
           return '未知'
       }
     })
     
-    // 璁＄畻缁撴灉寰界珷
+    // 计算结果徽章
     const resultBadgeClass = computed(() => {
       const percentage = score.value / questions.value.length;
       if (percentage === 1) {
@@ -540,13 +540,13 @@ export default defineComponent({
     const resultBadgeText = computed(() => {
       const percentage = score.value / questions.value.length;
       if (percentage === 1) {
-        return '瀹岀編'
+        return '完美'
       } else if (percentage >= 0.8) {
         return '良好'
       } else if (percentage >= 0.6) {
-        return '涓€鑸?'
+        return '一般'
       } else {
-        return '杈冨樊'
+        return '较差'
       }
     })
     
@@ -767,7 +767,7 @@ export default defineComponent({
   box-shadow: 0 2rpx 6rpx rgba(76, 175, 80, 0.2);
 }
 
-/* 娓告垙鐣岄潰 */
+/* 游戏界面 */
 .game-screen {
   flex: 1;
   display: flex;
@@ -949,7 +949,7 @@ export default defineComponent({
   color: #ff3b30;
 }
 
-/* 缁撴灉鐣岄潰 */
+/* 结果界面 */
 .result-screen {
   flex: 1;
   display: flex;

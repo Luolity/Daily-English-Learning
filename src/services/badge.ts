@@ -1,6 +1,6 @@
 import { Store } from 'vuex';
 
-// 寰界珷瀹氫箟鎺ュ彛
+// 徽章定义接口
 export interface IBadge {
   id: string;
   name: string;
@@ -12,13 +12,13 @@ export interface IBadge {
   dateEarned?: string;
 }
 
-// 寰界珷鍒楄〃
+// 徽章列表
 const badges: IBadge[] = [
-  // 杩炵画瀛︿範寰界珷
+  // 连续学习徽章
   {
     id: 'streak_3',
     name: '初学乍练',
-    description: '杩炵画瀛︿範3澶?',
+    description: '连续学习3天',
     icon: 'streak-3',
     level: 'bronze',
     category: 'streak',
@@ -26,8 +26,8 @@ const badges: IBadge[] = [
   },
   {
     id: 'streak_7',
-    name: '鍧氭寔涓嶆噲',
-    description: '杩炵画瀛︿範7澶?',
+    name: '坚持不懈',
+    description: '连续学习7天',
     icon: 'streak-7',
     level: 'silver',
     category: 'streak',
@@ -35,8 +35,8 @@ const badges: IBadge[] = [
   },
   {
     id: 'streak_30',
-    name: '瀛︿範杈句汉',
-    description: '杩炵画瀛︿範30澶?',
+    name: '学习达人',
+    description: '连续学习30天',
     icon: 'streak-30',
     level: 'gold',
     category: 'streak',
@@ -45,18 +45,18 @@ const badges: IBadge[] = [
   {
     id: 'streak_100',
     name: '英语大师',
-    description: '杩炵画瀛︿範100澶?',
+    description: '连续学习100天',
     icon: 'streak-100',
     level: 'platinum',
     category: 'streak',
     condition: (store) => store.getters.learningStreak >= 100
   },
   
-  // 鍗曡瘝瀛︿範寰界珷
+  // 单词学习徽章
   {
     id: 'vocabulary_50',
-    name: '璇嶆眹鏂版墜',
-    description: '瀛︿範50涓崟璇?',
+    name: '词汇新手',
+    description: '学习50个单词',
     icon: 'vocab-50',
     level: 'bronze',
     category: 'vocabulary',
@@ -69,8 +69,8 @@ const badges: IBadge[] = [
   },
   {
     id: 'vocabulary_200',
-    name: '璇嶆眹鏀惰棌瀹?',
-    description: '瀛︿範200涓崟璇?',
+    name: '词汇收藏家',
+    description: '学习200个单词',
     icon: 'vocab-200',
     level: 'silver',
     category: 'vocabulary',
@@ -83,8 +83,8 @@ const badges: IBadge[] = [
   },
   {
     id: 'vocabulary_500',
-    name: '璇嶆眹澶у笀',
-    description: '瀛︿範500涓崟璇?',
+    name: '词汇大师',
+    description: '学习500个单词',
     icon: 'vocab-500',
     level: 'gold',
     category: 'vocabulary',
@@ -96,11 +96,11 @@ const badges: IBadge[] = [
     }
   },
   
-  // 鎸戞垬寰界珷
+  // 挑战徽章
   {
     id: 'challenge_perfect',
-    name: '瀹岀編鎸戞垬',
-    description: '鍦ㄦ寫鎴樹腑鑾峰緱100%姝ｇ‘鐜?',
+    name: '完美挑战',
+    description: '在挑战中获得100%正确率',
     icon: 'challenge-perfect',
     level: 'gold',
     category: 'challenge',
@@ -113,8 +113,8 @@ const badges: IBadge[] = [
   },
   {
     id: 'challenge_master',
-    name: '鎸戞垬澶у笀',
-    description: '瀹屾垚10娆℃寫鎴?',
+    name: '挑战大师',
+    description: '完成10次挑战',
     icon: 'challenge-master',
     level: 'silver',
     category: 'challenge',
@@ -124,10 +124,10 @@ const badges: IBadge[] = [
     }
   },
   
-  // 鐗规畩寰界珷
+  // 特殊徽章
   {
     id: 'special_first_day',
-    name: '鍒濇潵涔嶅埌',
+    name: '初来乍到',
     description: '完成第一天的学习',
     icon: 'special-first',
     level: 'bronze',
@@ -137,7 +137,7 @@ const badges: IBadge[] = [
   {
     id: 'special_all_targets',
     name: '目标达人',
-    description: '杩炵画7澶╄揪鎴愭瘡鏃ュ涔犵洰鏍?',
+    description: '连续7天达成每日学习目标',
     icon: 'special-target',
     level: 'gold',
     category: 'special',
@@ -145,14 +145,14 @@ const badges: IBadge[] = [
       const stats = store.state.learningProgress.dailyStats;
       if (stats.length < 7) return false;
       
-      // 鑾峰彇鏈€杩?7澶╃殑璁板綍
+      // 获取最近7天的记录
       const recent = [...stats].sort((a: any, b: any) => 
         new Date(b.date).getTime() - new Date(a.date).getTime()
       ).slice(0, 7);
       
       if (recent.length < 7) return false;
       
-      // 妫€鏌ユ槸鍚﹁繛缁?7澶?
+      // 检查是否连续7天
       const today = new Date();
       for (let i = 0; i < 7; i++) {
         const targetDate = new Date();
@@ -169,27 +169,27 @@ const badges: IBadge[] = [
   }
 ];
 
-// 妫€鏌ュ苟鍙戞斁寰界珷
+// 检查并发放徽章
 export const checkAndAwardBadges = (store: Store<any>): IBadge[] => {
   const userBadges = store.state.user.badges || [];
   const newBadges: IBadge[] = [];
   
   badges.forEach(badge => {
-    // 濡傛灉鐢ㄦ埛宸叉湁璇ュ窘绔狅紝璺宠繃
+    // 如果用户已有该徽章，跳过
     if (userBadges.some((b: IBadge) => b.id === badge.id)) return;
     
-    // 妫€鏌ュ窘绔犳潯浠?
+    // 检查徽章条件
     if (badge.condition(store)) {
-      // 娣诲姞鑾峰緱鏃ユ湡
+      // 添加获得日期
       const badgeWithDate = {
         ...badge,
         dateEarned: new Date().toISOString()
       };
       
-      // 娣诲姞鍒版柊寰界珷鍒楄〃
+      // 添加到新徽章列表
       newBadges.push(badgeWithDate);
       
-      // 淇濆瓨鍒扮敤鎴峰窘绔犱腑
+      // 保存到用户徽章中
       store.dispatch('addBadge', badgeWithDate);
     }
   });
@@ -202,33 +202,33 @@ export const getBadgeIconPath = (iconName: string): string => {
   return `/static/images/badges/${iconName}.png`;
 };
 
-// 鏄剧ず鑾峰緱寰界珷鐨勫姩鐢诲拰鎻愮ず
+// 显示获得徽章的动画和提示
 export const showBadgeEarnedAnimation = (badge: IBadge): Promise<void> => {
   return new Promise((resolve) => {
-    // 鍒涘缓鍔ㄧ敾
+    // 创建动画
     const animation = uni.createAnimation({
       duration: 1000,
       timingFunction: 'ease',
     });
     
-    // 璁剧疆鍔ㄧ敾鏁堟灉
-    animation.scale(1.2, 1.2).step();
-    animation.scale(1, 1).step();
+    // 设置动画效果
+    animation.scale(1.2).step();
+    animation.scale(1).step();
     
-    // 鏄剧ず寰界珷鑾峰緱鎻愮ず
+    // 显示徽章获得提示
     uni.showToast({
-      title: `鑾峰緱寰界珷锛?${badge.name}`,
+      title: `获得徽章：${badge.name}`,
       icon: 'none',
       duration: 3000,
       image: getBadgeIconPath(badge.icon)
     });
     
-    // 鏄剧ず鑷畾涔夊脊绐?
+    // 显示自定义弹窗
     uni.showModal({
       title: '恭喜获得新徽章！',
       content: `${badge.name}\n${badge.description}`,
       showCancel: false,
-      confirmText: '澶浜?',
+      confirmText: '太棒了',
       success: () => {
         resolve();
       }
@@ -236,7 +236,7 @@ export const showBadgeEarnedAnimation = (badge: IBadge): Promise<void> => {
   });
 };
 
-// 鑾峰彇鐢ㄦ埛鎵€鏈夊窘绔?
+// 获取用户所有徽章
 export const getUserBadges = (store: Store<any>): IBadge[] => {
   try {
     // 检查store.state.achievements是否存在
@@ -244,44 +244,44 @@ export const getUserBadges = (store: Store<any>): IBadge[] => {
       return store.state.achievements.badges;
     }
     
-    // 濡傛灉娌℃湁鎵惧埌锛屽皾璇曚粠store.state.user鑾峰彇
+    // 如果没有找到，尝试从store.state.user获取
     if (store.state.user && store.state.user.badges) {
       return store.state.user.badges;
     }
     
-    // 濡傛灉閮芥病鏈夋壘鍒帮紝杩斿洖绌烘暟缁?
+    // 如果都没有找到，返回空数组
     return [];
   } catch (error) {
-    console.error('鑾峰彇寰界珷澶辫触:', error);
+    console.error('获取徽章失败:', error);
     return [];
   }
 };
 
-// 鑾峰彇鐗瑰畾绫诲埆鐨勫窘绔?
+// 获取特定类别的徽章
 export const getBadgesByCategory = (store: Store<any>, category: string): IBadge[] => {
   const userBadges = getUserBadges(store);
   return userBadges.filter(badge => badge.category === category);
 };
 
-// 璁＄畻寰界珷瀹屾垚搴︾櫨鍒嗘瘮
+// 计算徽章完成度百分比
 export const calculateBadgeCompletion = (store: Store<any>): number => {
   const userBadges = getUserBadges(store);
   return Math.round((userBadges.length / badges.length) * 100);
 };
 
-// 鍒嗕韩寰界珷鍒扮ぞ浜ゅ獟浣?
+// 分享徽章到社交媒体
 export const shareBadgeToSocial = (badge: IBadge): Promise<boolean> => {
   return new Promise((resolve) => {
-    // 妯℃嫙鍒嗕韩鍔熻兘锛屽疄闄呴」鐩腑搴斾娇鐢ㄧ湡瀹炵殑鍒嗕韩API
+    // 模拟分享功能，实际项目中应使用真实的分享API
     uni.showModal({
-      title: '鍒嗕韩寰界珷',
-      content: `确定要分享“${badge.name}”徽章到微信吗？`,
+      title: '分享徽章',
+      content: `确定要分享"${badge.name}"徽章到微信吗？`,
       success: (res) => {
         if (res.confirm) {
-          // 妯℃嫙鍒嗕韩鎴愬姛
+          // 模拟分享成功
           setTimeout(() => {
             uni.showToast({
-              title: '鍒嗕韩鎴愬姛',
+              title: '分享成功',
               icon: 'success'
             });
             resolve(true);
@@ -303,4 +303,4 @@ export default {
   getBadgesByCategory,
   calculateBadgeCompletion,
   shareBadgeToSocial
-};
+}; 

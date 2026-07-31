@@ -6,12 +6,12 @@
     
     <view v-if="!isGameStarted" class="start-screen">
       <view class="start-card">
-        <text class="start-icon">鍚?</text>
+        <text class="start-icon">听</text>
         <text class="start-title">听力理解挑战</text>
-        <text class="start-description">鍚煶棰戯紝閫夋嫨姝ｇ‘鐨勭瓟妗?</text>
+        <text class="start-description">听音频，选择正确的答案</text>
         
         <view class="difficulty-selector">
-          <text class="selector-label">閫夋嫨闅惧害:</text>
+          <text class="selector-label">选择难度:</text>
           <view class="selector-options">
             <view 
               class="difficulty-option" 
@@ -19,7 +19,7 @@
               @click="selectedDifficulty = 'easy'"
             >
               <text class="iconfont icon-star"></text>
-              <text>绠€鍗?</text>
+              <text>简单</text>
             </view>
             <view 
               class="difficulty-option" 
@@ -38,20 +38,20 @@
               <text class="iconfont icon-star"></text>
               <text class="iconfont icon-star"></text>
               <text class="iconfont icon-star"></text>
-              <text>鍥伴毦</text>
+              <text>困难</text>
             </view>
           </view>
         </view>
         
         <button class="start-btn" @click="startGame">
-          <text>寮€濮嬫寫鎴?</text>
+          <text>开始挑战</text>
         </button>
       </view>
     </view>
     
     <view v-else-if="isGameOver" class="result-screen">
       <view class="result-card">
-        <text class="result-title">鎸戞垬缁撴潫!</text>
+        <text class="result-title">挑战结束!</text>
         <view class="result-score">
           <text class="score-value">{{ score }}</text>
           <text class="score-total">/ {{ questions.length }}</text>
@@ -59,20 +59,20 @@
         <text class="result-percentage">{{ Math.round((score / questions.length) * 100) }}%</text>
         
         <view class="result-message">
-          <text v-if="score === questions.length"><text class="iconfont icon-badge"></text> 澶浜?! 瀹岀編绛旈!</text>
+          <text v-if="score === questions.length"><text class="iconfont icon-badge"></text> 太棒了! 完美答题!</text>
           <text v-else-if="score / questions.length >= 0.8"><text class="iconfont icon-check"></text> 很好! 继续努力!</text>
-          <text v-else-if="score / questions.length >= 0.6"><text class="iconfont icon-info"></text> 涓嶉敊! 鍐嶆帴鍐嶅帀!</text>
-          <text v-else><text class="iconfont icon-refresh"></text> 鍔犳补! 鍐嶈瘯涓€娆?!</text>
+          <text v-else-if="score / questions.length >= 0.6"><text class="iconfont icon-info"></text> 不错! 再接再厉!</text>
+          <text v-else><text class="iconfont icon-refresh"></text> 加油! 再试一次!</text>
         </view>
         
         <view class="result-actions">
           <button class="action-btn" @click="restartGame">
             <text class="iconfont icon-refresh"></text>
-            <text>鍐嶇帺涓€娆?</text>
+            <text>再玩一次</text>
           </button>
           <button class="action-btn" @click="backToHome">
             <text class="iconfont icon-right"></text>
-            <text>杩斿洖</text>
+            <text>返回</text>
           </button>
         </view>
       </view>
@@ -119,7 +119,7 @@
         <view v-if="showAnswer" class="answer-feedback">
           <view v-if="isCorrect" class="feedback correct">
             <text class="iconfont icon-check"></text>
-            <text>鍥炵瓟姝ｇ‘!</text>
+            <text>回答正确!</text>
           </view>
           <view v-else class="feedback wrong">
             <text class="iconfont icon-close"></text>
@@ -147,7 +147,7 @@
           @click="nextQuestion"
         >
           <text class="iconfont" :class="isLastQuestion ? 'icon-chart' : 'icon-right'"></text>
-          <text>{{ isLastQuestion ? '鏌ョ湅缁撴灉' : '涓嬩竴棰?' }}</text>
+          <text>{{ isLastQuestion ? '查看结果' : '下一题' }}</text>
         </button>
       </view>
     </view>
@@ -163,12 +163,12 @@ export default defineComponent({
   setup() {
     const store = useStore()
     
-    // 娓告垙鐘舵€?
+    // 游戏状态
     const isGameStarted = ref(false)
     const isGameOver = ref(false)
     const selectedDifficulty = ref('medium')
     
-    // 问题鐩稿叧
+    // 问题相关
     const questions = ref<Array<{
       audioUrl: string;
       question: string;
@@ -177,10 +177,10 @@ export default defineComponent({
     }>>([
       {
         audioUrl: 'https://example.com/audio/question1.mp3',
-        question: '鏍规嵁鍚埌鐨勫唴瀹癸紝閫夋嫨姝ｇ‘鐨勬弿杩?',
+        question: '根据听到的内容，选择正确的描述',
         options: [
-          '浠栦滑姝ｅ湪璁ㄨ涓€涓數褰?',
-          '浠栦滑姝ｅ湪璁″垝涓€娆℃梾琛?',
+          '他们正在讨论一个电影',
+          '他们正在计划一次旅行',
           '他们正在谈论天气',
           '他们正在讨论工作'
         ],
@@ -190,43 +190,43 @@ export default defineComponent({
         audioUrl: 'https://example.com/audio/question2.mp3',
         question: '女士最可能是什么职业？',
         options: [
-          '鍖荤敓',
-          '鏁欏笀',
-          '宸ョ▼甯?',
-          '鑹烘湳瀹?'
+          '医生',
+          '教师',
+          '工程师',
+          '艺术家'
         ],
         correctIndex: 0
       },
       {
         audioUrl: 'https://example.com/audio/question3.mp3',
-        question: '瀵硅瘽鍙戠敓鍦ㄥ摢閲岋紵',
+        question: '对话发生在哪里？',
         options: [
-          '椁愬巺',
-          '鍥句功棣?',
-          '鍔炲叕瀹?',
-          '鏈哄満'
+          '餐厅',
+          '图书馆',
+          '办公室',
+          '机场'
         ],
         correctIndex: 3
       },
       {
         audioUrl: 'https://example.com/audio/question4.mp3',
-        question: '鐢峰＋鎵撶畻鍋氫粈涔堬紵',
+        question: '男士打算做什么？',
         options: [
-          '璐拱鏂扮數鑴?',
+          '购买新电脑',
           '修理他的电脑',
-          '瀛︿範缂栫▼',
-          '鎵句竴浠芥柊宸ヤ綔'
+          '学习编程',
+          '找一份新工作'
         ],
         correctIndex: 1
       },
       {
         audioUrl: 'https://example.com/audio/question5.mp3',
-        question: '濂冲＋瀵逛粈涔堟劅鍒版媴蹇э紵',
+        question: '女士对什么感到担忧？',
         options: [
-          '鑰冭瘯鎴愮哗',
-          '杩熷埌',
-          '澶╂皵鎯呭喌',
-          '涓㈠け浜嗕笢瑗?'
+          '考试成绩',
+          '迟到',
+          '天气情况',
+          '丢失了东西'
         ],
         correctIndex: 2
       }
@@ -243,7 +243,7 @@ export default defineComponent({
     const duration = ref(30) // 模拟音频时长
     let audioTimer: number | null = null
     
-    // 褰撳墠问题
+    // 当前问题
     const currentQuestion = computed(() => {
       return questions.value[currentQuestionIndex.value] || {
         audioUrl: '',
@@ -253,7 +253,7 @@ export default defineComponent({
       }
     })
     
-    // 鏄惁涓烘渶鍚庝竴棰?
+    // 是否为最后一题
     const isLastQuestion = computed(() => {
       return currentQuestionIndex.value === questions.value.length - 1
     })
@@ -263,12 +263,12 @@ export default defineComponent({
       return selectedOptionIndex.value === currentQuestion.value.correctIndex
     })
     
-    // 寮€濮嬫父鎴?
+    // 开始游戏
     const startGame = () => {
-      // 鏍规嵁闅惧害绛涢€夐棶棰?
-      // 杩欓噷绠€鍖栧鐞嗭紝瀹為檯搴旇浠庢湇鍔″櫒鑾峰彇鎴栨牴鎹毦搴﹁繃婊?
+      // 根据难度筛选问题
+      // 这里简化处理，实际应该从服务器获取或根据难度过滤
       
-      // 閲嶇疆娓告垙鐘舵€?
+      // 重置游戏状态
       currentQuestionIndex.value = 0
       selectedOptionIndex.value = -1
       showAnswer.value = false
@@ -283,7 +283,7 @@ export default defineComponent({
         // 暂停播放
         pauseAudio()
       } else {
-        // 寮€濮嬫挱鏀?
+        // 开始播放
         isPlaying.value = true
         
         // 这里模拟音频播放进度
@@ -320,7 +320,7 @@ export default defineComponent({
       return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
     }
     
-    // 閫夋嫨閫夐」
+    // 选择选项
     const selectOption = (index: number) => {
       if (!showAnswer.value) {
         selectedOptionIndex.value = index
@@ -335,17 +335,17 @@ export default defineComponent({
       }
     }
     
-    // 涓嬩竴棰?
+    // 下一题
     const nextQuestion = () => {
       pauseAudio()
       currentTime.value = 0
       audioProgress.value = 0
       
       if (isLastQuestion.value) {
-        // 娓告垙缁撴潫
+        // 游戏结束
         isGameOver.value = true
         
-        // 鏇存柊瀛︿範杩涘害
+        // 更新学习进度
         store.dispatch('updateProgress', {
           wordsLearned: 0,
           timeSpent: 10,
@@ -353,27 +353,27 @@ export default defineComponent({
           totalCount: questions.value.length
         })
       } else {
-        // 杩涘叆涓嬩竴棰?
+        // 进入下一题
         currentQuestionIndex.value++
         selectedOptionIndex.value = -1
         showAnswer.value = false
       }
     }
     
-    // 閲嶆柊寮€濮嬫父鎴?
+    // 重新开始游戏
     const restartGame = () => {
       isGameStarted.value = false
       isGameOver.value = false
     }
     
-    // 杩斿洖涓婚〉
+    // 返回主页
     const backToHome = () => {
       uni.navigateBack({
         delta: 1
       })
     }
     
-    // 缁勪欢鍗歌浇鏃舵竻鐞嗗畾鏃跺櫒
+    // 组件卸载时清理定时器
     onUnmounted(() => {
       if (audioTimer) {
         clearInterval(audioTimer)
@@ -559,7 +559,7 @@ export default defineComponent({
   box-shadow: 0 3rpx 8rpx rgba(76, 175, 80, 0.2);
 }
 
-/* 娓告垙椤甸潰 */
+/* 游戏页面 */
 .game-screen {
   flex: 1;
   display: flex;
@@ -805,7 +805,7 @@ export default defineComponent({
   box-shadow: 0 3rpx 8rpx rgba(33, 150, 243, 0.2);
 }
 
-/* 缁撴灉椤甸潰 */
+/* 结果页面 */
 .result-screen {
   flex: 1;
   display: flex;

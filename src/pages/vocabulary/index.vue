@@ -2,17 +2,17 @@
   <view class="page-container">
     <view class="vocabulary-container">
       <view class="header">
-        <text class="title">鍗曡瘝瀛︿範</text>
+        <text class="title">单词学习</text>
         <view class="filter-container">
           <picker @change="onCategoryChange" :value="categoryIndex" :range="categories">
             <view class="picker">
-              <text>鍒嗙被锛歿{ categories[categoryIndex] }}</text>
+              <text>分类：{{ categories[categoryIndex] }}</text>
               <text class="iconfont icon-arrow-down"></text>
             </view>
           </picker>
           <picker @change="onDifficultyChange" :value="difficultyIndex" :range="difficulties">
             <view class="picker">
-              <text>闅惧害锛歿{ difficulties[difficultyIndex] }}</text>
+              <text>难度：{{ difficulties[difficultyIndex] }}</text>
               <text class="iconfont icon-arrow-down"></text>
             </view>
           </picker>
@@ -22,8 +22,8 @@
       <view class="content">
         <view class="section">
           <view class="section-header">
-            <text class="section-title">浠婃棩瀛︿範</text>
-            <text class="section-subtitle">{{ dailyGoal.completed }}/{{ dailyGoal.total }} 涓崟璇?</text>
+            <text class="section-title">今日学习</text>
+            <text class="section-subtitle">{{ dailyGoal.completed }}/{{ dailyGoal.total }} 个单词</text>
           </view>
           <view class="progress-bar">
             <view class="progress" :style="{ width: dailyGoal.percentage + '%' }"></view>
@@ -32,25 +32,25 @@
         
         <view class="section">
           <view class="section-header">
-            <text class="section-title">瀛︿範妯″紡</text>
+            <text class="section-title">学习模式</text>
           </view>
           <view class="card-container">
             <view class="card" @click="navigateTo('/pages/vocabulary/wordcard')">
               <view class="card-image-placeholder wordcard-bg">
-                <text class="placeholder-icon">馃摎</text>
+                <text class="placeholder-icon">📚</text>
               </view>
               <view class="card-content">
-                <text class="card-title">鍗曡瘝鍗＄墖</text>
-                <text class="card-description">閫氳繃鍗＄墖瀛︿範鍗曡瘝</text>
+                <text class="card-title">单词卡片</text>
+                <text class="card-description">通过卡片学习单词</text>
               </view>
             </view>
             <view class="card" @click="navigateTo('/pages/vocabulary/challenge')">
               <view class="card-image-placeholder challenge-bg">
-                <text class="placeholder-icon">馃幆</text>
+                <text class="placeholder-icon">🎯</text>
               </view>
               <view class="card-content">
-                <text class="card-title">璁板繂鎸戞垬</text>
-                <text class="card-description">閫氳繃娴嬮獙宸╁浐璁板繂</text>
+                <text class="card-title">记忆挑战</text>
+                <text class="card-description">通过测验巩固记忆</text>
               </view>
             </view>
           </view>
@@ -58,12 +58,12 @@
         
         <view class="section">
           <view class="section-header">
-            <text class="section-title">鎴戠殑鐢熻瘝鏈?</text>
-            <text class="view-all" @click="navigateTo('/pages/vocabulary/favorites')">鏌ョ湅鍏ㄩ儴</text>
+            <text class="section-title">我的生词本</text>
+            <text class="view-all" @click="navigateTo('/pages/vocabulary/favorites')">查看全部</text>
           </view>
           <view class="favorites-list">
             <view v-if="favoriteWords.length === 0" class="empty-favorites">
-              <text>鏆傛棤鏀惰棌鍗曡瘝</text>
+              <text>暂无收藏单词</text>
             </view>
             <view v-else class="word-item" v-for="word in favoriteWords.slice(0, 3)" :key="word.id">
               <view class="word-info">
@@ -93,16 +93,16 @@ export default defineComponent({
   setup() {
     const store = useStore()
     
-    // 鍒嗙被閫夋嫨
-    const categories = computed(() => ['鍏ㄩ儴', ...store.getters.categories])
+    // 分类选择
+    const categories = computed(() => ['全部', ...store.getters.categories])
     const categoryIndex = ref(0)
     const onCategoryChange = (e: any) => {
       categoryIndex.value = e.detail.value
       fetchWordList()
     }
     
-    // 闅惧害閫夋嫨
-    const difficulties = ref(['鍏ㄩ儴', '绠€鍗?', '涓瓑', '鍥伴毦'])
+    // 难度选择
+    const difficulties = ref(['全部', '简单', '中等', '困难'])
     const difficultyMap = ref<Record<number, string>>({
       0: '',
       1: 'easy',
@@ -131,17 +131,17 @@ export default defineComponent({
       }
     })
     
-    // 鏀惰棌鐨勫崟璇?
+    // 收藏的单词
     const favoriteWords = computed(() => store.getters.favoriteWords)
     
-    // 椤甸潰璺宠浆
+    // 页面跳转
     const navigateTo = (url: string) => {
       uni.navigateTo({
         url
       })
     }
     
-    // 鑾峰彇鍗曡瘝鍒楄〃
+    // 获取单词列表
     const fetchWordList = async () => {
       const category = categoryIndex.value === 0 ? undefined : categories.value[categoryIndex.value]
       const difficulty = difficultyMap.value[difficultyIndex.value] || undefined
