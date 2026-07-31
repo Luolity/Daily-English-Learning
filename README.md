@@ -57,15 +57,6 @@ npm install
 npm run dev:h5
 ```
 
-常用脚本：
-
-```bash
-npm run dev:h5          # H5 开发模式
-npm run dev:mp-weixin   # 微信小程序开发模式
-npm run build:h5        # H5 构建
-npm run type-check      # TypeScript 类型检查
-```
-
 ### 后端
 
 1. 创建 MySQL 数据库：
@@ -74,9 +65,25 @@ npm run type-check      # TypeScript 类型检查
 CREATE DATABASE english_learning DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-2. 按需调整 `backend/src/main/resources/application.properties` 中的数据库连接配置。
+2. 导入初始化数据：
 
-3. 启动后端服务：
+```bash
+mysql -u root -p english_learning < backend/src/main/resources/sql.sql
+```
+
+3. 当前数据库连接配置位于 `backend/src/main/resources/application.yml`：
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/english_learning?useSSL=false&serverTimezone=UTC&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    username: root
+    password: "123456"
+```
+
+如本地 MySQL 的地址、账号或密码不同，请按实际环境修改上述配置。
+
+4. 启动后端服务：
 
 ```bash
 cd backend
@@ -84,3 +91,11 @@ mvn spring-boot:run
 ```
 
 默认后端端口为 `8081`。
+
+## 管理员账号
+
+导入 `backend/src/main/resources/sql.sql` 后，可使用以下管理员账号登录：
+
+| 用户名 | 密码 | 角色 |
+| --- | --- | --- |
+| `admin` | `123456` | 管理员 |
