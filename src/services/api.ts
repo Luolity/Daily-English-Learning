@@ -3,7 +3,7 @@ import axios from 'axios';
 import { calcTotalPages, normalizeWordCardPage } from '../utils/pagination';
 import { getUserAvatarUrl } from '../utils/avatar';
 
-// 定义API响应类型
+// 瀹氫箟API鍝嶅簲绫诲瀷
 interface WordCardResponse {
   content?: IWordCard[];
   records?: IWordCard[];
@@ -11,14 +11,14 @@ interface WordCardResponse {
   currentPage?: number;
   totalItems?: number;
   totalPages?: number;
-  [key: string]: any; // 允许其他可能的字段
+  [key: string]: any; // 鍏佽鍏朵粬鍙兘鐨勫瓧娈?
 }
 
 // API基础URL - 确保与后端URL匹配
 export const API_HOST = 'http://localhost:8081';
 const BASE_URL = `${API_HOST}/api`;
 
-/** 将后端相对路径转为可访问的完整 URL */
+/** 灏嗗悗绔浉瀵硅矾寰勮浆涓哄彲璁块棶鐨勫畬鏁? URL */
 export function resolveMediaUrl(path?: string): string {
   if (!path) return '/static/images/profile/default-avatar.svg';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
@@ -28,7 +28,7 @@ export function resolveMediaUrl(path?: string): string {
   return path;
 }
 
-// 创建axios实例
+// 鍒涘缓axios瀹炰緥
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -37,25 +37,25 @@ const axiosInstance = axios.create({
   },
   // 允许跨域请求携带Cookie
   withCredentials: true,
-  timeout: 30000 // 30秒超时
+  timeout: 30000 // 30绉掕秴鏃?
 });
 
-// 请求拦截器 - 添加token
+// 璇锋眰鎷︽埅鍣? - 娣诲姞token
 axiosInstance.interceptors.request.use(
   config => {
     const token = uni.getStorageSync('token');
-    console.log('请求拦截器获取到的token:', token);
+    console.log('璇锋眰鎷︽埅鍣ㄨ幏鍙栧埌鐨則oken:', token);
     
     if (token && config.headers) {
       config.headers['Authorization'] = `Bearer ${token}`;
-      console.log('已添加Authorization请求头');
+      console.log('宸叉坊鍔燗uthorization璇锋眰澶?');
     } else if (!token) {
-      console.warn('未找到token，请求可能会被拒绝');
+      console.warn('鏈壘鍒皌oken锛岃姹傚彲鑳戒細琚嫆缁?');
     } else if (!config.headers) {
-      console.warn('无法添加Authorization请求头，config.headers不存在');
+      console.warn('鏃犳硶娣诲姞Authorization璇锋眰澶达紝config.headers涓嶅瓨鍦?');
     }
     
-    console.log('发送请求:', {
+    console.log('鍙戦€佽姹?:', {
       url: config.url,
       method: config.method,
       data: config.data,
@@ -69,10 +69,10 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// 响应拦截器 - 处理错误
+// 鍝嶅簲鎷︽埅鍣? - 澶勭悊閿欒
 axiosInstance.interceptors.response.use(
   response => {
-    console.log('收到响应:', response);
+    console.log('鏀跺埌鍝嶅簲:', response);
     return response.data;
   },
   error => {
@@ -93,7 +93,7 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// HTTP请求方法
+// HTTP璇锋眰鏂规硶
 async function request<T>(url: string, options: any = {}): Promise<T> {
   try {
     const config = {
@@ -110,11 +110,11 @@ async function request<T>(url: string, options: any = {}): Promise<T> {
   }
 }
 
-// API服务
+// API鏈嶅姟
 export const api = {
-  // 用户认证
+  // 鐢ㄦ埛璁よ瘉
   auth: {
-    // 登录
+    // 鐧诲綍
     login: async (username: string, password: string) => {
       try {
         const data = await axiosInstance.post('/auth/signin', { username, password });
@@ -128,12 +128,12 @@ export const api = {
           isLoggedIn: true
         };
       } catch (error) {
-        console.error('登录失败:', error);
+        console.error('鐧诲綍澶辫触:', error);
         throw error;
       }
     },
     
-    // 注册
+    // 娉ㄥ唽
     register: async (username: string, email: string, password: string, nickname?: string) => {
       try {
         console.log('开始注册请求，参数:', { username, email, nickname: nickname || username });
@@ -143,17 +143,17 @@ export const api = {
           password, 
           nickname: nickname || username 
         });
-        console.log('注册请求成功，响应:', response);
+        console.log('娉ㄥ唽璇锋眰鎴愬姛锛屽搷搴?:', response);
         
-        // 注册成功后直接登录
+        // 娉ㄥ唽鎴愬姛鍚庣洿鎺ョ櫥褰?
         return api.auth.login(username, password);
       } catch (error: any) {
-        console.error('注册失败，详细错误:', error);
+        console.error('娉ㄥ唽澶辫触锛岃缁嗛敊璇?:', error);
         if (error.code === 'ECONNABORTED') {
-          console.error('请求超时，请检查网络连接或服务器状态');
+          console.error('璇锋眰瓒呮椂锛岃妫€鏌ョ綉缁滆繛鎺ユ垨鏈嶅姟鍣ㄧ姸鎬?');
         }
         if (error.response) {
-          console.error('服务器响应:', {
+          console.error('鏈嶅姟鍣ㄥ搷搴?:', {
             status: error.response.status,
             data: error.response.data,
             headers: error.response.headers
@@ -170,7 +170,7 @@ export const api = {
       }
     },
     
-    // 退出登录
+    // 閫€鍑虹櫥褰?
     logout: async () => {
       // 清除本地token
       uni.removeStorageSync('token');
@@ -178,9 +178,9 @@ export const api = {
     }
   },
   
-  // 单词卡片
+  // 鍗曡瘝鍗＄墖
   wordCards: {
-    // 获取单词总数（分页前先查总数，再计算总页数 = ceil(totalItems / pageSize)）
+    // 鑾峰彇鍗曡瘝鎬绘暟锛堝垎椤靛墠鍏堟煡鎬绘暟锛屽啀璁＄畻鎬婚〉鏁? = ceil(totalItems / pageSize)锛?
     getWordCardCount: async (
       category?: string,
       difficulty?: string,
@@ -195,12 +195,12 @@ export const api = {
         const data = response as { totalItems?: number };
         return { totalItems: data.totalItems ?? 0 };
       } catch (error) {
-        console.error('获取单词总数失败:', error);
+        console.error('鑾峰彇鍗曡瘝鎬绘暟澶辫触:', error);
         throw error;
       }
     },
 
-    // 获取单词列表
+    // 鑾峰彇鍗曡瘝鍒楄〃
     getWordCards: async (
       page: number = 1,
       size: number = 10,
@@ -214,7 +214,7 @@ export const api = {
         if (difficulty) params.difficulty = difficulty;
         if (keyword) params.keyword = keyword;
         
-        console.log('请求参数:', params);
+        console.log('璇锋眰鍙傛暟:', params);
         const response = await axiosInstance.get('/wordcards', { params });
         console.log('API getWordCards 原始响应:', response);
         
@@ -236,7 +236,7 @@ export const api = {
           );
         }
         
-        // 如果响应本身就是数组，包装成预期的格式
+        // 濡傛灉鍝嶅簲鏈韩灏辨槸鏁扮粍锛屽寘瑁呮垚棰勬湡鐨勬牸寮?
         if (Array.isArray(data)) {
           return normalizeWordCardPage(
             { content: data, currentPage: page, totalItems: data.length },
@@ -245,7 +245,7 @@ export const api = {
           );
         }
         
-        // 尝试从其他可能的字段中提取数据
+        // 灏濊瘯浠庡叾浠栧彲鑳界殑瀛楁涓彁鍙栨暟鎹?
         const wordList = data.records || data.data || [];
         if (wordList && Array.isArray(wordList)) {
           const items = data.totalItems ?? data.total ?? 0;
@@ -261,37 +261,37 @@ export const api = {
           );
         }
         
-        // 最后的兜底，返回空数组
+        // 鏈€鍚庣殑鍏滃簳锛岃繑鍥炵┖鏁扮粍
         return normalizeWordCardPage({ content: [], currentPage: page, totalItems: 0 }, page, size);
       } catch (error) {
-        console.error('获取单词列表失败:', error);
+        console.error('鑾峰彇鍗曡瘝鍒楄〃澶辫触:', error);
         throw error;
       }
     },
     
-    // 获取单个单词
+    // 鑾峰彇鍗曚釜鍗曡瘝
     getWordCard: async (id: string) => {
       try {
         const response = await axiosInstance.get(`/wordcards/${id}`);
         return response.data;
       } catch (error) {
-        console.error('获取单词详情失败:', error);
+        console.error('鑾峰彇鍗曡瘝璇︽儏澶辫触:', error);
         throw error;
       }
     },
     
-    // 获取单词（通过单词名）
+    // 鑾峰彇鍗曡瘝锛堥€氳繃鍗曡瘝鍚嶏級
     getWordCardByWord: async (word: string) => {
       try {
         const response = await axiosInstance.get(`/wordcards/word/${encodeURIComponent(word)}`);
         return response.data;
       } catch (error) {
-        console.error('通过单词获取详情失败:', error);
+        console.error('閫氳繃鍗曡瘝鑾峰彇璇︽儏澶辫触:', error);
         throw error;
       }
     },
     
-    // 获取收藏的单词
+    // 鑾峰彇鏀惰棌鐨勫崟璇?
     getFavorites: async (): Promise<WordCardResponse> => {
       try {
         const response = await axiosInstance.get('/wordcards/favorites');
@@ -305,7 +305,7 @@ export const api = {
           return data;
         }
         
-        // 如果响应本身就是数组，包装成预期的格式
+        // 濡傛灉鍝嶅簲鏈韩灏辨槸鏁扮粍锛屽寘瑁呮垚棰勬湡鐨勬牸寮?
         if (Array.isArray(data)) {
           return { 
             content: data,
@@ -315,7 +315,7 @@ export const api = {
           };
         }
         
-        // 尝试从其他可能的字段中提取数据
+        // 灏濊瘯浠庡叾浠栧彲鑳界殑瀛楁涓彁鍙栨暟鎹?
         const favorites = data.records || data.data || [];
         if (favorites) {
           return {
@@ -326,37 +326,37 @@ export const api = {
           };
         }
         
-        // 最后的兜底，返回空数组
+        // 鏈€鍚庣殑鍏滃簳锛岃繑鍥炵┖鏁扮粍
         return { content: [] };
       } catch (error) {
-        console.error('获取收藏单词失败:', error);
+        console.error('鑾峰彇鏀惰棌鍗曡瘝澶辫触:', error);
         throw error;
       }
     },
     
-    // 添加到收藏
+    // 娣诲姞鍒版敹钘?
     addToFavorites: async (wordCardId: string) => {
       try {
         const response = await axiosInstance.post(`/wordcards/favorites/${wordCardId}`);
         return response.data;
       } catch (error) {
-        console.error('添加到收藏失败:', error);
+        console.error('娣诲姞鍒版敹钘忓け璐?:', error);
         throw error;
       }
     },
     
-    // 从收藏中移除
+    // 浠庢敹钘忎腑绉婚櫎
     removeFromFavorites: async (wordCardId: string) => {
       try {
         const response = await axiosInstance.delete(`/wordcards/favorites/${wordCardId}`);
         return response.data;
       } catch (error) {
-        console.error('从收藏中移除失败:', error);
+        console.error('浠庢敹钘忎腑绉婚櫎澶辫触:', error);
         throw error;
       }
     },
 
-    // 管理员：创建单词
+    // 绠＄悊鍛橈細鍒涘缓鍗曡瘝
     createWordCard: async (wordCard: Partial<IWordCard>) => {
       const payload = {
         word: wordCard.word,
@@ -371,12 +371,12 @@ export const api = {
       return await axiosInstance.post('/wordcards', payload);
     },
 
-    // 管理员：删除单词
+    // 绠＄悊鍛橈細鍒犻櫎鍗曡瘝
     deleteWordCard: async (id: string | number) => {
       return await axiosInstance.delete(`/wordcards/${id}`);
     },
 
-    // 管理员：更新单词
+    // 绠＄悊鍛橈細鏇存柊鍗曡瘝
     updateWordCard: async (id: string | number, wordCard: Partial<IWordCard>) => {
       const payload = {
         word: wordCard.word,
@@ -392,20 +392,20 @@ export const api = {
     }
   },
   
-  // 学习进度
+  // 瀛︿範杩涘害
   progress: {
-    // 获取学习进度
+    // 鑾峰彇瀛︿範杩涘害
     getProgress: async () => {
       try {
         const response = await axiosInstance.get('/progress');
         return response.data;
       } catch (error) {
-        console.error('获取学习进度失败:', error);
+        console.error('鑾峰彇瀛︿範杩涘害澶辫触:', error);
         throw error;
       }
     },
 
-    // 获取学习汇总统计
+    // 鑾峰彇瀛︿範姹囨€荤粺璁?
     getStats: async () => {
       try {
         return await axiosInstance.get('/progress/stats');
@@ -415,13 +415,13 @@ export const api = {
       }
     },
     
-    // 更新学习进度
+    // 鏇存柊瀛︿範杩涘害
     updateProgress: async (progress: IProgressUpdate) => {
       try {
         const response = await axiosInstance.post('/progress', progress);
         return response.data;
       } catch (error) {
-        console.error('更新学习进度失败:', error);
+        console.error('鏇存柊瀛︿範杩涘害澶辫触:', error);
         throw error;
       }
     },
@@ -444,86 +444,86 @@ export const api = {
     }
   },
   
-  // 徽章
+  // 寰界珷
   badges: {
-    // 获取用户已获得的徽章
+    // 鑾峰彇鐢ㄦ埛宸茶幏寰楃殑寰界珷
     getUserBadges: async () => {
       try {
         const response = await axiosInstance.get('/badges');
         return Array.isArray(response) ? response : [];
       } catch (error) {
-        console.error('获取用户徽章失败:', error);
+        console.error('鑾峰彇鐢ㄦ埛寰界珷澶辫触:', error);
         throw error;
       }
     },
 
-    // 检查并解锁符合条件的徽章
+    // 妫€鏌ュ苟瑙ｉ攣绗﹀悎鏉′欢鐨勫窘绔?
     checkAndAwardBadges: async () => {
       try {
         await axiosInstance.get('/badges/check');
       } catch (error) {
-        console.error('检查徽章失败:', error);
+        console.error('妫€鏌ュ窘绔犲け璐?:', error);
         throw error;
       }
     },
 
-    // 获取所有徽章（同 getUserBadges）
+    // 鑾峰彇鎵€鏈夊窘绔狅紙鍚? getUserBadges锛?
     getAllBadges: async () => {
       return api.badges.getUserBadges();
     },
     
-    // 获取指定类别的徽章
+    // 鑾峰彇鎸囧畾绫诲埆鐨勫窘绔?
     getBadgesByCategory: async (category: string) => {
       try {
-        console.log(`开始获取${category}类别的徽章...`);
+        console.log(`寮€濮嬭幏鍙?${category}绫诲埆鐨勫窘绔?...`);
         const response = await axiosInstance.get(`/badges/category/${category}`);
-        console.log(`获取${category}类别的徽章成功，响应:`, response.data);
+        console.log(`鑾峰彇${category}绫诲埆鐨勫窘绔犳垚鍔燂紝鍝嶅簲:`, response.data);
         return response.data;
       } catch (error) {
-        console.error(`获取${category}类别的徽章失败:`, error);
+        console.error(`鑾峰彇${category}绫诲埆鐨勫窘绔犲け璐?:`, error);
         throw error;
       }
     },
     
-    // 获取特定徽章详情
+    // 鑾峰彇鐗瑰畾寰界珷璇︽儏
     getUserBadgeById: async (badgeId: string) => {
       try {
-        console.log(`开始请求徽章${badgeId}详情...`);
+        console.log(`寮€濮嬭姹傚窘绔?${badgeId}璇︽儏...`);
         const response = await axiosInstance.get(`/badges/${badgeId}`);
-        console.log(`获取徽章${badgeId}详情成功，响应:`, response);
+        console.log(`鑾峰彇寰界珷${badgeId}璇︽儏鎴愬姛锛屽搷搴?:`, response);
         return response.data;
       } catch (error) {
-        console.error(`获取徽章${badgeId}详情失败:`, error);
+        console.error(`鑾峰彇寰界珷${badgeId}璇︽儏澶辫触:`, error);
         throw error;
       }
     },
     
-    // 获取徽章完成度
+    // 鑾峰彇寰界珷瀹屾垚搴?
     getBadgeCompletion: async () => {
       try {
-        console.log('开始获取徽章完成度...');
+        console.log('寮€濮嬭幏鍙栧窘绔犲畬鎴愬害...');
         const response = await axiosInstance.get('/badges/completion');
-        console.log('获取徽章完成度成功，响应:', response);
+        console.log('鑾峰彇寰界珷瀹屾垚搴︽垚鍔燂紝鍝嶅簲:', response);
         // 响应是一个对象，包含message字段
         if (typeof response === 'object' && response !== null && 'message' in response) {
           return parseInt(response.message as string || '0', 10);
         }
         return 0;
       } catch (error) {
-        console.error('获取徽章完成度失败:', error);
+        console.error('鑾峰彇寰界珷瀹屾垚搴﹀け璐?:', error);
         throw error;
       }
     }
   },
 
-  // 挑战
+  // 鎸戞垬
   challenge: {
     submitRecord: async (record: any) => {
       try {
         const response = await axiosInstance.post('/challenge/submit', record);
         return response;
       } catch (error) {
-        console.error('提交挑战记录失败:', error);
+        console.error('鎻愪氦鎸戞垬璁板綍澶辫触:', error);
         throw error;
       }
     },
@@ -532,7 +532,7 @@ export const api = {
         const response = await axiosInstance.get('/challenge/leaderboard', { params: { limit } });
         return response;
       } catch (error) {
-        console.error('获取排行榜失败:', error);
+        console.error('鑾峰彇鎺掕姒滃け璐?:', error);
         throw error;
       }
     },
@@ -541,15 +541,15 @@ export const api = {
         const response = await axiosInstance.get('/challenge/history');
         return response;
       } catch (error) {
-        console.error('获取挑战历史失败:', error);
+        console.error('鑾峰彇鎸戞垬鍘嗗彶澶辫触:', error);
         throw error;
       }
     }
   },
   
-  // 用户信息
+  // 鐢ㄦ埛淇℃伅
   user: {
-    // 获取用户信息
+    // 鑾峰彇鐢ㄦ埛淇℃伅
     getUserInfo: async () => {
       try {
         const response = await axiosInstance.get('/users/profile');
@@ -562,24 +562,24 @@ export const api = {
           isLoggedIn: true
         };
       } catch (error) {
-        console.error('获取用户信息失败:', error);
+        console.error('鑾峰彇鐢ㄦ埛淇℃伅澶辫触:', error);
         throw error;
       }
     },
     
-    // 更新用户信息
+    // 鏇存柊鐢ㄦ埛淇℃伅
     updateUserInfo: async (userInfo: Partial<IUserInfo>) => {
       try {
         const response = await axiosInstance.put('/users/profile', userInfo);
         const data = (response as any)?.data ?? response;
         return data;
       } catch (error) {
-        console.error('更新用户信息失败:', error);
+        console.error('鏇存柊鐢ㄦ埛淇℃伅澶辫触:', error);
         throw error;
       }
     },
     
-    // 上传头像（uni-app 使用 uploadFile）
+    // 涓婁紶澶村儚锛坲ni-app 浣跨敤 uploadFile锛?
     uploadAvatar: (filePath: string): Promise<{ avatar: string }> => {
       return new Promise((resolve, reject) => {
         const token = uni.getStorageSync('token');
@@ -591,7 +591,7 @@ export const api = {
           success: (res) => {
             try {
               if (res.statusCode && res.statusCode >= 400) {
-                reject(new Error('上传失败'));
+                reject(new Error('涓婁紶澶辫触'));
                 return;
               }
               const data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;

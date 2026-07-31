@@ -1,17 +1,17 @@
 <template>
   <view class="register-container">
     <view class="header">
-      <text class="title">账号注册</text>
+      <text class="title">璐﹀彿娉ㄥ唽</text>
       <text class="subtitle">创建您的英语学习账号</text>
     </view>
     
     <view class="form-section">
       <view class="input-group">
-        <text class="input-label">用户名</text>
+        <text class="input-label">鐢ㄦ埛鍚?</text>
         <input 
           type="text" 
           v-model="username" 
-          placeholder="请输入用户名" 
+          placeholder="请输入用户名"
           class="input-field"
         />
       </view>
@@ -21,27 +21,27 @@
         <input 
           type="text" 
           v-model="email" 
-          placeholder="请输入邮箱" 
+          placeholder="请输入邮箱"
           class="input-field"
         />
       </view>
       
       <view class="input-group">
-        <text class="input-label">昵称</text>
+        <text class="input-label">鏄电О</text>
         <input 
           type="text" 
           v-model="nickname" 
-          placeholder="请输入昵称（选填）" 
+          placeholder="请输入昵称（选填）"
           class="input-field"
         />
       </view>
       
       <view class="input-group">
-        <text class="input-label">密码</text>
+        <text class="input-label">瀵嗙爜</text>
         <input 
           type="password" 
           v-model="password" 
-          placeholder="请输入密码" 
+          placeholder="请输入密码"
           class="input-field"
         />
       </view>
@@ -51,19 +51,19 @@
         <input 
           type="password" 
           v-model="confirmPassword" 
-          placeholder="请再次输入密码" 
+          placeholder="请再次输入密码"
           class="input-field"
         />
       </view>
       
       <button class="register-btn" @click="handleRegister" :disabled="isLoading">
-        <text v-if="!isLoading">注册</text>
-        <text v-else>注册中...</text>
+        <text v-if="!isLoading">娉ㄥ唽</text>
+        <text v-else>娉ㄥ唽涓?...</text>
       </button>
       
       <view class="login-link">
-        <text>已有账号？</text>
-        <text class="link" @click="goToLogin">立即登录</text>
+        <text>宸叉湁璐﹀彿锛?</text>
+        <text class="link" @click="goToLogin">绔嬪嵆鐧诲綍</text>
       </view>
     </view>
     
@@ -72,10 +72,10 @@
         <label class="agreement-label">
           <checkbox value="agree" :checked="isAgreed" color="#4caf50" />
           <text class="agreement-text">
-            我已阅读并同意
-            <text class="agreement-link" @click="showUserAgreement">《用户协议》</text>
-            和
-            <text class="agreement-link" @click="showPrivacyPolicy">《隐私政策》</text>
+            鎴戝凡闃呰骞跺悓鎰?
+            <text class="agreement-link" @click="showUserAgreement">銆婄敤鎴峰崗璁€?</text>
+            鍜?
+            <text class="agreement-link" @click="showPrivacyPolicy">銆婇殣绉佹斂绛栥€?</text>
           </text>
         </label>
       </checkbox-group>
@@ -99,18 +99,18 @@ export default defineComponent({
     const isLoading = ref(false)
     const isAgreed = ref(false)
     
-    // 处理协议勾选
+    // 澶勭悊鍗忚鍕鹃€?
     const onAgreementChange = (e: any) => {
       isAgreed.value = e.detail.value.includes('agree')
     }
     
-    // 处理注册
+    // 澶勭悊娉ㄥ唽
     const handleRegister = async () => {
       try {
-        // 表单验证
+        // 琛ㄥ崟楠岃瘉
         if (!username.value.trim()) {
           uni.showToast({
-            title: '请输入用户名',
+            title: '璇疯緭鍏ョ敤鎴峰悕',
             icon: 'none'
           })
           return
@@ -118,7 +118,7 @@ export default defineComponent({
         
         if (!email.value.trim()) {
           uni.showToast({
-            title: '请输入邮箱',
+            title: '璇疯緭鍏ラ偖绠?',
             icon: 'none'
           })
           return
@@ -126,7 +126,7 @@ export default defineComponent({
         
         if (!password.value) {
           uni.showToast({
-            title: '请输入密码',
+            title: '璇疯緭鍏ュ瘑鐮?',
             icon: 'none'
           })
           return
@@ -134,7 +134,7 @@ export default defineComponent({
         
         if (password.value !== confirmPassword.value) {
           uni.showToast({
-            title: '两次密码输入不一致',
+            title: '涓ゆ瀵嗙爜杈撳叆涓嶄竴鑷?',
             icon: 'none'
           })
           return
@@ -142,7 +142,7 @@ export default defineComponent({
         
         if (!isAgreed.value) {
           uni.showToast({
-            title: '请先同意用户协议和隐私政策',
+            title: '璇峰厛鍚屾剰鐢ㄦ埛鍗忚鍜岄殣绉佹斂绛?',
             icon: 'none'
           })
           return
@@ -150,7 +150,7 @@ export default defineComponent({
         
         isLoading.value = true
         
-        // 调用注册接口
+        // 璋冪敤娉ㄥ唽鎺ュ彛
         await store.dispatch('register', {
           username: username.value.trim(),
           email: email.value.trim(),
@@ -159,7 +159,7 @@ export default defineComponent({
         })
         
         uni.showToast({
-          title: '注册成功',
+          title: '娉ㄥ唽鎴愬姛',
           icon: 'success'
         })
         
@@ -174,14 +174,14 @@ export default defineComponent({
         uni.showToast({
           title: error.message || '注册失败，请重试',
           icon: 'none',
-          duration: 3000  // 延长显示时间，确保用户能看清错误信息
+          duration: 3000  // 寤堕暱鏄剧ず鏃堕棿锛岀‘淇濈敤鎴疯兘鐪嬫竻閿欒淇℃伅
         })
       } finally {
         isLoading.value = false
       }
     }
     
-    // 跳转到登录页
+    // 璺宠浆鍒扮櫥褰曢〉
     const goToLogin = () => {
       uni.navigateBack()
     }
@@ -316,4 +316,4 @@ export default defineComponent({
 .agreement-link {
   color: #4caf50;
 }
-</style> 
+</style>

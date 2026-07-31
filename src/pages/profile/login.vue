@@ -8,37 +8,37 @@
     
     <view class="form-section">
       <view class="input-group">
-        <text class="input-label">用户名</text>
+        <text class="input-label">鐢ㄦ埛鍚?</text>
         <input 
           type="text" 
           v-model="username" 
-          placeholder="请输入用户名" 
+          placeholder="请输入用户名"
           class="input-field"
         />
       </view>
       
       <view class="input-group">
-        <text class="input-label">密码</text>
+        <text class="input-label">瀵嗙爜</text>
         <input 
           type="password" 
           v-model="password" 
-          placeholder="请输入密码" 
+          placeholder="请输入密码"
           class="input-field"
         />
       </view>
       
       <view class="form-actions">
-        <text class="forgot-password" @click="showResetPassword">忘记密码？</text>
+        <text class="forgot-password" @click="showResetPassword">蹇樿瀵嗙爜锛?</text>
       </view>
       
       <button class="login-btn" @click="handleLogin" :disabled="isLoading">
-        <text v-if="!isLoading">登录</text>
-        <text v-else>登录中...</text>
+        <text v-if="!isLoading">鐧诲綍</text>
+        <text v-else>鐧诲綍涓?...</text>
       </button>
       
       <view class="divider">
         <view class="divider-line"></view>
-        <text class="divider-text">其他登录方式</text>
+        <text class="divider-text">鍏朵粬鐧诲綍鏂瑰紡</text>
         <view class="divider-line"></view>
       </view>
       
@@ -53,16 +53,16 @@
     </view>
     
     <view class="register-section">
-      <text>还没有账号？</text>
-      <text class="register-link" @click="showRegister">立即注册</text>
+      <text>杩樻病鏈夎处鍙凤紵</text>
+      <text class="register-link" @click="showRegister">绔嬪嵆娉ㄥ唽</text>
     </view>
     
     <view class="agreement-section">
       <text class="agreement-text">
-        登录即表示您同意
-        <text class="agreement-link" @click="showUserAgreement">《用户协议》</text>
-        和
-        <text class="agreement-link" @click="showPrivacyPolicy">《隐私政策》</text>
+        鐧诲綍鍗宠〃绀烘偍鍚屾剰
+        <text class="agreement-link" @click="showUserAgreement">銆婄敤鎴峰崗璁€?</text>
+        鍜?
+        <text class="agreement-link" @click="showPrivacyPolicy">銆婇殣绉佹斂绛栥€?</text>
       </text>
     </view>
   </view>
@@ -80,13 +80,13 @@ export default defineComponent({
     const password = ref('')
     const isLoading = ref(false)
     
-    // 处理登录
+    // 澶勭悊鐧诲綍
     const handleLogin = async () => {
       try {
-        // 表单验证
+        // 琛ㄥ崟楠岃瘉
         if (!username.value.trim()) {
           uni.showToast({
-            title: '请输入用户名',
+            title: '璇疯緭鍏ョ敤鎴峰悕',
             icon: 'none'
           });
           return;
@@ -94,7 +94,7 @@ export default defineComponent({
         
         if (!password.value) {
           uni.showToast({
-            title: '请输入密码',
+            title: '璇疯緭鍏ュ瘑鐮?',
             icon: 'none'
           });
           return;
@@ -102,14 +102,14 @@ export default defineComponent({
         
         isLoading.value = true;
         
-        // 调用登录接口
+        // 璋冪敤鐧诲綍鎺ュ彛
         await store.dispatch('login', {
           username: username.value.trim(),
           password: password.value
         });
         
         uni.showToast({
-          title: '登录成功',
+          title: '鐧诲綍鎴愬姛',
           icon: 'success'
         });
         
@@ -137,25 +137,25 @@ export default defineComponent({
       })
     }
     
-    // QQ登录
+    // QQ鐧诲綍
     const handleQQLogin = () => {
       uni.showToast({
-        title: 'QQ登录功能开发中',
+        title: 'QQ鐧诲綍鍔熻兘寮€鍙戜腑',
         icon: 'none'
       })
     }
     
-    // 显示注册页面
+    // 鏄剧ず娉ㄥ唽椤甸潰
     const showRegister = () => {
       uni.navigateTo({
         url: '/pages/profile/register'
       });
     }
     
-    // 显示重置密码
+    // 鏄剧ず閲嶇疆瀵嗙爜
     const showResetPassword = () => {
       uni.showToast({
-        title: '密码重置功能开发中',
+        title: '瀵嗙爜閲嶇疆鍔熻兘寮€鍙戜腑',
         icon: 'none'
       })
     }
@@ -350,4 +350,4 @@ export default defineComponent({
 .agreement-link {
   color: #3cc51f;
 }
-</style> 
+</style>

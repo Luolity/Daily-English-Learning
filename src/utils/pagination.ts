@@ -1,4 +1,4 @@
-/** 根据总条数与每页条数计算总页数（size 是每页条数，不是总页数） */
+/** 鏍规嵁鎬绘潯鏁颁笌姣忛〉鏉℃暟璁＄畻鎬婚〉鏁帮紙size 鏄瘡椤垫潯鏁帮紝涓嶆槸鎬婚〉鏁帮級 */
 export function calcTotalPages(totalItems: number, pageSize: number): number {
   if (totalItems <= 0 || pageSize <= 0) {
     return 0
@@ -6,9 +6,9 @@ export function calcTotalPages(totalItems: number, pageSize: number): number {
   return Math.ceil(totalItems / pageSize)
 }
 
-export function normalizeWordCardPage(
+export function normalizeWordCardPage<T>(
   data: {
-    content?: unknown[]
+    content?: T[]
     currentPage?: number
     totalItems?: number
     totalPages?: number

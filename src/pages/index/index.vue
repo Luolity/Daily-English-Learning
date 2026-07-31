@@ -16,9 +16,9 @@
           <view class="streak-info">
             <view class="streak-count">
               <text class="streak-number">{{ learningStreak }}</text>
-              <text class="streak-label">天</text>
+              <text class="streak-label">澶?</text>
             </view>
-            <text class="streak-text">连续学习</text>
+            <text class="streak-text">杩炵画瀛︿範</text>
           </view>
           <view class="streak-calendar">
             <view
@@ -32,7 +32,7 @@
             </view>
           </view>
           <view v-if="hasNewBadge && latestBadge" class="streak-badge" @click="showBadgeDetails">
-            <text class="badge-icon">🏆</text>
+            <text class="badge-icon">馃弳</text>
             <text class="badge-text">{{ latestBadge.name }}</text>
           </view>
         </view>
@@ -53,7 +53,7 @@
           <view class="action-icon vocabulary">
             <svg-icon name="book" color="#9c27b0" :size="24" />
           </view>
-          <text class="action-title">单词学习</text>
+          <text class="action-title">鍗曡瘝瀛︿範</text>
         </view>
         <view class="action-card" @click="navigateTo('/pages/listening/sentence')">
           <view class="action-icon listening">
@@ -65,20 +65,20 @@
           <view class="action-icon challenge">
             <svg-icon name="target" color="#ff9800" :size="24" />
           </view>
-          <text class="action-title">记忆挑战</text>
+          <text class="action-title">璁板繂鎸戞垬</text>
         </view>
         <view class="action-card" @click="navigateTo('/pages/vocabulary/favorites')">
           <view class="action-icon favorites">
             <svg-icon name="star" color="#ffc107" :size="24" />
           </view>
-          <text class="action-title">生词本</text>
+          <text class="action-title">鐢熻瘝鏈?</text>
         </view>
       </view>
 
       <view class="daily-challenge-section">
         <view class="section-header">
-          <text class="section-title">每日挑战</text>
-          <text class="view-all" @click="navigateTo('/pages/listening/challenge')">查看全部</text>
+          <text class="section-title">姣忔棩鎸戞垬</text>
+          <text class="view-all" @click="navigateTo('/pages/listening/challenge')">鏌ョ湅鍏ㄩ儴</text>
         </view>
         <view class="challenge-card" @click="navigateTo('/pages/listening/challenge')">
           <view class="challenge-image">
@@ -86,9 +86,9 @@
           </view>
           <view class="challenge-content">
             <text class="challenge-title">今日听力挑战</text>
-            <text class="challenge-description">完成听力测验，获取成就徽章</text>
+            <text class="challenge-description">瀹屾垚鍚姏娴嬮獙锛岃幏鍙栨垚灏卞窘绔?</text>
             <view class="challenge-status" :class="{ completed: isDailyChallengeCompleted }">
-              <text>{{ isDailyChallengeCompleted ? '已完成' : '去挑战' }}</text>
+              <text>{{ isDailyChallengeCompleted ? '宸插畬鎴?' : '鍘绘寫鎴?' }}</text>
             </view>
           </view>
         </view>
@@ -96,7 +96,7 @@
 
       <view class="word-of-day-section">
         <view class="section-header">
-          <text class="section-title">每日单词</text>
+          <text class="section-title">姣忔棩鍗曡瘝</text>
           <view class="refresh-btn" @click="refreshDailyWord">
             <svg-icon name="refresh" :size="22" color="#4caf50" />
           </view>
@@ -128,7 +128,7 @@
         <view class="word-card empty" v-else @click="fetchDailyWord">
           <view class="empty-state">
             <svg-icon name="book" :size="40" color="#e0e0e0" />
-            <text class="empty-text">点击加载每日单词</text>
+            <text class="empty-text">鐐瑰嚮鍔犺浇姣忔棩鍗曡瘝</text>
           </view>
         </view>
       </view>
@@ -157,42 +157,42 @@ export default defineComponent({
   setup() {
     const store = useStore()
 
-    // 徽章相关
+    // 寰界珷鐩稿叧
     const hasNewBadge = ref(false)
     const latestBadge = ref<IBadge | null>(null)
     const isChallengeBadgeEarned = ref(false)
 
-    // 用户信息
+    // 鐢ㄦ埛淇℃伅
     const userInfo = computed(() => store.getters.userInfo)
     const userAvatarUrl = computed(() => store.getters.userAvatarUrl || getUserAvatarUrl(userInfo.value?.avatar))
 
     // 问候语
     const greeting = computed(() => {
       const hour = new Date().getHours()
-      if (hour < 6) return '凌晨好'
-      if (hour < 9) return '早上好'
-      if (hour < 12) return '上午好'
-      if (hour < 14) return '中午好'
-      if (hour < 18) return '下午好'
-      if (hour < 22) return '晚上好'
-      return '夜深了'
+      if (hour < 6) return '鍑屾櫒濂?'
+      if (hour < 9) return '鏃╀笂濂?'
+      if (hour < 12) return '涓婂崍濂?'
+      if (hour < 14) return '涓崍濂?'
+      if (hour < 18) return '涓嬪崍濂?'
+      if (hour < 22) return '鏅氫笂濂?'
+      return '澶滄繁浜?'
     })
 
-    // 学习天数
+    // 瀛︿範澶╂暟
     const learningStreak = computed(() => store.getters.learningStreak)
 
-    // 最近7天学习记录
+    // 鏈€杩?7澶╁涔犺褰?
     const recentDays = computed(() => {
       const days = []
       const today = new Date()
-      const dayNames = ['日', '一', '二', '三', '四', '五', '六']
+      const dayNames = ['鏃?', '涓€', '浜?', '涓?', '鍥?', '浜?', '鍏?']
 
       for (let i = 6; i >= 0; i--) {
         const date = new Date()
         date.setDate(today.getDate() - i)
         const dateStr = date.toISOString().split('T')[0]
 
-        // 检查该日期是否有学习记录
+        // 妫€鏌ヨ鏃ユ湡鏄惁鏈夊涔犺褰?
         const isStudied = store.state.learningProgress.dailyStats.some(
             (item: any) => item.date === dateStr
         )
@@ -224,10 +224,10 @@ export default defineComponent({
       }
     })
 
-    // 每日挑战状态
+    // 姣忔棩鎸戞垬鐘舵€?
     const isDailyChallengeCompleted = ref(false)
 
-    // 每日单词
+    // 姣忔棩鍗曡瘝
     const dailyWord = ref<IWordCard>({
       id: '',
       word: '',
@@ -240,15 +240,15 @@ export default defineComponent({
       categories: []
     })
 
-    // 是否已收藏每日单词
+    // 鏄惁宸叉敹钘忔瘡鏃ュ崟璇?
     const isWordFavorite = computed(() => {
       return store.getters.favoriteWords.some((word: IWordCard) => word.id === dailyWord.value.id)
     })
 
-    // 获取每日单词
+    // 鑾峰彇姣忔棩鍗曡瘝
     const fetchDailyWord = async () => {
       try {
-        console.log('开始获取每日单词...');
+        console.log('寮€濮嬭幏鍙栨瘡鏃ュ崟璇?...');
 
         // 先检查本地存储是否有今日单词
         const today = new Date().toISOString().split('T')[0];
@@ -257,13 +257,13 @@ export default defineComponent({
 
         // 如果本地存储中有今天的单词，直接使用
         if (storedWord && storedWord.date === today) {
-          console.log('从本地存储获取到今日单词:', storedWord.word);
+          console.log('浠庢湰鍦板瓨鍌ㄨ幏鍙栧埌浠婃棩鍗曡瘝:', storedWord.word);
           dailyWord.value = storedWord.word;
           return dailyWord.value;
         }
 
-        // 否则从API获取新单词
-        console.log('从API获取单词列表...');
+        // 鍚﹀垯浠嶢PI鑾峰彇鏂板崟璇?
+        console.log('浠嶢PI鑾峰彇鍗曡瘝鍒楄〃...');
         const response = await store.dispatch('fetchWordList', {
           category: '',
           difficulty: '',
@@ -271,7 +271,7 @@ export default defineComponent({
           size: 20
         });
 
-        console.log('获取单词列表响应:', response);
+        console.log('鑾峰彇鍗曡瘝鍒楄〃鍝嶅簲:', response);
 
         let words = [];
         if (response && response.content && Array.isArray(response.content)) {
@@ -280,33 +280,33 @@ export default defineComponent({
           words = store.state.vocabulary.wordList;
         }
 
-        console.log(`获取到${words.length}个单词`);
+        console.log(`获取到 ${words.length} 个单词`);
 
         if (words && words.length > 0) {
           // 根据日期选择一个固定的单词
           const day = new Date().getDate();
           const index = day % words.length;
-          console.log(`今天是${day}号，选择第${index}个单词`);
+          console.log(`今天是 ${day} 号，选择第 ${index} 个单词`);
 
           const selectedWord = words[index];
-          console.log('选中的每日单词:', selectedWord);
+          console.log('閫変腑鐨勬瘡鏃ュ崟璇?:', selectedWord);
 
           if (selectedWord) {
             dailyWord.value = selectedWord;
 
-            // 保存到本地存储
+            // 淇濆瓨鍒版湰鍦板瓨鍌?
             uni.setStorageSync('dailyWord', JSON.stringify({
               date: today,
               word: selectedWord
             }));
           } else {
-            console.error('无法获取每日单词，选中的单词为空');
+            console.error('鏃犳硶鑾峰彇姣忔棩鍗曡瘝锛岄€変腑鐨勫崟璇嶄负绌?');
             // 使用默认单词
             dailyWord.value = {
               id: 'default',
               word: 'Hello',
-              translation: '你好',
-              phonetic: '/həˈləʊ/',
+              translation: '浣犲ソ',
+              phonetic: '/h蓹藞l蓹蕣/',
               partOfSpeech: 'n.',
               definition: 'used as a greeting when you meet someone',
               example: 'Hello, how are you today?',
@@ -315,13 +315,13 @@ export default defineComponent({
             };
           }
         } else {
-          console.error('获取单词列表失败，列表为空');
+          console.error('鑾峰彇鍗曡瘝鍒楄〃澶辫触锛屽垪琛ㄤ负绌?');
           // 使用默认单词
           dailyWord.value = {
             id: 'default',
             word: 'Hello',
-            translation: '你好',
-            phonetic: '/həˈləʊ/',
+            translation: '浣犲ソ',
+            phonetic: '/h蓹藞l蓹蕣/',
             partOfSpeech: 'n.',
             definition: 'used as a greeting when you meet someone',
             example: 'Hello, how are you today?',
@@ -330,13 +330,13 @@ export default defineComponent({
           };
         }
       } catch (error) {
-        console.error('获取每日单词失败:', error);
+        console.error('鑾峰彇姣忔棩鍗曡瘝澶辫触:', error);
         // 使用默认单词
         dailyWord.value = {
           id: 'default',
           word: 'Hello',
-          translation: '你好',
-          phonetic: '/həˈləʊ/',
+          translation: '浣犲ソ',
+          phonetic: '/h蓹藞l蓹蕣/',
           partOfSpeech: 'n.',
           definition: 'used as a greeting when you meet someone',
           example: 'Hello, how are you today?',
@@ -346,17 +346,17 @@ export default defineComponent({
       }
     }
 
-    // 刷新每日单词
+    // 鍒锋柊姣忔棩鍗曡瘝
     const refreshDailyWord = async () => {
       try {
-        console.log('刷新每日单词...');
+        console.log('鍒锋柊姣忔棩鍗曡瘝...');
 
-        // 显示加载提示
+        // 鏄剧ず鍔犺浇鎻愮ず
         uni.showLoading({
-          title: '加载中...'
+          title: '鍔犺浇涓?...'
         });
 
-        // 从API获取单词列表
+        // 浠嶢PI鑾峰彇鍗曡瘝鍒楄〃
         const response = await store.dispatch('fetchWordList', {
           category: '',
           difficulty: '',
@@ -372,43 +372,43 @@ export default defineComponent({
         }
 
         if (words && words.length > 0) {
-          // 随机选择一个单词
+          // 闅忔満閫夋嫨涓€涓崟璇?
           const randomIndex = Math.floor(Math.random() * words.length);
-          console.log(`随机选择第${randomIndex}个单词`);
+          console.log(`随机选择第 ${randomIndex} 个单词`);
 
           const selectedWord = words[randomIndex];
-          console.log('选中的单词:', selectedWord);
+          console.log('閫変腑鐨勫崟璇?:', selectedWord);
 
           if (selectedWord) {
             dailyWord.value = selectedWord;
 
-            // 显示成功提示
+            // 鏄剧ず鎴愬姛鎻愮ず
             uni.hideLoading();
             uni.showToast({
-              title: '单词已更新',
+              title: '鍗曡瘝宸叉洿鏂?',
               icon: 'success'
             });
           } else {
-            console.error('无法获取单词，选中的单词为空');
+            console.error('鏃犳硶鑾峰彇鍗曡瘝锛岄€変腑鐨勫崟璇嶄负绌?');
             uni.hideLoading();
             uni.showToast({
-              title: '刷新失败',
+              title: '鍒锋柊澶辫触',
               icon: 'none'
             });
           }
         } else {
-          console.error('获取单词列表失败，列表为空');
+          console.error('鑾峰彇鍗曡瘝鍒楄〃澶辫触锛屽垪琛ㄤ负绌?');
           uni.hideLoading();
           uni.showToast({
-            title: '刷新失败',
+            title: '鍒锋柊澶辫触',
             icon: 'none'
           });
         }
       } catch (error) {
-        console.error('刷新每日单词失败:', error);
+        console.error('鍒锋柊姣忔棩鍗曡瘝澶辫触:', error);
         uni.hideLoading();
         uni.showToast({
-          title: '刷新失败',
+          title: '鍒锋柊澶辫触',
           icon: 'none'
         });
       }
@@ -422,13 +422,13 @@ export default defineComponent({
         icon: 'none'
       })
 
-      // 实际项目中可以使用 uni.createInnerAudioContext 播放音频
+      // 瀹為檯椤圭洰涓彲浠ヤ娇鐢? uni.createInnerAudioContext 鎾斁闊抽
       // const audio = uni.createInnerAudioContext()
       // audio.src = `https://dict.youdao.com/dictvoice?audio=${dailyWord.value.word}&type=2`
       // audio.play()
     }
 
-    // 切换收藏状态
+    // 鍒囨崲鏀惰棌鐘舵€?
     const toggleWordFavorite = () => {
       if (isWordFavorite.value) {
         store.dispatch('removeFromFavorites', dailyWord.value.id)
@@ -437,9 +437,9 @@ export default defineComponent({
       }
     }
 
-    // 页面跳转
+    // 椤甸潰璺宠浆
     const navigateTo = (url: string) => {
-      // 判断是否为 TabBar 页面
+      // 鍒ゆ柇鏄惁涓? TabBar 椤甸潰
       const tabBarPages = [
         '/pages/index/index',
         '/pages/vocabulary/index',
@@ -448,35 +448,35 @@ export default defineComponent({
       ]
 
       if (tabBarPages.includes(url)) {
-        // 使用 switchTab 跳转到 TabBar 页面
+        // 浣跨敤 switchTab 璺宠浆鍒? TabBar 椤甸潰
         uni.switchTab({
           url
         })
       } else {
-        // 使用 navigateTo 跳转到非 TabBar 页面
+        // 浣跨敤 navigateTo 璺宠浆鍒伴潪 TabBar 椤甸潰
         uni.navigateTo({
           url
         })
       }
     }
 
-    // 检查徽章
+    // 妫€鏌ュ窘绔?
     const checkBadges = async () => {
-      // 检查并发放新徽章
+      // 妫€鏌ュ苟鍙戞斁鏂板窘绔?
       const newBadges = badgeService.checkAndAwardBadges(store)
 
-      // 如果有新徽章，显示提示
+      // 濡傛灉鏈夋柊寰界珷锛屾樉绀烘彁绀?
       if (newBadges.length > 0) {
-        // 保存最新的徽章信息
+        // 淇濆瓨鏈€鏂扮殑寰界珷淇℃伅
         latestBadge.value = newBadges[newBadges.length - 1]
         hasNewBadge.value = true
 
-        // 展示徽章获得动画
+        // 灞曠ず寰界珷鑾峰緱鍔ㄧ敾
         await nextTick()
         for (const badge of newBadges) {
           await badgeService.showBadgeEarnedAnimation(badge)
 
-          // 如果是挑战徽章，设置标志
+          // 濡傛灉鏄寫鎴樺窘绔狅紝璁剧疆鏍囧織
           if (badge.category === 'challenge') {
             isChallengeBadgeEarned.value = true
           }
@@ -484,18 +484,18 @@ export default defineComponent({
       }
     }
 
-    // 显示徽章详情
+    // 鏄剧ず寰界珷璇︽儏
     const showBadgeDetails = () => {
       if (latestBadge.value) {
         uni.showModal({
           title: latestBadge.value.name,
           content: latestBadge.value.description,
           showCancel: true,
-          cancelText: '关闭',
-          confirmText: '分享',
+          cancelText: '鍏抽棴',
+          confirmText: '鍒嗕韩',
           success: (res) => {
             if (res.confirm && latestBadge.value) {
-              // 分享徽章
+              // 鍒嗕韩寰界珷
               shareBadge(latestBadge.value)
             }
           }
@@ -503,7 +503,7 @@ export default defineComponent({
       }
     }
 
-    // 分享徽章
+    // 鍒嗕韩寰界珷
     const shareBadge = async (badge?: IBadge) => {
       const badgeToShare = badge || latestBadge.value
 
@@ -516,11 +516,11 @@ export default defineComponent({
         setTimeout(() => {
           uni.hideLoading()
 
-          // 调用分享API
+          // 璋冪敤鍒嗕韩API
           badgeService.shareBadgeToSocial(badgeToShare)
         }, 800)
       } catch (error) {
-        console.error('分享失败:', error)
+        console.error('鍒嗕韩澶辫触:', error)
         uni.hideLoading()
         uni.showToast({
           title: '分享失败，请重试',

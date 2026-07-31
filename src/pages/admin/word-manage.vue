@@ -1,10 +1,10 @@
 <template>
   <view class="admin-container">
     <view class="header">
-      <text class="title">单词管理</text>
+      <text class="title">鍗曡瘝绠＄悊</text>
       <button class="add-btn" @click="openAddModal">
         <svg-icon name="plus" color="#fff" :size="14" />
-        <text class="add-btn-text">添加</text>
+        <text class="add-btn-text">娣诲姞</text>
       </button>
     </view>
 
@@ -13,80 +13,80 @@
         <input
           class="search-input"
           v-model="searchKeyword"
-          placeholder="搜索单词或释义"
+          placeholder="鎼滅储鍗曡瘝鎴栭噴涔?"
           confirm-type="search"
           @confirm="handleSearch"
         />
-        <button class="search-btn" @click="handleSearch">搜索</button>
+        <button class="search-btn" @click="handleSearch">鎼滅储</button>
       </view>
       <view class="filter-row">
         <picker :range="categoryOptions" :value="categoryIndex" @change="onCategoryChange">
-          <view class="picker-field">分类: {{ categoryOptions[categoryIndex] }}</view>
+          <view class="picker-field">鍒嗙被: {{ categoryOptions[categoryIndex] }}</view>
         </picker>
         <picker :range="difficultyOptions" :value="difficultyIndex" @change="onFilterDifficultyChange">
-          <view class="picker-field">难度: {{ difficultyOptions[difficultyIndex] }}</view>
+          <view class="picker-field">闅惧害: {{ difficultyOptions[difficultyIndex] }}</view>
         </picker>
       </view>
     </view>
 
-    <view v-if="loading" class="loading-tip">加载中...</view>
-    <view v-else-if="wordList.length === 0" class="empty-tip">暂无单词，点击右上角添加</view>
+    <view v-if="loading" class="loading-tip">鍔犺浇涓?...</view>
+    <view v-else-if="wordList.length === 0" class="empty-tip">鏆傛棤鍗曡瘝锛岀偣鍑诲彸涓婅娣诲姞</view>
 
     <view class="word-list" v-else>
       <view class="word-item" v-for="word in wordList" :key="word.id">
         <view class="word-info">
           <text class="word-text">{{ word.word }}</text>
           <text class="translation-text">{{ word.translation }}</text>
-          <text class="meta-text">{{ word.difficulty || 'easy' }} · {{ word.partOfSpeech || '-' }}</text>
+          <text class="meta-text">{{ word.difficulty || 'easy' }} 路 {{ word.partOfSpeech || '-' }}</text>
         </view>
         <view class="word-actions">
           <button class="action-btn edit-btn" @click="openEditModal(word)">
             <svg-icon name="edit" color="#2196f3" :size="14" />
-            <text>编辑</text>
+            <text>缂栬緫</text>
           </button>
           <button class="action-btn delete-btn" @click="confirmDelete(word)">
             <svg-icon name="trash" color="#f44336" :size="14" />
-            <text>删除</text>
+            <text>鍒犻櫎</text>
           </button>
         </view>
       </view>
     </view>
 
     <view class="pagination" v-if="!loading && totalPages > 0">
-      <text class="page-info">第 {{ currentPage }}/{{ totalPages }} 页 · 每页 {{ pageSize }} 条 · 共 {{ totalItems }} 个单词</text>
+      <text class="page-info">绗? {{ currentPage }}/{{ totalPages }} 椤? 路 姣忛〉 {{ pageSize }} 鏉? 路 鍏? {{ totalItems }} 涓崟璇?</text>
       <view class="pagination-controls">
-        <button class="page-btn" :disabled="currentPage <= 1" @click="goToPage(1)">首页</button>
-        <button class="page-btn" :disabled="currentPage <= 1" @click="goToPage(currentPage - 1)">上一页</button>
-        <button class="page-btn" :disabled="currentPage >= totalPages" @click="goToPage(currentPage + 1)">下一页</button>
+        <button class="page-btn" :disabled="currentPage <= 1" @click="goToPage(1)">棣栭〉</button>
+        <button class="page-btn" :disabled="currentPage <= 1" @click="goToPage(currentPage - 1)">涓婁竴椤?</button>
+        <button class="page-btn" :disabled="currentPage >= totalPages" @click="goToPage(currentPage + 1)">涓嬩竴椤?</button>
         <button class="page-btn" :disabled="currentPage >= totalPages" @click="goToPage(totalPages)">末页</button>
       </view>
     </view>
 
-    <!-- 添加/编辑弹窗 -->
+    <!-- 娣诲姞/缂栬緫寮圭獥 -->
     <view class="modal" v-if="showModal">
       <view class="modal-mask" @click="closeModal"></view>
       <view class="modal-content">
         <view class="modal-header">
-          <text class="modal-title">{{ isEditing ? '编辑单词' : '添加新单词' }}</text>
+          <text class="modal-title">{{ isEditing ? '缂栬緫鍗曡瘝' : '娣诲姞鏂板崟璇?' }}</text>
         </view>
         <view class="modal-body">
-          <input class="input" v-model="formWord.word" placeholder="单词 (如: hello)" />
-          <input class="input" v-model="formWord.translation" placeholder="翻译 (如: 你好)" />
-          <input class="input" v-model="formWord.phonetic" placeholder="音标 (可选)" />
-          <input class="input" v-model="formWord.partOfSpeech" placeholder="词性 (如: n.)" />
-          <input class="input" v-model="formWord.definition" placeholder="英文释义 (可选)" />
-          <input class="input" v-model="formWord.example" placeholder="例句 (可选)" />
+          <input class="input" v-model="formWord.word" placeholder="鍗曡瘝 (濡?: hello)" />
+          <input class="input" v-model="formWord.translation" placeholder="缈昏瘧 (濡?: 浣犲ソ)" />
+          <input class="input" v-model="formWord.phonetic" placeholder="闊虫爣 (鍙€?)" />
+          <input class="input" v-model="formWord.partOfSpeech" placeholder="璇嶆€? (濡?: n.)" />
+          <input class="input" v-model="formWord.definition" placeholder="鑻辨枃閲婁箟 (鍙€?)" />
+          <input class="input" v-model="formWord.example" placeholder="渚嬪彞 (鍙€?)" />
           <picker :range="formDifficultyLevels" :value="formDifficultyIndex" @change="onFormDifficultyChange">
-            <view class="picker-field">难度: {{ formWord.difficulty }}</view>
+            <view class="picker-field">闅惧害: {{ formWord.difficulty }}</view>
           </picker>
           <picker :range="formCategoryOptions" :value="formCategoryIndex" @change="onFormCategoryChange">
-            <view class="picker-field">分类: {{ formWord.categories[0] }}</view>
+            <view class="picker-field">鍒嗙被: {{ formWord.categories[0] }}</view>
           </picker>
         </view>
         <view class="modal-footer">
-          <button class="modal-btn" @click="closeModal">取消</button>
+          <button class="modal-btn" @click="closeModal">鍙栨秷</button>
           <button class="modal-btn primary" :disabled="submitting" @click="submitWord">
-            {{ submitting ? '保存中...' : '保存' }}
+            {{ submitting ? '淇濆瓨涓?...' : '淇濆瓨' }}
           </button>
         </view>
       </view>
@@ -121,13 +121,13 @@ export default defineComponent({
     const showModal = ref(false)
     const isEditing = ref(false)
     const editingId = ref<string | number | null>(null)
-    const difficultyOptions = ['全部', 'easy', 'medium', 'hard']
+    const difficultyOptions = ['鍏ㄩ儴', 'easy', 'medium', 'hard']
     const formDifficultyLevels = ['easy', 'medium', 'hard']
     const formCategoryOptions = ['CET4', 'CET6', 'TOEFL', 'IELTS', 'GRE']
     const difficultyIndex = ref(0)
     const formDifficultyIndex = ref(0)
     const formCategoryIndex = ref(0)
-    const categoryOptions = ['全部', 'CET4', 'CET6', 'TOEFL', 'IELTS', 'GRE']
+    const categoryOptions = ['鍏ㄩ儴', 'CET4', 'CET6', 'TOEFL', 'IELTS', 'GRE']
     const categoryIndex = ref(0)
     const searchKeyword = ref('')
     const currentPage = ref(1)
@@ -162,8 +162,8 @@ export default defineComponent({
 
         currentPage.value = response.currentPage || page
       } catch (error) {
-        console.error('获取单词列表失败', error)
-        uni.showToast({ title: '获取单词列表失败', icon: 'none' })
+        console.error('鑾峰彇鍗曡瘝鍒楄〃澶辫触', error)
+        uni.showToast({ title: '鑾峰彇鍗曡瘝鍒楄〃澶辫触', icon: 'none' })
       } finally {
         loading.value = false
       }
@@ -225,7 +225,7 @@ export default defineComponent({
     const confirmDelete = (word: { id: number | string; word: string }) => {
       uni.showModal({
         title: '确认删除',
-        content: `确定删除单词「${word.word}」吗？`,
+        content: `确定删除单词“${word.word}”吗？`,
         success: async (res) => {
           if (res.confirm) {
             await deleteWord(word.id)
@@ -237,11 +237,11 @@ export default defineComponent({
     const deleteWord = async (id: number | string) => {
       try {
         await api.wordCards.deleteWordCard(id)
-        uni.showToast({ title: '删除成功', icon: 'success' })
+        uni.showToast({ title: '鍒犻櫎鎴愬姛', icon: 'success' })
         fetchWords()
       } catch (error) {
-        console.error('删除失败', error)
-        uni.showToast({ title: '删除失败', icon: 'none' })
+        console.error('鍒犻櫎澶辫触', error)
+        uni.showToast({ title: '鍒犻櫎澶辫触', icon: 'none' })
       }
     }
 
@@ -257,7 +257,7 @@ export default defineComponent({
 
     const submitWord = async () => {
       if (!formWord.value.word?.trim() || !formWord.value.translation?.trim()) {
-        uni.showToast({ title: '单词和翻译不能为空', icon: 'none' })
+        uni.showToast({ title: '鍗曡瘝鍜岀炕璇戜笉鑳戒负绌?', icon: 'none' })
         return
       }
       submitting.value = true
@@ -270,16 +270,16 @@ export default defineComponent({
       try {
         if (isEditing.value && editingId.value != null) {
           await api.wordCards.updateWordCard(editingId.value, payload)
-          uni.showToast({ title: '更新成功', icon: 'success' })
+          uni.showToast({ title: '鏇存柊鎴愬姛', icon: 'success' })
         } else {
           await api.wordCards.createWordCard(payload)
-          uni.showToast({ title: '添加成功', icon: 'success' })
+          uni.showToast({ title: '娣诲姞鎴愬姛', icon: 'success' })
         }
         closeModal()
         fetchWords()
       } catch (error) {
-        console.error('保存失败', error)
-        uni.showToast({ title: '保存失败', icon: 'none' })
+        console.error('淇濆瓨澶辫触', error)
+        uni.showToast({ title: '淇濆瓨澶辫触', icon: 'none' })
       } finally {
         submitting.value = false
       }

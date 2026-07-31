@@ -13,38 +13,38 @@
               <svg-icon name="camera" color="#fff" :size="14" />
             </view>
           </view>
-          <text class="nickname">{{ userInfo.nickname || '未设置昵称' }}</text>
+          <text class="nickname">{{ userInfo.nickname || '閺堫亣顔曠純顔芥█缁夛拷' }}</text>
           <text class="user-id">ID: {{ userInfo.id }}</text>
         </view>
         
         <view class="stats-section">
           <view class="stat-item">
             <text class="stat-value">{{ learningStreak }}</text>
-            <text class="stat-label">连续学习</text>
+            <text class="stat-label">鏉╃偟鐢荤€涳缚绡?</text>
           </view>
           <view class="stat-item">
             <text class="stat-value">{{ wordsLearned }}</text>
-            <text class="stat-label">已学单词</text>
+            <text class="stat-label">瀹告彃顒熼崡鏇＄槤</text>
           </view>
           <view class="stat-item">
             <text class="stat-value">{{ badgeCompletion }}%</text>
-            <text class="stat-label">成就完成</text>
+            <text class="stat-label">閹存劕姘ㄧ€瑰本鍨?</text>
           </view>
         </view>
       </view>
       
       <view class="menu-section">
         <view class="section-header">
-          <text class="section-title">个人中心</text>
+          <text class="section-title">娑擃亙姹夋稉顓炵妇</text>
         </view>
         
         <view class="menu-list">
-          <!-- 我的成就 -->
+          <!-- 鎴戠殑鎴愬氨 -->
           <view class="menu-item" @click="navigateTo('/pages/profile/achievements')">
             <view class="menu-icon awards">
               <svg-icon name="trophy" color="#ffd700" :size="22" />
             </view>
-            <text class="menu-title">我的成就</text>
+            <text class="menu-title">鎴戠殑鎴愬氨</text>
             <view class="menu-action">
               <text v-if="hasNewBadge" class="badge-dot"></text>
               <svg-icon name="right-arrow" :size="14" color="#bbb" />
@@ -55,7 +55,7 @@
             <view class="menu-icon favorites">
               <svg-icon name="star" color="#ff5722" :size="22" />
             </view>
-            <text class="menu-title">我的收藏</text>
+            <text class="menu-title">鎴戠殑鏀惰棌</text>
             <view class="menu-action">
               <svg-icon name="right-arrow" :size="14" color="#bbb" />
             </view>
@@ -65,18 +65,18 @@
             <view class="menu-icon settings">
               <svg-icon name="settings" color="#03a9f4" :size="22" />
             </view>
-            <text class="menu-title">应用设置</text>
+            <text class="menu-title">鎼存梻鏁ょ拋鍓х枂</text>
             <view class="menu-action">
               <svg-icon name="right-arrow" :size="14" color="#bbb" />
             </view>
           </view>
 
-          <!-- 词汇管理 (仅管理员) -->
+          <!-- 鐠囧秵鐪圭粻锛勬倞 (娴犲懐顓搁悶鍡楁喅) -->
           <view class="menu-item" v-if="isAdmin" @click="navigateTo('/pages/admin/word-manage')">
             <view class="menu-icon test">
               <svg-icon name="settings" color="#9c27b0" :size="22" />
             </view>
-            <text class="menu-title">词汇管理</text>
+            <text class="menu-title">鐠囧秵鐪圭粻锛勬倞</text>
             <view class="menu-action">
               <svg-icon name="right-arrow" :size="14" color="#bbb" />
             </view>
@@ -86,12 +86,12 @@
       
       <view class="learning-section">
         <view class="section-header">
-          <text class="section-title">学习数据</text>
+          <text class="section-title">鐎涳缚绡勯弫鐗堝祦</text>
         </view>
         
         <view class="stats-card">
           <view class="card-header">
-            <text class="card-title">本周学习情况</text>
+            <text class="card-title">閺堫剙鎳嗙€涳缚绡勯幆鍛枌</text>
           </view>
           
           <view class="calendar">
@@ -110,8 +110,8 @@
       </view>
       
       <view class="about-section">
-        <text class="app-version">英语学习 v1.0.0</text>
-        <text class="copyright">© 2023 英语学习团队</text>
+        <text class="app-version">閼昏精顕㈢€涳缚绡? v1.0.0</text>
+        <text class="copyright">婕? 2023 閼昏精顕㈢€涳缚绡勯崶銏ゆЕ</text>
       </view>
     </view>
     <tab-bar :current="3"></tab-bar>
@@ -136,37 +136,37 @@ export default defineComponent({
   setup() {
     const store = useStore()
     
-    // 用户信息
+    // 閻€劍鍩涙穱鈩冧紖
     const userInfo = computed(() => store.getters.userInfo)
     const uploadingAvatar = ref(false)
 
     const displayAvatar = computed(() => getUserAvatarUrl(userInfo.value?.avatar))
     
-    // 是否管理员
+    // 閺勵垰鎯佺粻锛勬倞閸涳拷
     const isAdmin = computed(() => {
       const user = store.getters.userInfo;
       return user && user.roles && user.roles.includes('ROLE_ADMIN');
     })
     
-    // 学习天数
+    // 鐎涳缚绡勬径鈺傛殶
     const learningStreak = computed(() => store.getters.learningStreak)
     
-    // 已学单词数
+    // 瀹告彃顒熼崡鏇＄槤閺侊拷
     const wordsLearned = computed(() => {
       return store.state.learningProgress.dailyStats.reduce(
         (sum: number, day: any) => sum + day.wordsLearned, 0
       )
     })
     
-    // 成就完成度
+    // 閹存劕姘ㄧ€瑰本鍨氭惔锟?
     const badgeCompletion = computed(() => badgeService.calculateBadgeCompletion(store))
     
-    // 是否有新徽章
+    // 閺勵垰鎯侀張澶嬫煀瀵扮晫鐝?
     const hasNewBadge = computed(() => {
       const badges = store.getters.userBadges || []
       if (badges.length === 0) return false
       
-      // 检查是否有最近24小时内获得的徽章
+      // 濡偓閺屻儲妲搁崥锔芥箒閺堚偓鏉╋拷24鐏忓繑妞傞崘鍛板箯瀵版娈戝鐣岀彿
       const now = new Date().getTime()
       return badges.some((badge: IBadge) => {
         if (!badge.dateEarned) return false
@@ -175,18 +175,18 @@ export default defineComponent({
       })
     })
     
-    // 最近7天学习记录
+    // 閺堚偓鏉╋拷7婢垛晛顒熸稊鐘侯唶瑜帮拷
     const recentDays = computed(() => {
       const days = []
       const today = new Date()
-      const dayNames = ['日', '一', '二', '三', '四', '五', '六']
+      const dayNames = ['閺冿拷', '娑撯偓', '娴滐拷', '娑擄拷', '閸ワ拷', '娴滐拷', '閸忥拷']
       
       for (let i = 6; i >= 0; i--) {
         const date = new Date()
         date.setDate(today.getDate() - i)
         const dateStr = date.toISOString().split('T')[0]
         
-        // 查找该日期的学习记录
+        // 閺屻儲澹樼拠銉︽）閺堢喓娈戠€涳缚绡勭拋鏉跨秿
         const dayRecord = store.state.learningProgress.dailyStats.find(
           (item: any) => item.date === dateStr
         )
@@ -203,21 +203,21 @@ export default defineComponent({
       return days
     })
     
-    // 页面跳转
+    // 妞ょ敻娼扮捄瀹犳祮
     const navigateTo = (url: string) => {
       uni.navigateTo({
         url
       })
     }
     
-    // 修改头像
+    // 娣囶喗鏁兼径鏉戝剼
     const changeAvatar = () => {
       if (!store.getters.isLoggedIn) {
-        uni.showToast({ title: '请先登录', icon: 'none' })
+        uni.showToast({ title: '鐠囧嘲鍘涢惂璇茬秿', icon: 'none' })
         return
       }
       uni.showActionSheet({
-        itemList: ['从相册选择', '拍照'],
+        itemList: ['娴犲海娴夐崘宀勨偓澶嬪', '閹峰秶鍙?'],
         success: (res) => {
           const sourceType = res.tapIndex === 0 ? ['album'] : ['camera'] as ('album' | 'camera')[]
           uni.chooseImage({
@@ -227,12 +227,12 @@ export default defineComponent({
             success: async (chooseRes) => {
               const tempFilePath = chooseRes.tempFilePaths[0]
               uploadingAvatar.value = true
-              uni.showLoading({ title: '上传中...' })
+              uni.showLoading({ title: '娑撳﹣绱舵稉锟?...' })
               try {
                 await store.dispatch('uploadAvatar', tempFilePath)
-                uni.showToast({ title: '头像已更新', icon: 'success' })
+                uni.showToast({ title: '婢舵潙鍎氬鍙夋纯閺傦拷', icon: 'success' })
               } catch (error) {
-                console.error('上传头像失败', error)
+                console.error('娑撳﹣绱舵径鏉戝剼婢惰精瑙?', error)
                 uni.showToast({ title: '上传失败，请重试', icon: 'none' })
               } finally {
                 uploadingAvatar.value = false
@@ -244,9 +244,9 @@ export default defineComponent({
       })
     }
     
-    // 获取头像文本
+    // 閼惧嘲褰囨径鏉戝剼閺傚洦婀?
     const getAvatarText = (nickname: string) => {
-      if (!nickname || nickname.length === 0) return '未设置昵称'
+      if (!nickname || nickname.length === 0) return '閺堫亣顔曠純顔芥█缁夛拷'
       return nickname.slice(0, 2).toUpperCase()
     }
     
@@ -592,4 +592,4 @@ export default defineComponent({
   font-size: 24rpx;
   color: #bdc3c7;
 }
-</style> 
+</style>

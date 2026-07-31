@@ -2,7 +2,7 @@ import { resolveMediaUrl } from '../services/api'
 
 export const DEFAULT_AVATAR = '/static/images/profile/default-avatar.svg'
 
-/** 用户头像 URL，无头像时使用默认图 */
+/** 鐢ㄦ埛澶村儚 URL锛屾棤澶村儚鏃朵娇鐢ㄩ粯璁ゅ浘 */
 export function getUserAvatarUrl(avatar?: string | null): string {
   if (!avatar || !String(avatar).trim()) {
     return DEFAULT_AVATAR

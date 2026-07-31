@@ -1,12 +1,12 @@
 <template>
   <view class="settings-container">
     <view class="header">
-      <text class="title">应用设置</text>
+      <text class="title">鎼存梻鏁ょ拋鍓х枂</text>
     </view>
     
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">基本设置</text>
+        <text class="section-title">閸╃儤婀扮拋鍓х枂</text>
       </view>
       
       <view class="settings-list">
@@ -14,7 +14,7 @@
           <view class="settings-icon theme">
             <svg-icon name="theme" color="#673ab7" :size="22" />
           </view>
-          <text class="settings-title">主题设置</text>
+          <text class="settings-title">娑撳顣界拋鍓х枂</text>
           <view class="settings-action">
             <picker 
               :value="themeIndex" 
@@ -31,7 +31,7 @@
           <view class="settings-icon sound">
             <svg-icon name="sound" color="#2196f3" :size="22" />
           </view>
-          <text class="settings-title">音效开关</text>
+          <text class="settings-title">闂婅櫕鏅ュ鈧崗锟?</text>
           <view class="settings-action">
             <switch 
               :checked="soundEnabled" 
@@ -45,7 +45,7 @@
           <view class="settings-icon notification">
             <svg-icon name="notification" color="#ff9800" :size="22" />
           </view>
-          <text class="settings-title">通知提醒</text>
+          <text class="settings-title">閫氱煡鎻愰啋</text>
           <view class="settings-action">
             <switch 
               :checked="notificationEnabled" 
@@ -59,7 +59,7 @@
     
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">学习设置</text>
+        <text class="section-title">鐎涳缚绡勭拋鍓х枂</text>
       </view>
       
       <view class="settings-list">
@@ -67,7 +67,7 @@
           <view class="settings-icon target">
             <svg-icon name="target" color="#e91e63" :size="22" />
           </view>
-          <text class="settings-title">每日学习目标</text>
+          <text class="settings-title">濮ｅ繑妫╃€涳缚绡勯惄顔界垼</text>
           <view class="settings-action">
             <picker 
               :value="targetIndex" 
@@ -84,7 +84,7 @@
           <view class="settings-icon difficulty">
             <svg-icon name="settings" color="#009688" :size="22" />
           </view>
-          <text class="settings-title">默认难度</text>
+          <text class="settings-title">姒涙ǹ顓婚梾鎯у</text>
           <view class="settings-action">
             <picker 
               :value="difficultyIndex" 
@@ -101,7 +101,7 @@
     
     <view class="settings-section">
       <view class="section-header">
-        <text class="section-title">数据与账号</text>
+        <text class="section-title">閺佺増宓佹稉搴ゅ閸欙拷</text>
       </view>
       
       <view class="settings-list">
@@ -109,7 +109,7 @@
           <view class="settings-icon clear">
             <svg-icon name="clear" color="#f44336" :size="22" />
           </view>
-          <text class="settings-title">清除缓存</text>
+          <text class="settings-title">濞撳懘娅庣紓鎾崇摠</text>
           <view class="settings-action">
             <text class="action-text">{{ cacheSize }}</text>
           </view>
@@ -119,14 +119,14 @@
           <view class="menu-icon">
             <svg-icon name="logout" color="#ff5252" :size="22" />
           </view>
-          <text class="menu-title">退出登录</text>
+          <text class="menu-title">闁偓閸戣櫣娅ヨぐ锟?</text>
         </view>
       </view>
     </view>
     
     <view class="about-section">
-      <text class="app-version">英语学习 v1.0.0</text>
-      <text class="copyright">© 2023 英语学习团队</text>
+      <text class="app-version">閼昏精顕㈢€涳缚绡? v1.0.0</text>
+      <text class="copyright">婕? 2023 閼昏精顕㈢€涳缚绡勯崶銏ゆЕ</text>
     </view>
   </view>
 </template>
@@ -144,26 +144,26 @@ export default defineComponent({
   setup() {
     const store = useStore()
     
-    // 主题设置
-    const themeOptions = ['浅色模式', '深色模式', '跟随系统']
+    // 娑撳顣界拋鍓х枂
+    const themeOptions = ['濞村懓澹婂Ο鈥崇础', '濞ｈ精澹婂Ο鈥崇础', '鐠虹喖娈㈢化鑽ょ埠']
     const themeIndex = ref(0)
     
-    // 学习目标设置
-    const targetOptions = ['10个单词/天', '20个单词/天', '30个单词/天', '50个单词/天']
-    const targetIndex = ref(1) // 默认20个单词/天
+    // 鐎涳缚绡勯惄顔界垼鐠佸墽鐤?
+    const targetOptions = ['10娑擃亜宕熺拠锟?/婢讹拷', '20娑擃亜宕熺拠锟?/婢讹拷', '30娑擃亜宕熺拠锟?/婢讹拷', '50娑擃亜宕熺拠锟?/婢讹拷']
+    const targetIndex = ref(1) // 默认每天学习 20 个单词
     
-    // 难度设置
-    const difficultyOptions = ['简单', '中等', '困难']
-    const difficultyIndex = ref(1) // 默认中等难度
+    // 闂呮儳瀹崇拋鍓х枂
+    const difficultyOptions = ['缁犫偓閸楋拷', '娑擃厾鐡?', '閸ヤ即姣?']
+    const difficultyIndex = ref(1) // 姒涙ǹ顓绘稉顓犵搼闂呮儳瀹?
     
-    // 开关状态
+    // 瀵偓閸忓磭濮搁幀锟?
     const soundEnabled = ref(true)
     const notificationEnabled = ref(true)
     
-    // 缓存大小
+    // 缂傛挸鐡ㄦ径褍鐨?
     const cacheSize = ref('2.5MB')
     
-    // 初始化设置
+    // 閸掓繂顫愰崠鏍啎缂冿拷
     const initSettings = () => {
       const settings = store.getters.userSettings
       if (!settings) return
@@ -184,7 +184,7 @@ export default defineComponent({
       if (diffIdx >= 0) difficultyIndex.value = diffIdx
     }
     
-    // 主题更改
+    // 娑撳顣介弴瀛樻暭
     const handleThemeChange = (e: any) => {
       const index = e.detail.value
       themeIndex.value = index
@@ -196,61 +196,61 @@ export default defineComponent({
       store.dispatch('updateUserSetting', { key: 'theme', value: theme })
     }
     
-    // 音效开关更改
+    // 闂婅櫕鏅ュ鈧崗铏纯閺€锟?
     const handleSoundChange = (e: any) => {
       const enabled = e.detail.value
       soundEnabled.value = enabled
       store.dispatch('updateUserSetting', { key: 'soundEnabled', value: enabled })
     }
     
-    // 通知开关更改
+    // 闁氨鐓″鈧崗铏纯閺€锟?
     const handleNotificationChange = (e: any) => {
       const enabled = e.detail.value
       notificationEnabled.value = enabled
       store.dispatch('updateUserSetting', { key: 'notificationEnabled', value: enabled })
     }
     
-    // 学习目标更改
+    // 鐎涳缚绡勯惄顔界垼閺囧瓨鏁?
     const handleTargetChange = (e: any) => {
       const index = e.detail.value
       targetIndex.value = index
       
-      // 根据索引获取目标数
+      // 閺嶈宓佺槐銏犵穿閼惧嘲褰囬惄顔界垼閺侊拷
       const targetMap = [10, 20, 30, 50]
       const target = targetMap[index]
       
       store.dispatch('updateUserSetting', { key: 'dailyTarget', value: target })
     }
     
-    // 难度更改
+    // 闂呮儳瀹抽弴瀛樻暭
     const handleDifficultyChange = (e: any) => {
       const index = e.detail.value
       difficultyIndex.value = index
       
-      // 根据索引获取难度
+      // 鏍规嵁绱㈠紩鑾峰彇闅惧害
       const difficultyMap = ['easy', 'medium', 'hard']
       const difficulty = difficultyMap[index]
       
       store.dispatch('updateUserSetting', { key: 'defaultDifficulty', value: difficulty })
     }
     
-    // 清除缓存
+    // 濞撳懘娅庣紓鎾崇摠
     const handleClearData = () => {
       uni.showModal({
-        title: '清除缓存',
-        content: '确定要清除缓存数据吗？这不会影响您的学习记录。',
+        title: '濞撳懘娅庣紓鎾崇摠',
+        content: '绾喖鐣剧憰浣圭闂勩倗绱︾€涙ɑ鏆熼幑顔兼偋閿涚喕绻栨稉宥勭窗瑜板崬鎼烽幃銊ф畱鐎涳缚绡勭拋鏉跨秿閵嗭拷',
         success: (res) => {
           if (res.confirm) {
-            // 模拟清除缓存
+            // 濡剝瀚欏〒鍛存珟缂傛挸鐡?
             uni.showLoading({
-              title: '清除中...'
+              title: '濞撳懘娅庢稉锟?...'
             })
             
             setTimeout(() => {
               uni.hideLoading()
               cacheSize.value = '0KB'
               uni.showToast({
-                title: '缓存已清除',
+                title: '缂傛挸鐡ㄥ鍙夌闂勶拷',
                 icon: 'success'
               })
             }, 1000)
@@ -259,28 +259,28 @@ export default defineComponent({
       })
     }
     
-    // 退出登录
+    // 闁偓閸戣櫣娅ヨぐ锟?
     const handleLogout = () => {
       uni.showModal({
-        title: '退出登录',
-        content: '确定要退出当前账号吗？',
+        title: '闁偓閸戣櫣娅ヨぐ锟?',
+        content: '绾喖鐣剧憰渚€鈧偓閸戝搫缍嬮崜宥堝閸欏嘲鎮ч敍锟?',
         success: async (res) => {
           if (res.confirm) {
             uni.showLoading({
-              title: '退出中...'
+              title: '闁偓閸戣桨鑵?...'
             });
             
             try {
-              // 调用退出登录action
+              // 璋冪敤閫€鍑虹櫥褰昦ction
               await store.dispatch('logout');
               
               uni.hideLoading();
               uni.showToast({
-                title: '已退出登录',
+                title: '瀹告煡鈧偓閸戣櫣娅ヨぐ锟?',
                 icon: 'success'
               });
               
-              // 返回登录页
+              // 鏉╂柨娲栭惂璇茬秿妞わ拷
               setTimeout(() => {
                 uni.redirectTo({
                   url: '/pages/profile/login'
@@ -289,7 +289,7 @@ export default defineComponent({
             } catch (error) {
               uni.hideLoading();
               uni.showToast({
-                title: '退出失败，请重试',
+                title: '闁偓閸戝搫銇戠拹銉礉鐠囩兘鍣哥拠锟?',
                 icon: 'none'
               });
             }
@@ -456,4 +456,4 @@ export default defineComponent({
   font-size: 22rpx;
   color: #999;
 }
-</style> 
+</style>

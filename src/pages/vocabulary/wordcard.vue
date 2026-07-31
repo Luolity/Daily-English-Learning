@@ -1,27 +1,27 @@
 <template>
   <view class="wordcard-container">
     <view class="header">
-      <text class="title">单词卡片</text>
+      <text class="title">鍗曡瘝鍗＄墖</text>
       <view class="header-actions">
         <text class="progress">{{ currentIndex + 1 }}/{{ wordList.length }}</text>
         <view class="filter-btn" @click="showFilterModal = true">
-          <text>筛选</text>
-          <text class="icon-filter">🔍</text>
+          <text>绛涢€?</text>
+          <text class="icon-filter">馃攳</text>
         </view>
       </view>
     </view>
     
-    <!-- 加载状态 -->
+    <!-- 鍔犺浇鐘舵€? -->
     <view class="loading-container" v-if="isLoading">
       <view class="loading-spinner"></view>
-      <text class="loading-text">加载中...</text>
+      <text class="loading-text">鍔犺浇涓?...</text>
     </view>
     
-    <!-- 空数据状态 -->
+    <!-- 绌烘暟鎹姸鎬? -->
     <view class="empty-container" v-else-if="wordList.length === 0">
-      <text class="empty-icon">📚</text>
-      <text class="empty-text">暂无单词数据</text>
-      <button class="reload-btn" @click="handleReload">重新加载</button>
+      <text class="empty-icon">馃摎</text>
+      <text class="empty-text">鏆傛棤鍗曡瘝鏁版嵁</text>
+      <button class="reload-btn" @click="handleReload">閲嶆柊鍔犺浇</button>
     </view>
     
     <swiper v-else class="swiper" @change="onSwiperChange" :current="currentIndex">
@@ -39,24 +39,24 @@
               <text class="part-of-speech">{{ word.partOfSpeech }}</text>
               <view class="card-actions">
                 <button class="action-btn sound-btn" @click.stop="playPronunciation(word)">
-                  <text class="icon-sound">🔊</text>
+                  <text class="icon-sound">馃攰</text>
                 </button>
                 <button 
                   class="action-btn favorite-btn" 
                   :class="{ 'is-favorite': isFavorite(word) }"
                   @click.stop="toggleFavorite(word)"
                 >
-                  <text class="icon-star">{{ isFavorite(word) ? '★' : '☆' }}</text>
+                  <text class="icon-star">{{ isFavorite(word) ? '鈽?' : '鈽?' }}</text>
                 </button>
               </view>
-              <text class="hint">点击卡片查看释义</text>
+              <text class="hint">鐐瑰嚮鍗＄墖鏌ョ湅閲婁箟</text>
             </view>
             <view class="card-back">
               <view class="difficulty-indicator" :class="word.difficulty"></view>
               <text class="translation">{{ word.translation }}</text>
               <text class="definition">{{ word.definition }}</text>
               <view class="example-container">
-                <text class="example-label">例句：</text>
+                <text class="example-label">渚嬪彞锛?</text>
                 <text class="example">{{ word.example }}</text>
               </view>
               <view class="tags-container" v-if="word.categories && word.categories.length > 0">
@@ -65,17 +65,17 @@
               </view>
               <view class="card-actions">
                 <button class="action-btn sound-btn" @click.stop="playPronunciation(word)">
-                  <text class="icon-sound">🔊</text>
+                  <text class="icon-sound">馃攰</text>
                 </button>
                 <button 
                   class="action-btn favorite-btn" 
                   :class="{ 'is-favorite': isFavorite(word) }"
                   @click.stop="toggleFavorite(word)"
                 >
-                  <text class="icon-star">{{ isFavorite(word) ? '★' : '☆' }}</text>
+                  <text class="icon-star">{{ isFavorite(word) ? '鈽?' : '鈽?' }}</text>
                 </button>
               </view>
-              <text class="hint">点击卡片返回</text>
+              <text class="hint">鐐瑰嚮鍗＄墖杩斿洖</text>
             </view>
           </view>
         </view>
@@ -84,30 +84,30 @@
     
     <view class="controls">
       <button class="control-btn prev-btn" @click="prevCard" :disabled="currentIndex === 0">
-        <text class="icon-left">◀</text>
+        <text class="icon-left">鈼€</text>
       </button>
       <button class="control-btn primary learn-btn" @click="markAsLearned" :class="{ 'learned': learnedWords[wordList[currentIndex]?.id] }">
-        <text>{{ learnedWords[wordList[currentIndex]?.id] ? '已学习' : '标记为已学' }}</text>
+        <text>{{ learnedWords[wordList[currentIndex]?.id] ? '宸插涔?' : '鏍囪涓哄凡瀛?' }}</text>
       </button>
       <button class="control-btn next-btn" @click="nextCard" :disabled="currentIndex === wordList.length - 1">
-        <text class="icon-right">▶</text>
+        <text class="icon-right">鈻?</text>
       </button>
     </view>
     
-    <!-- 分页控件 -->
+    <!-- 鍒嗛〉鎺т欢 -->
     <view class="pagination">
       <view class="pagination-info">
-        <text>第 {{ currentPage }}/{{ totalPages }} 页 · 每页 {{ pageSize }} 条 · 共 {{ totalItems }} 个单词</text>
+        <text>绗? {{ currentPage }}/{{ totalPages }} 椤? 路 姣忛〉 {{ pageSize }} 鏉? 路 鍏? {{ totalItems }} 涓崟璇?</text>
       </view>
       <view class="pagination-controls">
         <button class="page-btn" @click="loadPage(1)" :disabled="currentPage === 1">
-          <text>首页</text>
+          <text>棣栭〉</text>
         </button>
         <button class="page-btn" @click="loadPage(currentPage - 1)" :disabled="currentPage === 1">
-          <text>上一页</text>
+          <text>涓婁竴椤?</text>
         </button>
         <button class="page-btn" @click="loadPage(currentPage + 1)" :disabled="totalPages === 0 || currentPage >= totalPages">
-          <text>下一页</text>
+          <text>涓嬩竴椤?</text>
         </button>
         <button class="page-btn" @click="loadPage(totalPages)" :disabled="totalPages === 0 || currentPage >= totalPages">
           <text>末页</text>
@@ -115,29 +115,29 @@
       </view>
     </view>
     
-    <!-- 筛选弹窗 -->
+    <!-- 绛涢€夊脊绐? -->
     <view class="filter-modal" v-if="showFilterModal">
       <view class="modal-mask" @click="showFilterModal = false"></view>
       <view class="modal-content">
         <view class="modal-header">
-          <text class="modal-title">筛选单词</text>
-          <text class="modal-close" @click="showFilterModal = false">×</text>
+          <text class="modal-title">绛涢€夊崟璇?</text>
+          <text class="modal-close" @click="showFilterModal = false">脳</text>
         </view>
         
         <view class="modal-body">
           <view class="filter-section">
-            <text class="filter-label">搜索</text>
+            <text class="filter-label">鎼滅储</text>
             <input
               class="filter-search-input"
               v-model="searchKeyword"
-              placeholder="输入单词或释义"
+              placeholder="杈撳叆鍗曡瘝鎴栭噴涔?"
               confirm-type="search"
               @confirm="applyFilters"
             />
           </view>
 
           <view class="filter-section">
-            <text class="filter-label">难度</text>
+            <text class="filter-label">闅惧害</text>
             <view class="filter-options">
               <view 
                 v-for="difficulty in difficulties" 
@@ -152,7 +152,7 @@
           </view>
           
           <view class="filter-section">
-            <text class="filter-label">分类</text>
+            <text class="filter-label">鍒嗙被</text>
             <view class="filter-options wrap">
               <view 
                 v-for="category in categories" 
@@ -167,14 +167,14 @@
           </view>
           
           <view class="filter-section">
-            <text class="filter-label">显示</text>
+            <text class="filter-label">鏄剧ず</text>
             <view class="filter-options">
               <view 
                 class="filter-option" 
                 :class="{ active: showFavoritesOnly }"
                 @click="showFavoritesOnly = !showFavoritesOnly"
               >
-                <text>仅显示收藏</text>
+                <text>浠呮樉绀烘敹钘?</text>
               </view>
               <view 
                 class="filter-option" 
@@ -188,16 +188,16 @@
         </view>
         
         <view class="modal-footer">
-          <button class="modal-btn" @click="resetFilters">重置</button>
-          <button class="modal-btn primary" @click="applyFilters">应用</button>
+          <button class="modal-btn" @click="resetFilters">閲嶇疆</button>
+          <button class="modal-btn primary" @click="applyFilters">搴旂敤</button>
         </view>
       </view>
     </view>
     
-    <!-- 添加成功提示 -->
+    <!-- 娣诲姞鎴愬姛鎻愮ず -->
     <view class="toast" v-if="showToast">
       <view class="toast-content">
-        <text class="toast-icon">{{ toastSuccess ? '✓' : '✗' }}</text>
+        <text class="toast-icon">{{ toastSuccess ? '鉁?' : '鉁?' }}</text>
         <text class="toast-message">{{ toastMessage }}</text>
       </view>
     </view>
@@ -221,13 +221,13 @@ export default defineComponent({
     const flippedCards = ref<Record<number, boolean>>({})
     const learnedWords = ref<Record<string, boolean>>({})
     
-    // 分页相关
+    // 鍒嗛〉鐩稿叧
     const currentPage = ref(1)
     const pageSize = ref(10)
     const totalItems = ref(0)
     const totalPages = ref(0)
     
-    // 筛选相关
+    // 绛涢€夌浉鍏?
     const showFilterModal = ref(false)
     const selectedDifficulty = ref('')
     const selectedCategory = ref('')
@@ -236,25 +236,25 @@ export default defineComponent({
     const hideLearnedWords = ref(false)
     const categories = computed(() => store.state.vocabulary.categories)
     const difficulties = [
-      { label: '全部', value: '' },
-      { label: '简单', value: 'easy' },
+      { label: '鍏ㄩ儴', value: '' },
+      { label: '绠€鍗?', value: 'easy' },
       { label: '中等', value: 'medium' },
-      { label: '困难', value: 'hard' }
+      { label: '鍥伴毦', value: 'hard' }
     ]
     
-    // 提示相关
+    // 鎻愮ず鐩稿叧
     const showToast = ref(false)
     const toastMessage = ref('')
     const toastSuccess = ref(true)
     const toastTimer = ref<number | null>(null)
     
-    // 音频播放器
+    // 闊抽鎾斁鍣?
     let audioContext: any = null
     
-    // 加载状态
+    // 鍔犺浇鐘舵€?
     const isLoading = ref(false)
     
-    // 根据路由参数初始化
+    // 鏍规嵁璺敱鍙傛暟鍒濆鍖?
     const initFromRoute = () => {
       const query = uni.getLaunchOptionsSync().query || {}
       
@@ -264,7 +264,7 @@ export default defineComponent({
         const wordsToReview = allWords.value.filter((word: IWordCard) => wordIds.includes(word.id))
         wordList.value = wordsToReview
       } else {
-        // 正常模式，加载第一页数据
+        // 姝ｅ父妯″紡锛屽姞杞界涓€椤垫暟鎹?
         loadPage(1)
       }
     }
@@ -275,8 +275,8 @@ export default defineComponent({
       keyword: searchKeyword.value.trim() || undefined
     })
 
-    // 加载指定页码的数据：先查单词总数，再按 totalItems 计算总页数
-    const loadPage = async (page: number) => {
+    // 鍔犺浇鎸囧畾椤电爜鐨勬暟鎹細鍏堟煡鍗曡瘝鎬绘暟锛屽啀鎸? totalItems 璁＄畻鎬婚〉鏁?
+    const loadPage = async (page: number): Promise<void> => {
       if (page < 1) return;
       
       isLoading.value = true;
@@ -302,7 +302,8 @@ export default defineComponent({
           totalPages.value = calcTotalPages(total, pageSize.value);
 
           if (totalPages.value > 0 && page > totalPages.value) {
-            return loadPage(totalPages.value);
+            await loadPage(totalPages.value);
+            return;
           }
 
           currentPage.value = page;
@@ -310,11 +311,11 @@ export default defineComponent({
           flippedCards.value = {};
         }
         
-        console.log(`每页${pageSize.value}条，共${totalItems.value}个单词，${totalPages.value}页，当前第${page}页`);
+        console.log(`每页 ${pageSize.value} 条，共 ${totalItems.value} 个单词，${totalPages.value} 页，当前第 ${page} 页`);
       } catch (error) {
-        console.error('加载分页数据失败:', error);
+        console.error('鍔犺浇鍒嗛〉鏁版嵁澶辫触:', error);
         uni.showToast({
-          title: '加载分页数据失败',
+          title: '鍔犺浇鍒嗛〉鏁版嵁澶辫触',
           icon: 'none'
         });
       } finally {
@@ -322,21 +323,21 @@ export default defineComponent({
       }
     };
     
-    // 应用筛选
+    // 搴旂敤绛涢€?
     const applyFilters = async () => {
       try {
         isLoading.value = true;
-        console.log('应用筛选，重置到第一页');
+        console.log('搴旂敤绛涢€夛紝閲嶇疆鍒扮涓€椤?');
         
-        // 重置到第一页
+        // 閲嶇疆鍒扮涓€椤?
         await loadPage(1);
         
-        // 关闭筛选弹窗
+        // 鍏抽棴绛涢€夊脊绐?
         showFilterModal.value = false;
       } catch (error) {
-        console.error('筛选单词时出错:', error);
+        console.error('绛涢€夊崟璇嶆椂鍑洪敊:', error);
         uni.showToast({
-          title: '筛选单词时出错',
+          title: '绛涢€夊崟璇嶆椂鍑洪敊',
           icon: 'none'
         });
       } finally {
@@ -344,7 +345,7 @@ export default defineComponent({
       }
     }
     
-    // 重置筛选
+    // 閲嶇疆绛涢€?
     const resetFilters = () => {
       selectedDifficulty.value = ''
       selectedCategory.value = ''
@@ -353,32 +354,32 @@ export default defineComponent({
       hideLearnedWords.value = false
     }
     
-    // 翻转卡片
+    // 缈昏浆鍗＄墖
     const flipCard = (index: number) => {
       flippedCards.value[index] = !flippedCards.value[index]
     }
     
-    // 切换收藏状态
+    // 鍒囨崲鏀惰棌鐘舵€?
     const toggleFavorite = async (word: IWordCard) => {
       if (isFavorite(word)) {
         await store.dispatch('removeFromFavorites', word.id)
         showToastMessage('已从生词本移除', false)
       } else {
         await store.dispatch('addToFavorites', word)
-        showToastMessage('已添加到生词本', true)
+        showToastMessage('宸叉坊鍔犲埌鐢熻瘝鏈?', true)
       }
-      // 自动刷新生词本
+      // 鑷姩鍒锋柊鐢熻瘝鏈?
       store.dispatch('fetchFavorites')
     }
     
-    // 显示提示信息
+    // 鏄剧ず鎻愮ず淇℃伅
     const showToastMessage = (message: string, success: boolean = true) => {
-      // 清除之前的定时器
+      // 娓呴櫎涔嬪墠鐨勫畾鏃跺櫒
       if (toastTimer.value) {
         clearTimeout(toastTimer.value)
       }
       
-      // 显示新提示
+      // 鏄剧ず鏂版彁绀?
       toastMessage.value = message
       toastSuccess.value = success
       showToast.value = true
@@ -389,17 +390,17 @@ export default defineComponent({
       }, 2000) as unknown as number
     }
     
-    // 检查是否已收藏
+    // 妫€鏌ユ槸鍚﹀凡鏀惰棌
     const isFavorite = (word: IWordCard) => {
       return store.getters.favoriteWords.some((item: IWordCard) => item.id === word.id)
     }
     
-    // 获取难度文本
+    // 鑾峰彇闅惧害鏂囨湰
     const getDifficultyText = (difficulty: string) => {
       switch (difficulty) {
-        case 'easy': return '简单'
+        case 'easy': return '绠€鍗?'
         case 'medium': return '中等'
-        case 'hard': return '困难'
+        case 'hard': return '鍥伴毦'
         default: return difficulty
       }
     }
@@ -416,7 +417,7 @@ export default defineComponent({
         audioContext.autoplay = true
         
         audioContext.onPlay(() => {
-          console.log('音频开始播放')
+          console.log('闊抽寮€濮嬫挱鏀?')
         })
         
         audioContext.onError((res: any) => {
@@ -435,32 +436,32 @@ export default defineComponent({
       }
     }
     
-    // 滑动切换卡片
+    // 婊戝姩鍒囨崲鍗＄墖
     const onSwiperChange = (e: any) => {
       currentIndex.value = e.detail.current
     }
     
-    // 下一张卡片
+    // 涓嬩竴寮犲崱鐗?
     const nextCard = () => {
       if (currentIndex.value < wordList.value.length - 1) {
         currentIndex.value++
       }
     }
     
-    // 上一张卡片
+    // 涓婁竴寮犲崱鐗?
     const prevCard = () => {
       if (currentIndex.value > 0) {
         currentIndex.value--
       }
     }
     
-    // 标记为已学
+    // 鏍囪涓哄凡瀛?
     const markAsLearned = () => {
       const currentWord = wordList.value[currentIndex.value]
       if (!learnedWords.value[currentWord.id]) {
         learnedWords.value[currentWord.id] = true
         
-        // 更新学习进度
+        // 鏇存柊瀛︿範杩涘害
         store.dispatch('updateProgress', {
           wordsLearned: 1,
           timeSpent: 1,
@@ -468,33 +469,33 @@ export default defineComponent({
           totalCount: 0
         })
         
-        showToastMessage('已标记为学习完成', true)
+        showToastMessage('宸叉爣璁颁负瀛︿範瀹屾垚', true)
         
-        // 如果设置了隐藏已学单词，则重新筛选
+        // 濡傛灉璁剧疆浜嗛殣钘忓凡瀛﹀崟璇嶏紝鍒欓噸鏂扮瓫閫?
         if (hideLearnedWords.value) {
           // 延迟执行，让用户看到提示
           setTimeout(() => {
             applyFilters()
           }, 1000)
         } else {
-          // 自动前进到下一张卡片
+          // 鑷姩鍓嶈繘鍒颁笅涓€寮犲崱鐗?
           nextCard()
         }
       }
     }
     
-    // 获取单词列表
+    // 鑾峰彇鍗曡瘝鍒楄〃
     const fetchWordList = async () => {
       try {
         isLoading.value = true
-        // 使用分页加载第一页数据
+        // 浣跨敤鍒嗛〉鍔犺浇绗竴椤垫暟鎹?
         await loadPage(1);
       } catch (error) {
-        console.error('获取单词列表失败:', error);
-        // 使用模拟数据作为备选
+        console.error('鑾峰彇鍗曡瘝鍒楄〃澶辫触:', error);
+        // 浣跨敤妯℃嫙鏁版嵁浣滀负澶囬€?
         wordList.value = getMockWordCards();
         uni.showToast({
-          title: '加载单词列表失败，使用本地数据',
+          title: '鍔犺浇鍗曡瘝鍒楄〃澶辫触锛屼娇鐢ㄦ湰鍦版暟鎹?',
           icon: 'none'
         });
       } finally {
@@ -502,14 +503,14 @@ export default defineComponent({
       }
     }
     
-    // 模拟单词数据，用于API失败时的备选
+    // 妯℃嫙鍗曡瘝鏁版嵁锛岀敤浜嶢PI澶辫触鏃剁殑澶囬€?
     const getMockWordCards = (): IWordCard[] => {
       return [
         {
           id: '1',
           word: 'hello',
-          translation: '你好',
-          phonetic: '/həˈloʊ/',
+          translation: '浣犲ソ',
+          phonetic: '/h蓹藞lo蕣/',
           partOfSpeech: 'n. & int.',
           definition: 'used as a greeting',
           example: 'Hello, how are you today?',
@@ -519,8 +520,8 @@ export default defineComponent({
         {
           id: '2',
           word: 'world',
-          translation: '世界',
-          phonetic: '/wɜːrld/',
+          translation: '涓栫晫',
+          phonetic: '/w蓽藧rld/',
           partOfSpeech: 'n.',
           definition: 'the earth, together with all of its countries and peoples',
           example: 'He wants to travel around the world.',
@@ -530,8 +531,8 @@ export default defineComponent({
         {
           id: '3',
           word: 'vocabulary',
-          translation: '词汇',
-          phonetic: '/vəˈkæbjəˌleri/',
+          translation: '璇嶆眹',
+          phonetic: '/v蓹藞k忙bj蓹藢leri/',
           partOfSpeech: 'n.',
           definition: 'all the words known and used by a particular person',
           example: 'Reading helps to increase your vocabulary.',
@@ -541,38 +542,38 @@ export default defineComponent({
       ];
     }
     
-    // 重新加载数据
+    // 閲嶆柊鍔犺浇鏁版嵁
     const handleReload = () => {
       fetchWordList();
     }
     
-    // 组件卸载时释放资源
+    // 缁勪欢鍗歌浇鏃堕噴鏀捐祫婧?
     onMounted(() => {
-      console.log('单词卡片组件已挂载');
+      console.log('鍗曡瘝鍗＄墖缁勪欢宸叉寕杞?');
       
-      // 加载单词列表
+      // 鍔犺浇鍗曡瘝鍒楄〃
       fetchWordList().then(() => {
-        console.log('单词列表加载完成，准备初始化路由参数');
+        console.log('鍗曡瘝鍒楄〃鍔犺浇瀹屾垚锛屽噯澶囧垵濮嬪寲璺敱鍙傛暟');
         
         // 根据路由参数初始化（如果有）
         try {
           initFromRoute();
         } catch (error) {
-          console.error('初始化路由参数失败:', error);
+          console.error('鍒濆鍖栬矾鐢卞弬鏁板け璐?:', error);
         }
         
-        // 调试：打印数据
+        // 璋冭瘯锛氭墦鍗版暟鎹?
         setTimeout(() => {
           console.log('allWords:', allWords.value);
           console.log('wordList:', wordList.value);
         }, 1000);
       }).catch(error => {
-        console.error('加载单词列表失败:', error);
-        // 使用模拟数据
+        console.error('鍔犺浇鍗曡瘝鍒楄〃澶辫触:', error);
+        // 浣跨敤妯℃嫙鏁版嵁
         wordList.value = getMockWordCards();
       });
       
-      // 返回清理函数
+      // 杩斿洖娓呯悊鍑芥暟
       return () => {
         if (audioContext) {
           audioContext.destroy();
@@ -612,7 +613,7 @@ export default defineComponent({
       resetFilters,
       isLoading,
       handleReload,
-      // 分页相关
+      // 鍒嗛〉鐩稿叧
       currentPage,
       totalPages,
       totalItems,
@@ -943,7 +944,7 @@ export default defineComponent({
   pointer-events: none;
 }
 
-/* 筛选弹窗样式 */
+/* 绛涢€夊脊绐楁牱寮? */
 .filter-modal {
   position: fixed;
   top: 0;
@@ -1105,7 +1106,7 @@ export default defineComponent({
   transform: translateY(2rpx);
 }
 
-/* 提示样式 */
+/* 鎻愮ず鏍峰紡 */
 .toast {
   position: fixed;
   top: 50%;
@@ -1139,7 +1140,7 @@ export default defineComponent({
   font-size: 28rpx;
 }
 
-/* 加载状态样式 */
+/* 鍔犺浇鐘舵€佹牱寮? */
 .loading-container {
   position: absolute;
   top: 0;
@@ -1174,7 +1175,7 @@ export default defineComponent({
   color: #333;
 }
 
-/* 空数据状态样式 */
+/* 绌烘暟鎹姸鎬佹牱寮? */
 .empty-container {
   position: absolute;
   top: 0;
@@ -1216,7 +1217,7 @@ export default defineComponent({
   transform: translateY(2rpx);
 }
 
-/* 分页样式 */
+/* 鍒嗛〉鏍峰紡 */
 .pagination {
   display: flex;
   flex-direction: column;
@@ -1262,4 +1263,4 @@ export default defineComponent({
 .page-btn:active {
   background-color: #e0e0e0;
 }
-</style> 
+</style>

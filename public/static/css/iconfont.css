@@ -1,0 +1,79 @@
+@font-face {
+  font-family: "iconfont";
+  src: url('https://at.alicdn.com/t/c/font_4456621_l2c6dfpxlm.woff2?t=1710667981605') format('woff2'),
+       url('https://at.alicdn.com/t/c/font_4456621_l2c6dfpxlm.woff?t=1710667981605') format('woff'),
+       url('https://at.alicdn.com/t/c/font_4456621_l2c6dfpxlm.ttf?t=1710667981605') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 播放图标 - 圆形播放 */
+.icon-play-circle:before {
+  content: "\e601";
+}
+
+/* 鏆傚仠鍥炬爣 - 鍦嗗舰 */
+.icon-pause-circle:before {
+  content: "\e602";
+}
+
+/* 鑰虫満鍥炬爣 */
+.icon-headphone:before {
+  content: "\e603";
+}
+
+/* 鏄熸槦鍥炬爣 */
+.icon-star:before {
+  content: "\e604";
+}
+
+/* 视频播放图标 */
+.icon-video-play:before {
+  content: "\e605";
+}
+
+/* 瀵瑰嬀鍥炬爣 */
+.icon-check:before {
+  content: "\e606";
+}
+
+/* 错误图标 */
+.icon-close:before {
+  content: "\e607";
+}
+
+/* 鍒锋柊鍥炬爣 */
+.icon-refresh:before {
+  content: "\e608";
+}
+
+/* 鍙崇澶村浘鏍? */
+.icon-right:before {
+  content: "\e609";
+}
+
+/* 寰界珷鍥炬爣 */
+.icon-badge:before {
+  content: "\e60a";
+}
+
+/* 淇℃伅鍥炬爣 */
+.icon-info:before {
+  content: "\e60b";
+}
+
+/* 涔︽湰鍥炬爣 */
+.icon-book:before {
+  content: "\e60c";
+}
+
+/* 问答图标 */
+.icon-quiz:before {
+  content: "\e60d";
+}

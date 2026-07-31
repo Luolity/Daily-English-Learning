@@ -7,7 +7,7 @@
     <view class="content">
       <view class="sentence-card">
         <view class="card-header">
-          <text class="sentence-number">句子 {{ currentIndex + 1 }}/{{ sentences.length }}</text>
+          <text class="sentence-number">鍙ュ瓙 {{ currentIndex + 1 }}/{{ sentences.length }}</text>
           <view class="difficulty" :class="currentSentence.difficulty">
             <text>{{ difficultyText }}</text>
           </view>
@@ -26,7 +26,7 @@
         <view class="sentence-content">
           <text v-if="showTranscript" class="transcript">{{ currentSentence.text }}</text>
           <view v-else class="placeholder">
-            <text>点击"显示文本"查看句子</text>
+            <text>鐐瑰嚮"鏄剧ず鏂囨湰"鏌ョ湅鍙ュ瓙</text>
           </view>
         </view>
         
@@ -36,23 +36,23 @@
         
         <view class="card-actions">
           <button class="action-btn" @click="toggleTranscript">
-            {{ showTranscript ? '隐藏文本' : '显示文本' }}
+            {{ showTranscript ? '闅愯棌鏂囨湰' : '鏄剧ず鏂囨湰' }}
           </button>
           <button class="action-btn" @click="toggleTranslation">
-            {{ showTranslation ? '隐藏翻译' : '显示翻译' }}
+            {{ showTranslation ? '闅愯棌缈昏瘧' : '鏄剧ず缈昏瘧' }}
           </button>
         </view>
       </view>
       
       <view class="controls">
         <button class="control-btn" @click="prevSentence" :disabled="currentIndex === 0">
-          <text>上一句</text>
+          <text>涓婁竴鍙?</text>
         </button>
         <button class="control-btn primary" @click="replayAudio">
-          <text>重播</text>
+          <text>閲嶆挱</text>
         </button>
         <button class="control-btn" @click="nextSentence" :disabled="currentIndex === sentences.length - 1">
-          <text>下一句</text>
+          <text>涓嬩竴鍙?</text>
         </button>
       </view>
     </view>
@@ -65,40 +65,40 @@ import { defineComponent, ref, computed, onUnmounted } from 'vue'
 export default defineComponent({
   name: 'SentenceListening',
   setup() {
-    // 模拟句子数据
+    // 妯℃嫙鍙ュ瓙鏁版嵁
     const sentences = ref([
       {
         id: '1',
         text: 'Learning a new language requires consistent practice and patience.',
-        translation: '学习一门新语言需要持续的练习和耐心。',
+        translation: '瀛︿範涓€闂ㄦ柊璇█闇€瑕佹寔缁殑缁冧範鍜岃€愬績銆?',
         audioUrl: 'https://example.com/audio/sentence1.mp3',
         difficulty: 'easy'
       },
       {
         id: '2',
         text: 'The ability to speak multiple languages can open many doors in your career.',
-        translation: '会说多种语言的能力可以为你的职业生涯打开许多大门。',
+        translation: '浼氳澶氱璇█鐨勮兘鍔涘彲浠ヤ负浣犵殑鑱屼笟鐢熸动鎵撳紑璁稿澶ч棬銆?',
         audioUrl: 'https://example.com/audio/sentence2.mp3',
         difficulty: 'medium'
       },
       {
         id: '3',
         text: 'Despite the challenges, she persevered in her studies and eventually became fluent.',
-        translation: '尽管面临挑战，她还是坚持学习，最终能够流利地使用这门语言。',
+        translation: '灏界闈复鎸戞垬锛屽ス杩樻槸鍧氭寔瀛︿範锛屾渶缁堣兘澶熸祦鍒╁湴浣跨敤杩欓棬璇█銆?',
         audioUrl: 'https://example.com/audio/sentence3.mp3',
         difficulty: 'hard'
       },
       {
         id: '4',
         text: 'Immersion is one of the most effective ways to learn a language quickly.',
-        translation: '沉浸式学习是快速学习语言的最有效方法之一。',
+        translation: '娌夋蹈寮忓涔犳槸蹇€熷涔犺瑷€鐨勬渶鏈夋晥鏂规硶涔嬩竴銆?',
         audioUrl: 'https://example.com/audio/sentence4.mp3',
         difficulty: 'medium'
       },
       {
         id: '5',
         text: 'Regular listening practice can significantly improve your comprehension skills.',
-        translation: '定期的听力练习可以显著提高你的理解能力。',
+        translation: '瀹氭湡鐨勫惉鍔涚粌涔犲彲浠ユ樉钁楁彁楂樹綘鐨勭悊瑙ｈ兘鍔涖€?',
         audioUrl: 'https://example.com/audio/sentence5.mp3',
         difficulty: 'easy'
       }
@@ -111,19 +111,19 @@ export default defineComponent({
     const isPlaying = ref(false)
     const audioProgress = ref(0)
     const currentTime = ref(0)
-    const duration = ref(30) // 模拟音频时长，实际应从音频文件获取
+    const duration = ref(30) // 妯℃嫙闊抽鏃堕暱锛屽疄闄呭簲浠庨煶棰戞枃浠惰幏鍙?
     let audioTimer: number | null = null
     
-    // 显示控制
+    // 鏄剧ず鎺у埗
     const showTranscript = ref(false)
     const showTranslation = ref(false)
     
-    // 难度文本
+    // 闅惧害鏂囨湰
     const difficultyText = computed(() => {
       const map: Record<string, string> = {
-        easy: '简单',
+        easy: '绠€鍗?',
         medium: '中等',
-        hard: '困难'
+        hard: '鍥伴毦'
       }
       return map[currentSentence.value.difficulty] || '中等'
     })
@@ -134,7 +134,7 @@ export default defineComponent({
         // 暂停播放
         pauseAudio()
       } else {
-        // 开始播放
+        // 寮€濮嬫挱鏀?
         isPlaying.value = true
         
         // 这里模拟音频播放进度
@@ -179,17 +179,17 @@ export default defineComponent({
       return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
     }
     
-    // 切换显示文本
+    // 鍒囨崲鏄剧ず鏂囨湰
     const toggleTranscript = () => {
       showTranscript.value = !showTranscript.value
     }
     
-    // 切换显示翻译
+    // 鍒囨崲鏄剧ず缈昏瘧
     const toggleTranslation = () => {
       showTranslation.value = !showTranslation.value
     }
     
-    // 上一句
+    // 涓婁竴鍙?
     const prevSentence = () => {
       if (currentIndex.value > 0) {
         pauseAudio()
@@ -198,7 +198,7 @@ export default defineComponent({
       }
     }
     
-    // 下一句
+    // 涓嬩竴鍙?
     const nextSentence = () => {
       if (currentIndex.value < sentences.value.length - 1) {
         pauseAudio()
@@ -207,14 +207,14 @@ export default defineComponent({
       }
     }
     
-    // 重置音频状态
+    // 閲嶇疆闊抽鐘舵€?
     const resetAudio = () => {
       currentTime.value = 0
       audioProgress.value = 0
       showTranscript.value = false
     }
     
-    // 组件卸载时清理定时器
+    // 缁勪欢鍗歌浇鏃舵竻鐞嗗畾鏃跺櫒
     onUnmounted(() => {
       if (audioTimer) {
         clearInterval(audioTimer)
