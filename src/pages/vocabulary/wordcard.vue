@@ -1,10 +1,10 @@
 <template>
   <view class="wordcard-container">
     <view class="header">
-      <text class="title">单词卡片</text>
+      <text class="title">{{ reviewMode ? '错题复习' : '单词卡片' }}</text>
       <view class="header-actions">
-        <text class="progress">{{ currentIndex + 1 }}/{{ wordList.length }}</text>
-        <view class="filter-btn" @click="showFilterModal = true">
+        <text class="progress">{{ wordList.length ? currentIndex + 1 : 0 }}/{{ wordList.length }}</text>
+        <view v-if="!reviewMode" class="filter-btn" @click="showFilterModal = true">
           <text>筛选</text>
           <text class="icon-filter">🔍</text>
         </view>
@@ -20,7 +20,7 @@
     <!-- 空数据状态 -->
     <view class="empty-container" v-else-if="wordList.length === 0">
       <text class="empty-icon">📚</text>
-      <text class="empty-text">暂无单词数据</text>
+      <text class="empty-text">{{ reviewMode ? '暂无待复习错题' : '暂无单词数据' }}</text>
       <button class="reload-btn" @click="handleReload">重新加载</button>
     </view>
     
@@ -82,7 +82,7 @@
       </swiper-item>
     </swiper>
     
-    <view class="controls">
+    <view v-if="wordList.length > 0" class="controls">
       <button class="control-btn prev-btn" @click="prevCard" :disabled="currentIndex === 0">
         <text class="icon-left">◀</text>
       </button>
@@ -95,7 +95,7 @@
     </view>
     
     <!-- 分页控件 -->
-    <view class="pagination">
+    <view v-if="!reviewMode && wordList.length > 0" class="pagination">
       <view class="pagination-info">
         <text>第 {{ currentPage }}/{{ totalPages }} 页 · 每页 {{ pageSize }} 条 · 共 {{ totalItems }} 个单词</text>
       </view>
@@ -206,6 +206,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted, watch } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 import { useStore } from 'vuex'
 import type { IWordCard } from '../../store/types'
 import { api } from '../../services/api'
@@ -215,11 +216,11 @@ export default defineComponent({
   name: 'WordCard',
   setup() {
     const store = useStore()
-    const allWords = computed(() => store.state.vocabulary.wordList)
     const wordList = ref<IWordCard[]>([])
     const currentIndex = ref(0)
     const flippedCards = ref<Record<number, boolean>>({})
     const learnedWords = ref<Record<string, boolean>>({})
+    const reviewMode = ref(false)
     
     // 分页相关
     const currentPage = ref(1)
@@ -254,21 +255,6 @@ export default defineComponent({
     // 加载状态
     const isLoading = ref(false)
     
-    // 根据路由参数初始化
-    const initFromRoute = () => {
-      const query = uni.getLaunchOptionsSync().query || {}
-      
-      // 如果是复习模式，从参数中获取单词ID
-      if (query.mode === 'review' && query.words) {
-        const wordIds = (query.words as string).split(',')
-        const wordsToReview = allWords.value.filter((word: IWordCard) => wordIds.includes(word.id))
-        wordList.value = wordsToReview
-      } else {
-        // 正常模式，加载第一页数据
-        loadPage(1)
-      }
-    }
-    
     const getFilterParams = () => ({
       category: selectedCategory.value || undefined,
       difficulty: selectedDifficulty.value || undefined,
@@ -276,7 +262,7 @@ export default defineComponent({
     })
 
     // 加载指定页码的数据：先查单词总数，再按 totalItems 计算总页数
-    const loadPage = async (page: number) => {
+    const loadPage = async (page: number): Promise<void> => {
       if (page < 1) return;
       
       isLoading.value = true;
@@ -321,6 +307,27 @@ export default defineComponent({
         isLoading.value = false;
       }
     };
+
+    // 加载当前用户的错题
+    const loadWrongWords = async () => {
+      isLoading.value = true
+      try {
+        wordList.value = await api.wrongWords.getWrongWords()
+        totalItems.value = wordList.value.length
+        totalPages.value = wordList.value.length > 0 ? 1 : 0
+        currentPage.value = 1
+        currentIndex.value = 0
+        flippedCards.value = {}
+      } catch (error) {
+        console.error('加载错题失败:', error)
+        uni.showToast({
+          title: '加载错题失败',
+          icon: 'none'
+        })
+      } finally {
+        isLoading.value = false
+      }
+    }
     
     // 应用筛选
     const applyFilters = async () => {
@@ -455,11 +462,41 @@ export default defineComponent({
     }
     
     // 标记为已学
-    const markAsLearned = () => {
+    const markAsLearned = async () => {
       const currentWord = wordList.value[currentIndex.value]
-      if (!learnedWords.value[currentWord.id]) {
+      if (currentWord && !learnedWords.value[currentWord.id]) {
         learnedWords.value[currentWord.id] = true
-        
+
+        if (reviewMode.value) {
+          try {
+            await api.wrongWords.removeWrongWord(currentWord.id)
+          } catch (error) {
+            delete learnedWords.value[currentWord.id]
+            console.error('移除错题失败:', error)
+            uni.showToast({
+              title: '移除错题失败',
+              icon: 'none'
+            })
+            return
+          }
+
+          store.dispatch('updateProgress', {
+            wordsLearned: 1,
+            timeSpent: 1,
+            correctCount: 0,
+            totalCount: 0
+          })
+          wordList.value.splice(currentIndex.value, 1)
+          totalItems.value = wordList.value.length
+          totalPages.value = wordList.value.length > 0 ? 1 : 0
+          if (currentIndex.value >= wordList.value.length) {
+            currentIndex.value = Math.max(wordList.value.length - 1, 0)
+          }
+          flippedCards.value = {}
+          showToastMessage('已完成复习，错题已移除', true)
+          return
+        }
+
         // 更新学习进度
         store.dispatch('updateProgress', {
           wordsLearned: 1,
@@ -543,34 +580,26 @@ export default defineComponent({
     
     // 重新加载数据
     const handleReload = () => {
-      fetchWordList();
+      if (reviewMode.value) {
+        loadWrongWords()
+        return
+      }
+      fetchWordList()
     }
+
+    onLoad((query) => {
+      reviewMode.value = query?.mode === 'review'
+    })
     
     // 组件卸载时释放资源
     onMounted(() => {
       console.log('单词卡片组件已挂载');
       
-      // 加载单词列表
-      fetchWordList().then(() => {
-        console.log('单词列表加载完成，准备初始化路由参数');
-        
-        // 根据路由参数初始化（如果有）
-        try {
-          initFromRoute();
-        } catch (error) {
-          console.error('初始化路由参数失败:', error);
-        }
-        
-        // 调试：打印数据
-        setTimeout(() => {
-          console.log('allWords:', allWords.value);
-          console.log('wordList:', wordList.value);
-        }, 1000);
-      }).catch(error => {
-        console.error('加载单词列表失败:', error);
-        // 使用模拟数据
-        wordList.value = getMockWordCards();
-      });
+      if (reviewMode.value) {
+        loadWrongWords()
+      } else {
+        fetchWordList()
+      }
       
       // 返回清理函数
       return () => {
@@ -588,6 +617,7 @@ export default defineComponent({
       currentIndex,
       flippedCards,
       learnedWords,
+      reviewMode,
       showFilterModal,
       selectedDifficulty,
       selectedCategory,
@@ -1262,4 +1292,4 @@ export default defineComponent({
 .page-btn:active {
   background-color: #e0e0e0;
 }
-</style> 
+</style>

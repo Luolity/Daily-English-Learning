@@ -106,8 +106,13 @@
           <text v-else-if="score / questions.length >= 0.6">不错! 再接再厉!</text>
           <text v-else>加油! 再试一次!</text>
         </view>
+
+        <view v-if="wrongWordIds.length > 0" class="wrong-word-summary">
+          <text>本次有 {{ wrongWordIds.length }} 个错词，建议马上复习巩固</text>
+        </view>
         
         <view class="result-actions">
+          <button v-if="wrongWordIds.length > 0" class="action-btn review-btn" @click="reviewWrongWords">复习错题</button>
           <button class="action-btn" @click="restartGame">再玩一次</button>
           <button class="action-btn" @click="backToHome">返回主页</button>
         </view>
@@ -213,6 +218,7 @@ export default defineComponent({
     
     // 问题相关
     const questions = ref<Array<{
+      id: string;
       word: string;
       phonetic: string;
       options: string[];
@@ -224,12 +230,14 @@ export default defineComponent({
     const score = ref(0)
     const timeLeft = ref(60)
     const usedTime = ref(0)
+    const wrongWordIds = ref<string[]>([])
     const timerInterval = ref<number | null>(null)
     const startTime = ref<number>(0)
     
     // 当前问题
     const currentQuestion = computed(() => {
       return questions.value[currentQuestionIndex.value] || {
+        id: '',
         word: '',
         phonetic: '',
         options: [],
@@ -388,6 +396,7 @@ export default defineComponent({
         allOptions.splice(correctIndex, 0, word.translation)
         
         return {
+          id: String(word.id),
           word: word.word,
           phonetic: word.phonetic,
           options: allOptions,
@@ -402,6 +411,7 @@ export default defineComponent({
       score.value = 0
       timeLeft.value = calculateTimePerQuestion()
       usedTime.value = 0
+      wrongWordIds.value = []
       startTime.value = Date.now()
       isGameStarted.value = true
       isGameOver.value = false
@@ -432,6 +442,8 @@ export default defineComponent({
       showAnswer.value = true
       if (isCorrect.value) {
         score.value++
+      } else if (currentQuestion.value.id) {
+        wrongWordIds.value.push(currentQuestion.value.id)
       }
       
       // 累加用时
@@ -452,7 +464,8 @@ export default defineComponent({
             score: score.value,
             totalQuestions: questions.value.length,
             accuracy: score.value / questions.value.length,
-            timeSpent: usedTime.value
+            timeSpent: usedTime.value,
+            wrongWordIds: wrongWordIds.value
           });
           await store.dispatch('updateProgress', {
             wordsLearned: questions.value.length,
@@ -497,6 +510,10 @@ export default defineComponent({
       uni.navigateTo({
         url: '/pages/vocabulary/leaderboard'
       })
+    }
+
+    const reviewWrongWords = () => {
+      uni.navigateTo({ url: '/pages/vocabulary/wordcard?mode=review' })
     }
     
     // 时间限制变化
@@ -566,6 +583,7 @@ export default defineComponent({
       selectedOptionIndex,
       showAnswer,
       score,
+      wrongWordIds,
       isLastQuestion,
       isCorrect,
       onQuestionCountChange,
@@ -576,6 +594,7 @@ export default defineComponent({
       restartGame,
       backToHome,
       goToLeaderboard,
+      reviewWrongWords,
       enableTimeLimit,
       enableAudio,
       timeLeft,
@@ -1032,6 +1051,15 @@ export default defineComponent({
   line-height: 1.5;
 }
 
+.wrong-word-summary {
+  margin-bottom: 30rpx;
+  padding: 18rpx;
+  border-radius: 10rpx;
+  background-color: #fff3e0;
+  color: #e65100;
+  font-size: 26rpx;
+}
+
 .result-actions {
   display: flex;
   justify-content: space-around;
@@ -1058,5 +1086,10 @@ export default defineComponent({
 .action-btn:first-child:active {
   transform: translateY(2rpx);
   box-shadow: 0 2rpx 6rpx rgba(76, 175, 80, 0.2);
+}
+
+.review-btn {
+  background-color: #fff3e0;
+  color: #e65100;
 }
 </style> 

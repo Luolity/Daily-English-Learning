@@ -548,6 +548,15 @@ export const api = {
   },
   
   // 用户信息
+  wrongWords: {
+    getWrongWords: async (): Promise<IWordCard[]> => {
+      return await axiosInstance.get('/wrong-words');
+    },
+    removeWrongWord: async (wordId: string | number) => {
+      return await axiosInstance.delete(`/wrong-words/${wordId}`);
+    }
+  },
+
   user: {
     // 获取用户信息
     getUserInfo: async () => {

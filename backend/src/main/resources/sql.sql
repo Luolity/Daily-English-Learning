@@ -168,6 +168,23 @@ INSERT INTO `tbl_roles` VALUES (2, 'ROLE_MODERATOR');
 INSERT INTO `tbl_roles` VALUES (3, 'ROLE_ADMIN');
 
 -- ----------------------------
+-- Table structure for tbl_wrong_words
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_wrong_words`;
+CREATE TABLE `tbl_wrong_words`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `word_id` bigint NOT NULL,
+  `wrong_count` int NOT NULL DEFAULT 1,
+  `last_wrong_at` datetime NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_wrong_words_user_word`(`user_id` ASC, `word_id` ASC) USING BTREE,
+  INDEX `word_id`(`word_id` ASC) USING BTREE,
+  CONSTRAINT `tbl_wrong_words_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  CONSTRAINT `tbl_wrong_words_ibfk_2` FOREIGN KEY (`word_id`) REFERENCES `tbl_word_cards` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for tbl_user_favorites
 -- ----------------------------
 DROP TABLE IF EXISTS `tbl_user_favorites`;

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,4 +22,5 @@ public class ChallengeRecordDto {
     private Double accuracy;
     private Integer timeSpent;
     private LocalDateTime createdAt;
+    private List<Long> wrongWordIds;
 }

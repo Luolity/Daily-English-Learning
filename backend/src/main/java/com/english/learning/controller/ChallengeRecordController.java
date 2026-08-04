@@ -4,6 +4,7 @@ import com.english.learning.dto.ChallengeRecordDto;
 import com.english.learning.security.services.UserDetailsImpl;
 import com.english.learning.service.BadgeService;
 import com.english.learning.service.ChallengeRecordService;
+import com.english.learning.service.WrongWordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,9 @@ public class ChallengeRecordController {
     @Autowired
     private BadgeService badgeService;
 
+    @Autowired
+    private WrongWordService wrongWordService;
+
     @PostMapping("/submit")
     // @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> submitChallengeRecord(
@@ -30,6 +34,7 @@ public class ChallengeRecordController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getId();
         ChallengeRecordDto savedRecord = challengeRecordService.submitRecord(userId, recordDto);
+        wrongWordService.recordWrongWords(userId, recordDto.getWrongWordIds());
         badgeService.checkAndAwardBadges(userId);
         return ResponseEntity.ok(savedRecord);
     }
